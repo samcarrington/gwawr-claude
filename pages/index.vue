@@ -61,36 +61,34 @@
     </section>
 
     <!-- Call-to-Action Section -->
-    <section id="contact" class="py-20 bg-gray-900 text-white">
-      <UContainer>
-        <div class="text-center max-w-3xl mx-auto">
-          <h2 class="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Build Something Amazing?
-          </h2>
-          <p class="text-xl text-gray-300 mb-8">
-            I'm always excited to work on new projects and collaborate with
-            passionate teams. Let's discuss how we can bring your ideas to life.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <UButton
-              size="lg"
-              variant="outline"
-              class="px-8 py-3 border-white text-white hover:bg-white hover:text-gray-900"
-              @click="navigateTo('/projects')"
-            >
-              View My Projects
-            </UButton>
-            <UButton
-              size="lg"
-              class="px-8 py-3 bg-primary hover:bg-primary/90"
-              @click="openEmailClient"
-            >
-              Start a Conversation
-            </UButton>
-          </div>
-        </div>
-      </UContainer>
-    </section>
+    <CallToAction
+      variant="dark"
+      title="Ready to Build Something Amazing?"
+      description="I'm always excited to work on new projects and collaborate with passionate teams. Let's discuss how we can bring your ideas to life."
+    >
+      <template #primary-button="{ variant, classes }">
+        <UButton
+          size="lg"
+          :variant="variant"
+          :class="classes"
+          @click="navigateTo('/projects')"
+          aria-label="View my portfolio projects"
+        >
+          View My Projects
+        </UButton>
+      </template>
+      <template #secondary-button="{ variant, classes }">
+        <UButton
+          size="lg"
+          :variant="variant"
+          :class="classes"
+          @click="openEmailClient"
+          aria-label="Send me an email to start a conversation"
+        >
+          Start a Conversation
+        </UButton>
+      </template>
+    </CallToAction>
   </div>
 </template>
 
