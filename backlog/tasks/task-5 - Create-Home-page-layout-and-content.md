@@ -10,7 +10,7 @@ dependencies: []
 
 ## Description
 
-Build the main landing page that introduces the individual and showcases key highlights of their work and skills
+Build the main landing page that introduces the individual "Sam Carrington" and showcases key highlights of their work and skills
 
 ## Acceptance Criteria
 

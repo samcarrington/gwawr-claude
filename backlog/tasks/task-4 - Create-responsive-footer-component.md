@@ -12,6 +12,15 @@ dependencies: []
 
 Build a simple responsive footer that displays consistently across all pages with essential links and contact information
 
+### Links
+
+#### Social Media
+
+[BlueSky](gwawr.bsky.social)
+[Instagram](https://www.instagram.com/gwawr/)
+[Linkedin](https://www.linkedin.com/in/gwawr/)
+[Github](https://github.com/samcarrington)
+
 ## Acceptance Criteria
 
 - [ ] Footer displays correctly on all screen sizes
