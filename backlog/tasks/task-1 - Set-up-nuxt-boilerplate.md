@@ -7,7 +7,7 @@ assignee:
 created_date: '2025-07-09'
 updated_date: '2025-07-09'
 labels: []
-milestone: m1 - Scaffolding
+milestone: m1 - Core Website Foundation
 dependencies:
   - task-0
 ---
