@@ -156,8 +156,11 @@
 
 <script setup>
 import { formatDate } from '~/utils/date';
-import type { BlogPost } from '~/types/blog';
-import { getSortedBlogPosts, getFeaturedBlogPost, getBlogCategories } from '~/data/blog';
+import {
+  getSortedBlogPosts,
+  getFeaturedBlogPost,
+  getBlogCategories,
+} from '../../data/blog';
 
 // Page metadata
 useHead({
@@ -183,10 +186,7 @@ const regularPosts = computed(() =>
 // Filter functionality
 const selectedCategory = ref('All');
 
-const categories = computed(() => [
-  'All',
-  ...getBlogCategories(),
-]);
+const categories = computed(() => ['All', ...getBlogCategories()]);
 
 const filteredPosts = computed(() => {
   if (selectedCategory.value === 'All') {

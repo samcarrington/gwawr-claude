@@ -76,11 +76,13 @@
 
 <script setup>
 import { formatDate } from '~/utils/date';
-import type { BlogPost } from '~/types/blog';
 
-defineProps<{
-  post: BlogPost;
-}>();
+defineProps({
+  post: {
+    type: Object,
+    required: true,
+  },
+});
 </script>
 
 <style scoped>

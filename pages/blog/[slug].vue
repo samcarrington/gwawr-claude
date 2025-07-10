@@ -223,15 +223,14 @@ const example = () => {
 
 <script setup>
 import { formatDate } from '~/utils/date';
-import type { BlogPost } from '~/types/blog';
-import { getBlogPostBySlug, getRelatedBlogPosts } from '~/data/blog';
+import { getBlogPostBySlug, getRelatedBlogPosts } from '../../data/blog';
 
 const route = useRoute();
 const router = useRouter();
 
 // Find the post by slug
 const post = computed(() => {
-  const foundPost = getBlogPostBySlug(route.params.slug as string);
+  const foundPost = getBlogPostBySlug(route.params.slug);
   if (!foundPost) {
     throw createError({
       statusCode: 404,
