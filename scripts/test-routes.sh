@@ -61,6 +61,9 @@ test_route "/" 200 "Home Page"
 test_route "/projects" 200 "Projects Page"
 test_route "/testimonials" 200 "Testimonials Page"
 test_route "/blog" 200 "Blog Index Page"
+
+# TODO: Replace hardcoded blog post slug with dynamic content discovery
+# See task-17.1 for Contentful integration refactoring
 test_route "/blog/building-scalable-vue-applications-composition-api" 200 "Blog Post Page"
 
 # Test 404 handling
