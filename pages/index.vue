@@ -10,8 +10,8 @@
             Hi, I'm <span class="text-primary">Sam Carrington</span>
           </h1>
           <p class="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
-            Full-stack developer passionate about creating exceptional digital
-            experiences through clean code and innovative solutions.
+            Cloud Architect and Engineering Leader with a passion for creative
+            technology and innovation.
           </p>
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <UButton

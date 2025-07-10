@@ -14,11 +14,13 @@ dependencies:
 
 ## Description
 
-Integrate a headless CMS solution to enable dynamic content management for the website. This milestone transforms the static site into a dynamic, content-driven platform that can be easily maintained by non-technical users.
+Integrate a headless CMS solution to enable dynamic content management for the website. This milestone transforms 
+the static site into a dynamic, content-driven platform that can be easily maintained by non-technical users.
 
 ## Goal
 
-Successfully integrate a headless CMS (Strapi, Contentful, or Sanity) with the Nuxt application, enabling dynamic content management for all pages while maintaining performance and SEO benefits.
+Successfully integrate a headless CMS (Contentful) with the Nuxt application, enabling dynamic 
+content management for all pages while maintaining performance and SEO benefits.
 
 ## Acceptance Criteria
 
