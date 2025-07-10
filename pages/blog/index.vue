@@ -155,6 +155,8 @@
 </template>
 
 <script setup>
+import { formatDate } from '~/utils/date';
+
 // Page metadata
 useHead({
   title: 'Blog - Sam Carrington',
@@ -286,16 +288,6 @@ const filteredPosts = computed(() => {
     post => post.category === selectedCategory.value
   );
 });
-
-// Helper function to format date
-const formatDate = dateString => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-};
 
 // Navigation functions
 const openEmailClient = () => {

@@ -222,6 +222,8 @@ const example = () => {
 </template>
 
 <script setup>
+import { formatDate } from '~/utils/date';
+
 const route = useRoute();
 const router = useRouter();
 
@@ -370,16 +372,6 @@ useHead(() => ({
     })),
   ],
 }));
-
-// Helper function to format date
-const formatDate = dateString => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-};
 
 // Social sharing functions
 const shareOnTwitter = () => {
