@@ -16,13 +16,14 @@
       <ProjectHero v-if="featuredProject" :project="featuredProject" />
 
       <!-- Filter Tabs -->
-      <div class="mb-8">
-        <div class="flex flex-wrap gap-2 justify-center">
+      <div class="mb-12">
+        <div class="flex flex-wrap gap-3 justify-center">
           <UButton
             v-for="category in categories"
             :key="category"
             :variant="selectedCategory === category ? 'solid' : 'outline'"
-            size="sm"
+            size="md"
+            class="px-6 py-2.5 font-medium"
             @click="selectedCategory = category"
           >
             {{ category }}
