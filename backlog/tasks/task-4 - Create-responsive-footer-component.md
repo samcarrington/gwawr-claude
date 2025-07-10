@@ -18,7 +18,7 @@ Build a simple responsive footer that displays consistently across all pages wit
 
 [BlueSky](gwawr.bsky.social)
 [Instagram](https://www.instagram.com/gwawr/)
-[Linkedin](https://www.linkedin.com/in/gwawr/)
+[LinkedIn](https://www.linkedin.com/in/gwawr/)
 [Github](https://github.com/samcarrington)
 
 ## Acceptance Criteria
