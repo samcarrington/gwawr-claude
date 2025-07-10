@@ -1,6 +1,6 @@
 <!-- GWAWR WEBSITE GUIDELINES START -->
 
-# General Operational Standards 
+# General Operational Standards
 
 - Use Backlog, documented below, to manage all tasks and actions
 - Observe all accessibility standards when generating HTML and interactive functionality
@@ -10,6 +10,7 @@
 <!-- GWAWR WEBSITE GUIDELINES END -->
 
 <!-- BACKLOG.MD GUIDELINES END -->
+
 # Instructions for the usage of Backlog.md CLI Tool for planning and execution of tasks on the project
 
 ## 1. Source of Truth
