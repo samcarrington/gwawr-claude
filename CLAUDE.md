@@ -28,7 +28,7 @@ Use a clear brief title that summarizes the task.
 ### **Description**: (The **"why"**)
 
 Provide a concise summary of the task purpose and its goal. Do not add implementation details here. It
-should explain the purpose and context of the task. Code snippooets should be avoided.
+should explain the purpose and context of the task. Code snippets should be avoided.
 
 ### **Acceptance Criteria**: (The **"what"**)
 
