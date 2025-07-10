@@ -11,8 +11,10 @@
     </div>
 
     <!-- Testimonial Content -->
-    <blockquote class="text-gray-700 text-lg leading-relaxed mb-6 italic">
-      "{{ testimonial.content }}"
+    <blockquote
+      class="testimonial-quote text-gray-700 text-lg leading-relaxed mb-6 italic"
+    >
+      {{ testimonial.content }}
     </blockquote>
 
     <!-- Author Info -->
@@ -71,3 +73,27 @@ const getInitials = name => {
     .join('');
 };
 </script>
+
+<style scoped>
+.testimonial-quote {
+  position: relative;
+}
+
+.testimonial-quote::before {
+  content: '"';
+  font-size: 1.5em;
+  color: rgb(var(--color-primary-500) / 0.6);
+  font-weight: bold;
+  position: absolute;
+  left: -0.5em;
+  top: -0.1em;
+}
+
+.testimonial-quote::after {
+  content: '"';
+  font-size: 1.5em;
+  color: rgb(var(--color-primary-500) / 0.6);
+  font-weight: bold;
+  margin-left: 0.1em;
+}
+</style>
