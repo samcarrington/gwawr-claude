@@ -28,37 +28,13 @@
       </div>
 
       <!-- Call-to-Action Section -->
-      <div
-        class="bg-gradient-to-r from-primary/5 to-primary/10 rounded-2xl p-8 md:p-12 text-center"
-      >
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-          Ready to Work Together?
-        </h2>
-        <p class="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
-          Join these satisfied clients and let's create something amazing
-          together. I'm always excited to take on new challenges and deliver
-          exceptional results.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <UButton
-            size="lg"
-            @click="navigateTo('/projects')"
-            aria-label="View my portfolio projects"
-          >
-            <UIcon name="i-heroicons-eye" class="mr-2" />
-            View My Work
-          </UButton>
-          <UButton
-            size="lg"
-            variant="outline"
-            @click="openEmailClient"
-            aria-label="Send me an email to start a conversation"
-          >
-            <UIcon name="i-heroicons-envelope" class="mr-2" />
-            Get In Touch
-          </UButton>
-        </div>
-      </div>
+      <CallToAction
+        variant="light"
+        title="Ready to Work Together?"
+        description="Join these satisfied clients and let's create something amazing together. I'm always excited to take on new challenges and deliver exceptional results."
+        :primary-button="testimonialsPrimaryButton"
+        :secondary-button="testimonialsSecondaryButton"
+      />
     </UContainer>
   </div>
 </template>
@@ -141,5 +117,20 @@ const openEmailClient = () => {
     'Hi Sam,\n\nI came across your testimonials and would love to discuss a potential project. Could we schedule a time to chat?\n\nBest regards,'
   );
   window.location.href = `mailto:sam@gwawr.com?subject=${subject}&body=${body}`;
+};
+
+// Testimonials page CTA button configurations
+const testimonialsPrimaryButton = {
+  text: 'View My Work',
+  icon: 'i-heroicons-eye',
+  action: () => navigateTo('/projects'),
+  ariaLabel: 'View my portfolio projects',
+};
+
+const testimonialsSecondaryButton = {
+  text: 'Get In Touch',
+  icon: 'i-heroicons-envelope',
+  action: openEmailClient,
+  ariaLabel: 'Send me an email to start a conversation',
 };
 </script>
