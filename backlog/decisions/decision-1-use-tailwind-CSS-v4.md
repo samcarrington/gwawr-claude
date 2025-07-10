@@ -4,6 +4,7 @@ title: Use Tailwind CSS v4 for web UI development
 date: '2025-06-22'
 status: proposed
 ---
+
 ## Context
 
 The site requires a CSS framework. Tailwind CSS v4 was recently released with 
