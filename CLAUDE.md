@@ -1,6 +1,6 @@
 <!-- GWAWR WEBSITE GUIDELINES START -->
 
-re
+# General Operational Standards 
 
 - Use Backlog, documented below, to manage all tasks and actions
 - Observe all accessibility standards when generating HTML and interactive functionality
@@ -8,6 +8,7 @@ re
 - Prefix all branches with 'feature/' to ensure they're organised correctly in git.
 
 <!-- GWAWR WEBSITE GUIDELINES END -->
+
 <!-- BACKLOG.MD GUIDELINES END -->
 # Instructions for the usage of Backlog.md CLI Tool for planning and execution of tasks on the project
 
@@ -27,7 +28,7 @@ Use a clear brief title that summarizes the task.
 ### **Description**: (The **"why"**)
 
 Provide a concise summary of the task purpose and its goal. Do not add implementation details here. It
-should explain the purpose and context of the task. Code snippets should be avoided.
+should explain the purpose and context of the task. Code snippooets should be avoided.
 
 ### **Acceptance Criteria**: (The **"what"**)
 
