@@ -1,5 +1,15 @@
 <!-- GWAWR WEBSITE GUIDELINES START -->
 
+# General Operational Standards 
+
+- Use Backlog, documented below, to manage all tasks and actions
+- Observe all accessibility standards when generating HTML and interactive functionality
+- Use 'Conventional Commits' standards when writing commit messages for git
+- Prefix all branches with 'feature/' to ensure they're organised correctly in git.
+
+<!-- GWAWR WEBSITE GUIDELINES END -->
+
+<!-- BACKLOG.MD GUIDELINES END -->
 # Instructions for the usage of Backlog.md CLI Tool for planning and execution of tasks on the project
 
 ## 1. Source of Truth
