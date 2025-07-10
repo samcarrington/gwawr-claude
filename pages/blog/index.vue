@@ -154,13 +154,14 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { formatDate } from '~/utils/date';
+import type { BlogPost } from '~/types/blog';
 import {
   getSortedBlogPosts,
   getFeaturedBlogPost,
   getBlogCategories,
-} from '../../data/blog';
+} from '~/data/blog';
 
 // Page metadata
 useHead({

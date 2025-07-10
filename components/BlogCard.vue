@@ -74,15 +74,13 @@
   </article>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { formatDate } from '~/utils/date';
+import type { BlogPost } from '~/types/blog';
 
-defineProps({
-  post: {
-    type: Object,
-    required: true,
-  },
-});
+defineProps<{
+  post: BlogPost;
+}>();
 </script>
 
 <style scoped>

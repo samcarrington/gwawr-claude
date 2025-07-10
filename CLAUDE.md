@@ -7,6 +7,11 @@
 - Use 'Conventional Commits' standards when writing commit messages for git
 - Prefix all branches with 'feature/' to ensure they're organised correctly in git.
 
+## 2. Working with Vue and Nuxt
+
+- Remember to use `lang="ts"` in script blocks if using TypeScript or importing types
+- Observe and comply with the coding standards described at https://code-style.gwawr.uk/typescript
+
 <!-- GWAWR WEBSITE GUIDELINES END -->
 
 <!-- BACKLOG.MD GUIDELINES END -->
