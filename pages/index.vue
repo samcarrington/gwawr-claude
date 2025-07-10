@@ -141,6 +141,7 @@ const scrollToSection = sectionId => {
 };
 
 const openEmailClient = () => {
-  window.location.href = "mailto:sam@gwawr.com?subject=Let's work together!";
+  const subject = encodeURIComponent("Let's work together!");
+  window.location.href = `mailto:sam@gwawr.com?subject=${subject}`;
 };
 </script>
