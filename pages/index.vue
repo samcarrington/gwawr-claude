@@ -65,9 +65,30 @@
       variant="dark"
       title="Ready to Build Something Amazing?"
       description="I'm always excited to work on new projects and collaborate with passionate teams. Let's discuss how we can bring your ideas to life."
-      :primary-button="homePrimaryButton"
-      :secondary-button="homeSecondaryButton"
-    />
+    >
+      <template #primary-button="{ variant, classes }">
+        <UButton
+          size="lg"
+          :variant="variant"
+          :class="classes"
+          @click="navigateTo('/projects')"
+          aria-label="View my portfolio projects"
+        >
+          View My Projects
+        </UButton>
+      </template>
+      <template #secondary-button="{ variant, classes }">
+        <UButton
+          size="lg"
+          :variant="variant"
+          :class="classes"
+          @click="openEmailClient"
+          aria-label="Send me an email to start a conversation"
+        >
+          Start a Conversation
+        </UButton>
+      </template>
+    </CallToAction>
   </div>
 </template>
 
@@ -120,18 +141,5 @@ const scrollToSection = sectionId => {
 const openEmailClient = () => {
   const subject = encodeURIComponent("Let's work together!");
   window.location.href = `mailto:sam@gwawr.com?subject=${subject}`;
-};
-
-// Home page CTA button configurations
-const homePrimaryButton = {
-  text: 'View My Projects',
-  action: () => navigateTo('/projects'),
-  ariaLabel: 'View my portfolio projects',
-};
-
-const homeSecondaryButton = {
-  text: 'Start a Conversation',
-  action: openEmailClient,
-  ariaLabel: 'Send me an email to start a conversation',
 };
 </script>

@@ -32,9 +32,32 @@
         variant="light"
         title="Ready to Work Together?"
         description="Join these satisfied clients and let's create something amazing together. I'm always excited to take on new challenges and deliver exceptional results."
-        :primary-button="testimonialsPrimaryButton"
-        :secondary-button="testimonialsSecondaryButton"
-      />
+      >
+        <template #primary-button="{ variant, classes }">
+          <UButton
+            size="lg"
+            :variant="variant"
+            :class="classes"
+            @click="navigateTo('/projects')"
+            aria-label="View my portfolio projects"
+          >
+            <UIcon name="i-heroicons-eye" class="mr-2" />
+            View My Work
+          </UButton>
+        </template>
+        <template #secondary-button="{ variant, classes }">
+          <UButton
+            size="lg"
+            :variant="variant"
+            :class="classes"
+            @click="openEmailClient"
+            aria-label="Send me an email to start a conversation"
+          >
+            <UIcon name="i-heroicons-envelope" class="mr-2" />
+            Get In Touch
+          </UButton>
+        </template>
+      </CallToAction>
     </UContainer>
   </div>
 </template>
@@ -117,20 +140,5 @@ const openEmailClient = () => {
     'Hi Sam,\n\nI came across your testimonials and would love to discuss a potential project. Could we schedule a time to chat?\n\nBest regards,'
   );
   window.location.href = `mailto:sam@gwawr.com?subject=${subject}&body=${body}`;
-};
-
-// Testimonials page CTA button configurations
-const testimonialsPrimaryButton = {
-  text: 'View My Work',
-  icon: 'i-heroicons-eye',
-  action: () => navigateTo('/projects'),
-  ariaLabel: 'View my portfolio projects',
-};
-
-const testimonialsSecondaryButton = {
-  text: 'Get In Touch',
-  icon: 'i-heroicons-envelope',
-  action: openEmailClient,
-  ariaLabel: 'Send me an email to start a conversation',
 };
 </script>

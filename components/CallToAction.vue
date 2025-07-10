@@ -9,38 +9,26 @@
         <h2 :class="titleClasses">
           {{ title }}
         </h2>
-        <p :class="descriptionClasses">
-          {{ description }}
-        </p>
+        <div :class="descriptionClasses">
+          <slot name="description">
+            <p>{{ description }}</p>
+          </slot>
+        </div>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <UButton
-            size="lg"
+          <slot
+            name="primary-button"
             :variant="primaryButtonVariant"
-            :class="primaryButtonClasses"
-            @click="handlePrimaryAction"
-            :aria-label="primaryButton.ariaLabel"
+            :classes="primaryButtonClasses"
           >
-            <UIcon
-              v-if="primaryButton.icon"
-              :name="primaryButton.icon"
-              class="mr-2"
-            />
-            {{ primaryButton.text }}
-          </UButton>
-          <UButton
-            size="lg"
+            <!-- Default primary button if no slot provided -->
+          </slot>
+          <slot
+            name="secondary-button"
             :variant="secondaryButtonVariant"
-            :class="secondaryButtonClasses"
-            @click="handleSecondaryAction"
-            :aria-label="secondaryButton.ariaLabel"
+            :classes="secondaryButtonClasses"
           >
-            <UIcon
-              v-if="secondaryButton.icon"
-              :name="secondaryButton.icon"
-              class="mr-2"
-            />
-            {{ secondaryButton.text }}
-          </UButton>
+            <!-- Default secondary button if no slot provided -->
+          </slot>
         </div>
       </div>
     </UContainer>
@@ -60,19 +48,7 @@ const props = defineProps({
   },
   description: {
     type: String,
-    required: true,
-  },
-  primaryButton: {
-    type: Object,
-    required: true,
-    validator: value =>
-      value.text && value.action && typeof value.action === 'function',
-  },
-  secondaryButton: {
-    type: Object,
-    required: true,
-    validator: value =>
-      value.text && value.action && typeof value.action === 'function',
+    default: '',
   },
 });
 
@@ -121,13 +97,4 @@ const secondaryButtonClasses = computed(() => {
   }
   return '';
 });
-
-// Action handlers
-const handlePrimaryAction = () => {
-  props.primaryButton.action();
-};
-
-const handleSecondaryAction = () => {
-  props.secondaryButton.action();
-};
 </script>
