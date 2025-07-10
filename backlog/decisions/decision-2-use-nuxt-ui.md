@@ -1,9 +1,10 @@
---
+---
 id: decision-2
 title: Use Nuxt UI for web UI development
 date: '2025-06-22'
 status: proposed
 ---
+
 ## Context
 Nuxt UI is a stable and configurable UI Library which pairs well with the chosen JS and CSS frameworks
 
