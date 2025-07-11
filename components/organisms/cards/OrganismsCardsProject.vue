@@ -1,5 +1,5 @@
 <template>
-  <BaseCard
+  <MoleculesCardsBase
     variant="default"
     size="md"
     padding="md"
@@ -8,7 +8,7 @@
   >
     <!-- Project Image -->
     <template #header>
-      <CardImage
+      <MoleculesCardsImage
         :src="project.image"
         :alt="project.title"
         :category="project.category"
@@ -19,16 +19,16 @@
 
     <!-- Project Content -->
     <template #default>
-      <CardTitle tag="h3" size="default" spacing="tight">
+      <AtomsTypographyCard tag="h3" size="default" spacing="tight">
         {{ project.title }}
-      </CardTitle>
+      </AtomsTypographyCard>
       <p class="text-gray-600 mb-4 line-clamp-3">
         {{ project.description }}
       </p>
 
       <!-- Technologies -->
       <div class="mb-4">
-        <TagList
+        <MoleculesListsTags
           :tags="project.technologies"
           variant="default"
           size="xs"
@@ -64,7 +64,7 @@
         </UButton>
       </div>
     </template>
-  </BaseCard>
+  </MoleculesCardsBase>
 </template>
 
 <script setup>

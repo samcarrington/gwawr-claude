@@ -3,9 +3,9 @@
     <UContainer>
       <!-- Page Header -->
       <div class="text-center mb-16">
-        <PageTitle size="large" spacing="default">
+        <AtomsTypographyPage size="large" spacing="default">
           Developer's Journal
-        </PageTitle>
+        </AtomsTypographyPage>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
           Thoughts, tutorials, and insights on web development, technology
           trends, and the ever-evolving world of software engineering.
@@ -15,7 +15,7 @@
       <!-- Category Filter -->
       <div class="mb-12">
         <div class="flex flex-wrap gap-3 justify-center">
-          <BaseButton
+          <AtomsButtonsBase
             v-for="category in categories"
             :key="category"
             :variant="selectedCategory === category ? 'solid' : 'outline'"
@@ -24,13 +24,13 @@
             @click="selectedCategory = category"
           >
             {{ category }}
-          </BaseButton>
+          </AtomsButtonsBase>
         </div>
       </div>
 
       <!-- Featured Post -->
       <section v-if="featuredPost" class="mb-16">
-        <SectionTitle size="default" align="left" spacing="default">Featured Article</SectionTitle>
+        <AtomsTypographySection size="default" align="left" spacing="default">Featured Article</AtomsTypographySection>
         <article
           class="bg-gradient-to-r from-primary/5 to-primary/10 rounded-2xl p-8 md:p-12"
         >
@@ -43,9 +43,9 @@
                   {{ featuredPost.category }} • Featured
                 </span>
               </div>
-              <CardTitle tag="h3" size="large" spacing="tight">
+              <AtomsTypographyCard tag="h3" size="large" spacing="tight">
                 {{ featuredPost.title }}
-              </CardTitle>
+              </AtomsTypographyCard>
               <p class="text-lg text-gray-600 mb-6">
                 {{ featuredPost.excerpt }}
               </p>
@@ -88,13 +88,13 @@
 
       <!-- Blog Posts Grid -->
       <section>
-        <SectionTitle size="default" align="left" spacing="loose">Recent Articles</SectionTitle>
+        <AtomsTypographySection size="default" align="left" spacing="loose">Recent Articles</AtomsTypographySection>
         <div
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           role="list"
           aria-label="Blog posts"
         >
-          <BlogCard
+          <OrganismsCardsBlog
             v-for="post in filteredPosts"
             :key="post.id"
             :post="post"
@@ -111,7 +111,7 @@
             name="i-heroicons-document-magnifying-glass"
             class="w-16 h-16 mx-auto mb-4"
           />
-          <CardTitle tag="h3" size="default" align="center" spacing="tight">No articles found</CardTitle>
+          <AtomsTypographyCard tag="h3" size="default" align="center" spacing="tight">No articles found</AtomsTypographyCard>
           <p class="text-lg">
             Try selecting a different category or check back later for new
             content.
@@ -120,7 +120,7 @@
       </section>
 
       <!-- Call-to-Action -->
-      <CallToAction
+      <OrganismsSectionsCallToAction
         variant="light"
         title="Stay Updated"
         description="Subscribe to get notified when I publish new articles about web development, technology insights, and coding tutorials."
@@ -149,7 +149,7 @@
             Get In Touch
           </UButton>
         </template>
-      </CallToAction>
+      </OrganismsSectionsCallToAction>
     </UContainer>
   </div>
 </template>

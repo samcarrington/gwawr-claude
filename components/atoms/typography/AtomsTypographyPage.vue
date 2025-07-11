@@ -1,6 +1,6 @@
 <template>
-  <BaseTitle
-    tag="h2"
+  <AtomsTypographyBase
+    tag="h1"
     :size="size"
     :align="align"
     :color="color"
@@ -9,12 +9,12 @@
     :class="$attrs.class"
   >
     <slot />
-  </BaseTitle>
+  </AtomsTypographyBase>
 </template>
 
 <script setup lang="ts">
 interface Props {
-  size?: 'default' | 'large' | 'small';
+  size?: 'default' | 'large' | 'hero';
   align?: 'left' | 'center' | 'right';
   color?: 'default' | 'primary' | 'secondary' | 'tertiary';
   spacing?: 'default' | 'tight' | 'loose';
@@ -33,19 +33,19 @@ const props = withDefaults(defineProps<Props>(), {
   weight: 'bold',
 });
 
-// Map SectionTitle sizes to BaseTitle sizes
+// Map PageTitle sizes to BaseTitle sizes
 const size = computed(() => {
   switch (props.size) {
+    case 'hero':
+      return '5xl';
     case 'large':
-      return '3xl';
-    case 'small':
-      return 'xl';
+      return '4xl';
     default: // 'default' and fallback
-      return '2xl';
+      return '3xl';
   }
 });
 
-// Map SectionTitle spacing to BaseTitle spacing
+// Map PageTitle spacing to BaseTitle spacing
 const spacing = computed(() => {
   switch (props.spacing) {
     case 'tight':

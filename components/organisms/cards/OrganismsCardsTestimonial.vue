@@ -1,5 +1,5 @@
 <template>
-  <BaseCard
+  <MoleculesCardsBase
     variant="default"
     size="md"
     padding="lg"
@@ -57,7 +57,7 @@
         ]"
       />
     </div>
-  </BaseCard>
+  </MoleculesCardsBase>
 </template>
 
 <script setup>

@@ -1,26 +1,23 @@
 <template>
-  <BaseTitle
-    :tag="tag"
+  <AtomsTypographyBase
+    tag="h2"
     :size="size"
     :align="align"
     :color="color"
     :spacing="spacing"
     :weight="weight"
-    :hover="hover"
     :class="$attrs.class"
   >
     <slot />
-  </BaseTitle>
+  </AtomsTypographyBase>
 </template>
 
 <script setup lang="ts">
 interface Props {
-  tag?: 'h2' | 'h3' | 'h4';
   size?: 'default' | 'large' | 'small';
   align?: 'left' | 'center' | 'right';
   color?: 'default' | 'primary' | 'secondary' | 'tertiary';
-  spacing?: 'default' | 'tight' | 'loose' | 'none';
-  hover?: boolean;
+  spacing?: 'default' | 'tight' | 'loose';
   weight?: 'normal' | 'medium' | 'semibold' | 'bold';
 }
 
@@ -29,41 +26,35 @@ defineOptions({
 });
 
 const props = withDefaults(defineProps<Props>(), {
-  tag: 'h3',
   size: 'default',
-  align: 'left',
+  align: 'center',
   color: 'default',
   spacing: 'default',
-  hover: false,
   weight: 'bold',
 });
 
-// Map CardTitle sizes to BaseTitle sizes
+// Map SectionTitle sizes to BaseTitle sizes
 const size = computed(() => {
   switch (props.size) {
     case 'large':
-      return '2xl';
+      return '3xl';
     case 'small':
-      return 'md';
+      return 'xl';
     default: // 'default' and fallback
-      return 'lg';
+      return '2xl';
   }
 });
 
-// Map CardTitle spacing to BaseTitle spacing
+// Map SectionTitle spacing to BaseTitle spacing
 const spacing = computed(() => {
   switch (props.spacing) {
     case 'tight':
-      return 'sm';
-    case 'loose':
       return 'lg';
-    case 'none':
-      return 'none';
-    default: // 'default' and fallback
-      return 'md';
+    default: // 'loose', 'default' and fallback
+      return 'xl';
   }
 });
 
 // Pass through other props
-const { tag, align, color, hover, weight } = toRefs(props);
+const { align, color, weight } = toRefs(props);
 </script>

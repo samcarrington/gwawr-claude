@@ -14,9 +14,9 @@
           </div>
 
           <!-- Title -->
-          <PageTitle size="large" spacing="default">
+          <AtomsTypographyPage size="large" spacing="default">
             {{ post.title }}
-          </PageTitle>
+          </AtomsTypographyPage>
 
           <!-- Meta Information -->
           <div
@@ -95,18 +95,18 @@
                 {{ post.excerpt }}
               </p>
 
-              <SectionTitle size="default" align="left" spacing="tight">
+              <AtomsTypographySection size="default" align="left" spacing="tight">
                 Introduction
-              </SectionTitle>
+              </AtomsTypographySection>
               <p class="text-gray-700 leading-relaxed">
                 This article would contain the full content of the blog post.
                 The content would typically be fetched from a headless CMS or
                 parsed from markdown files using a tool like @nuxt/content.
               </p>
 
-              <SectionTitle size="default" align="left" spacing="tight">
+              <AtomsTypographySection size="default" align="left" spacing="tight">
                 Key Concepts
-              </SectionTitle>
+              </AtomsTypographySection>
               <p class="text-gray-700 leading-relaxed">
                 The actual implementation would include rich text content with
                 proper formatting, code blocks, images, and other multimedia
@@ -125,9 +125,9 @@ const example = () => {
 };</code></pre>
               </div>
 
-              <SectionTitle size="default" align="left" spacing="tight">
+              <AtomsTypographySection size="default" align="left" spacing="tight">
                 Conclusion
-              </SectionTitle>
+              </AtomsTypographySection>
               <p class="text-gray-700 leading-relaxed">
                 This placeholder demonstrates the structure and layout that
                 would be used for actual blog post content in the final
@@ -175,11 +175,11 @@ const example = () => {
     <section class="py-16 bg-gray-50">
       <UContainer>
         <div class="max-w-6xl mx-auto">
-          <SectionTitle size="large" align="center" spacing="loose">
+          <AtomsTypographySection size="large" align="center" spacing="loose">
             Related Articles
-          </SectionTitle>
+          </AtomsTypographySection>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <BlogCard
+            <OrganismsCardsBlog
               v-for="relatedPost in relatedPosts"
               :key="relatedPost.id"
               :post="relatedPost"
@@ -190,7 +190,7 @@ const example = () => {
     </section>
 
     <!-- Call-to-Action -->
-    <CallToAction
+    <OrganismsSectionsCallToAction
       variant="dark"
       title="Enjoyed This Article?"
       description="If you found this helpful, check out my other projects or get in touch to discuss your next development challenge."
@@ -217,7 +217,7 @@ const example = () => {
           Start a Conversation
         </UButton>
       </template>
-    </CallToAction>
+    </OrganismsSectionsCallToAction>
   </div>
 </template>
 

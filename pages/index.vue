@@ -6,27 +6,27 @@
     >
       <UContainer class="text-center">
         <div class="max-w-4xl mx-auto">
-          <PageTitle size="hero" spacing="default">
+          <AtomsTypographyPage size="hero" spacing="default">
             Hi, I'm <span class="text-primary">Sam Carrington</span>
-          </PageTitle>
+          </AtomsTypographyPage>
           <p class="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
             Cloud Architect and Engineering Leader with a passion for creative
             technology and innovation.
           </p>
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <ButtonPrimary
+            <AtomsButtonsPrimary
               size="lg"
               shadow
               @click="navigateTo('/projects')"
             >
               View My Work
-            </ButtonPrimary>
-            <ButtonSecondary
+            </AtomsButtonsPrimary>
+            <AtomsButtonsSecondary
               size="lg"
               @click="scrollToSection('contact')"
             >
               Get In Touch
-            </ButtonSecondary>
+            </AtomsButtonsSecondary>
           </div>
         </div>
       </UContainer>
@@ -36,9 +36,9 @@
     <section class="py-20 bg-white">
       <UContainer>
         <div class="text-center mb-16">
-          <SectionTitle size="large" spacing="tight">
+          <AtomsTypographySection size="large" spacing="tight">
             What I Do
-          </SectionTitle>
+          </AtomsTypographySection>
           <p class="text-xl text-gray-600 max-w-2xl mx-auto">
             I specialize in building modern web applications with a focus on
             performance, user experience, and scalable architecture.
@@ -46,7 +46,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <SkillCard
+          <OrganismsCardsSkill
             v-for="skill in skills"
             :key="skill.title"
             :icon="skill.icon"
@@ -59,13 +59,13 @@
     </section>
 
     <!-- Call-to-Action Section -->
-    <CallToAction
+    <OrganismsSectionsCallToAction
       variant="dark"
       title="Ready to Build Something Amazing?"
       description="I'm always excited to work on new projects and collaborate with passionate teams. Let's discuss how we can bring your ideas to life."
     >
       <template #primary-button="{ variant, classes }">
-        <BaseButton
+        <AtomsButtonsBase
           size="lg"
           :variant="variant"
           :class="classes"
@@ -73,10 +73,10 @@
           aria-label="View my portfolio projects"
         >
           View My Projects
-        </BaseButton>
+        </AtomsButtonsBase>
       </template>
       <template #secondary-button="{ variant, classes }">
-        <BaseButton
+        <AtomsButtonsBase
           size="lg"
           :variant="variant"
           :class="classes"
@@ -84,9 +84,9 @@
           aria-label="Send me an email to start a conversation"
         >
           Start a Conversation
-        </BaseButton>
+        </AtomsButtonsBase>
       </template>
-    </CallToAction>
+    </OrganismsSectionsCallToAction>
   </div>
 </template>
 

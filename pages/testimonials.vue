@@ -3,9 +3,9 @@
     <UContainer>
       <!-- Page Header -->
       <div class="text-center mb-16">
-        <PageTitle size="large" spacing="default">
+        <AtomsTypographyPage size="large" spacing="default">
           What People Say
-        </PageTitle>
+        </AtomsTypographyPage>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
           Here's what clients, colleagues, and collaborators have said about
           working with me. These testimonials reflect my commitment to quality,
@@ -19,7 +19,7 @@
         role="list"
         aria-label="Client testimonials"
       >
-        <TestimonialCard
+        <OrganismsCardsTestimonial
           v-for="testimonial in testimonials"
           :key="testimonial.id"
           :testimonial="testimonial"
@@ -28,7 +28,7 @@
       </div>
 
       <!-- Call-to-Action Section -->
-      <CallToAction
+      <OrganismsSectionsCallToAction
         variant="light"
         title="Ready to Work Together?"
         description="Join these satisfied clients and let's create something amazing together. I'm always excited to take on new challenges and deliver exceptional results."
@@ -57,7 +57,7 @@
             Get In Touch
           </UButton>
         </template>
-      </CallToAction>
+      </OrganismsSectionsCallToAction>
     </UContainer>
   </div>
 </template>
