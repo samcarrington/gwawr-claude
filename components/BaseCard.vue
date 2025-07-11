@@ -147,15 +147,5 @@ const footerClasses = computed(() => {
 </script>
 
 <style scoped>
-.card-header {
-  /* Header-specific styles */
-}
-
-.card-content {
-  /* Content-specific styles */
-}
-
-.card-footer {
-  /* Footer-specific styles */
-}
+/* Removed unused styles for .card-header, .card-content, and .card-footer */
 </style>
