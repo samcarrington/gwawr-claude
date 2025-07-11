@@ -81,7 +81,7 @@ const isActiveRoute = (href: string) => {
   if (href === '/') {
     return route.path === '/';
   }
-  return route.path.startsWith(href);
+  return route.path === href || route.path.startsWith(href + '/');
 };
 
 // Close mobile menu when route changes
