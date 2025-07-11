@@ -19,7 +19,7 @@
             :key="item.name"
             :to="item.href"
             class="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors"
-            :class="{ 'text-gray-900': $route.path === item.href }"
+            :class="{ 'text-gray-900 font-semibold': isActiveRoute(item.href) }"
           >
             {{ item.name }}
           </NuxtLink>
@@ -48,7 +48,11 @@
             :key="item.name"
             :to="item.href"
             class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
-            :class="{ 'text-gray-900 bg-gray-50': $route.path === item.href }"
+            :class="{
+              'text-gray-900 bg-gray-50 font-semibold': isActiveRoute(
+                item.href
+              ),
+            }"
             @click="isMenuOpen = false"
           >
             {{ item.name }}
@@ -59,9 +63,10 @@
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from 'vue';
 
+const route = useRoute();
 const isMenuOpen = ref(false);
 
 const navigation = [
@@ -71,9 +76,17 @@ const navigation = [
   { name: 'Blog', href: '/blog' },
 ];
 
+// Check if route is active (handles dynamic routes)
+const isActiveRoute = (href: string) => {
+  if (href === '/') {
+    return route.path === '/';
+  }
+  return route.path === href || route.path.startsWith(href + '/');
+};
+
 // Close mobile menu when route changes
 watch(
-  () => useRoute().path,
+  () => route.path,
   () => {
     isMenuOpen.value = false;
   }
