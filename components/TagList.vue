@@ -1,8 +1,8 @@
 <template>
   <div :class="containerClasses">
     <span
-      v-for="tag in tags"
-      :key="tag"
+      v-for="(tag, index) in tags"
+      :key="`${tag}-${index}`"
       :class="tagClasses"
     >
       {{ formatTag(tag) }}
