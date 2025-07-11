@@ -126,7 +126,7 @@ export function transformBlogPost(entry: ContentfulEntry<ContentfulBlogPost>): B
  * Transform multiple blog posts
  */
 export function transformBlogPosts(entries: ContentfulEntry<ContentfulBlogPost>[]): BlogPost[] {
-  return entries.map(transformBlogPost).filter(Boolean)
+  return entries.map(transformBlogPost)
 }
 
 /**
