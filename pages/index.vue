@@ -14,21 +14,19 @@
             technology and innovation.
           </p>
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <UButton
+            <ButtonPrimary
               size="lg"
-              class="px-8 py-3"
+              shadow
               @click="navigateTo('/projects')"
             >
               View My Work
-            </UButton>
-            <UButton
+            </ButtonPrimary>
+            <ButtonSecondary
               size="lg"
-              variant="outline"
-              class="px-8 py-3"
               @click="scrollToSection('contact')"
             >
               Get In Touch
-            </UButton>
+            </ButtonSecondary>
           </div>
         </div>
       </UContainer>
@@ -67,7 +65,7 @@
       description="I'm always excited to work on new projects and collaborate with passionate teams. Let's discuss how we can bring your ideas to life."
     >
       <template #primary-button="{ variant, classes }">
-        <UButton
+        <BaseButton
           size="lg"
           :variant="variant"
           :class="classes"
@@ -75,10 +73,10 @@
           aria-label="View my portfolio projects"
         >
           View My Projects
-        </UButton>
+        </BaseButton>
       </template>
       <template #secondary-button="{ variant, classes }">
-        <UButton
+        <BaseButton
           size="lg"
           :variant="variant"
           :class="classes"
@@ -86,7 +84,7 @@
           aria-label="Send me an email to start a conversation"
         >
           Start a Conversation
-        </UButton>
+        </BaseButton>
       </template>
     </CallToAction>
   </div>

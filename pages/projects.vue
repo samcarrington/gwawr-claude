@@ -18,16 +18,16 @@
       <!-- Filter Tabs -->
       <div class="mb-12">
         <div class="flex flex-wrap gap-3 justify-center">
-          <UButton
+          <BaseButton
             v-for="category in categories"
             :key="category"
             :variant="selectedCategory === category ? 'solid' : 'outline'"
             size="md"
-            class="px-6 py-2.5 font-medium"
+            color="primary"
             @click="selectedCategory = category"
           >
             {{ category }}
-          </UButton>
+          </BaseButton>
         </div>
       </div>
 

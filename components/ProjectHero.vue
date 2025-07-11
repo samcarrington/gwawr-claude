@@ -32,27 +32,30 @@
 
         <!-- Project Links -->
         <div class="flex gap-4">
-          <UButton
+          <ButtonPrimary
             v-if="project.liveUrl"
             size="lg"
             :to="project.liveUrl"
             target="_blank"
             external
           >
-            <UIcon name="i-heroicons-globe-alt" class="mr-2" />
+            <template #leading>
+              <UIcon name="i-heroicons-globe-alt" />
+            </template>
             View Live Project
-          </UButton>
-          <UButton
+          </ButtonPrimary>
+          <ButtonSecondary
             v-if="project.repoUrl"
             size="lg"
-            variant="outline"
             :to="project.repoUrl"
             target="_blank"
             external
           >
-            <UIcon name="i-heroicons-code-bracket" class="mr-2" />
+            <template #leading>
+              <UIcon name="i-heroicons-code-bracket" />
+            </template>
             View Code
-          </UButton>
+          </ButtonSecondary>
         </div>
       </div>
 

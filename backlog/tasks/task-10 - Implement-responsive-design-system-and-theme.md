@@ -5,7 +5,7 @@ status: To Do
 assignee:
   - '@Claude'
 created_date: '2025-07-09'
-updated_date: '2025-07-10'
+updated_date: '2025-07-11'
 labels: []
 dependencies: []
 ---
@@ -31,7 +31,7 @@ Extract titles into a reusable component so consistent spacing, sizing and colou
 - [ ] All components follow responsive design principles
 - [ ] Design system uses Tailwind CSS v4 @theme configuration
 - [ ] Design system is documented for future reference
-
+- [ ] Unit tests created for all design system components
 ## Implementation Plan
 
 1. Implement Tailwind CSS v4 theme configuration with color palette and design tokens
