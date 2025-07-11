@@ -3,9 +3,9 @@
     <UContainer>
       <!-- Page Header -->
       <div class="text-center mb-12">
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+        <PageTitle size="large" spacing="tight">
           My Projects
-        </h1>
+        </PageTitle>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto">
           A showcase of my recent work in web development, from full-stack
           applications to creative frontend projects.

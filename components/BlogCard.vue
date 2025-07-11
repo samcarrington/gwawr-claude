@@ -39,11 +39,9 @@
       </div>
 
       <!-- Title -->
-      <h2
-        class="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-primary transition-colors"
-      >
+      <CardTitle tag="h2" size="default" spacing="default" hover class="line-clamp-2">
         {{ post.title }}
-      </h2>
+      </CardTitle>
 
       <!-- Excerpt -->
       <p class="text-gray-600 mb-4 line-clamp-3">

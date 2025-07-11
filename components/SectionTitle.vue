@@ -1,0 +1,83 @@
+<template>
+  <h2 :class="titleClasses">
+    <slot />
+  </h2>
+</template>
+
+<script setup lang="ts">
+interface Props {
+  size?: 'default' | 'large' | 'small';
+  align?: 'left' | 'center' | 'right';
+  color?: 'default' | 'primary' | 'secondary';
+  spacing?: 'default' | 'tight' | 'loose';
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  size: 'default',
+  align: 'center',
+  color: 'default',
+  spacing: 'default',
+});
+
+const titleClasses = computed(() => {
+  const classes = ['font-bold'];
+  
+  // Size classes using theme typography
+  switch (props.size) {
+    case 'large':
+      classes.push('text-3xl md:text-4xl');
+      break;
+    case 'small':
+      classes.push('text-xl md:text-2xl');
+      break;
+    case 'default':
+    default:
+      classes.push('text-2xl md:text-3xl');
+      break;
+  }
+  
+  // Alignment classes
+  switch (props.align) {
+    case 'left':
+      classes.push('text-left');
+      break;
+    case 'right':
+      classes.push('text-right');
+      break;
+    case 'center':
+    default:
+      classes.push('text-center');
+      break;
+  }
+  
+  // Color classes using theme colors
+  switch (props.color) {
+    case 'primary':
+      classes.push('text-primary');
+      break;
+    case 'secondary':
+      classes.push('text-secondary');
+      break;
+    case 'default':
+    default:
+      classes.push('text-gray-900');
+      break;
+  }
+  
+  // Spacing classes using theme spacing
+  switch (props.spacing) {
+    case 'tight':
+      classes.push('mb-4');
+      break;
+    case 'loose':
+      classes.push('mb-8');
+      break;
+    case 'default':
+    default:
+      classes.push('mb-6');
+      break;
+  }
+  
+  return classes.join(' ');
+});
+</script>
