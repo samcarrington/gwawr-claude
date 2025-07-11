@@ -28,9 +28,9 @@
 
     <!-- Project Content -->
     <div class="p-6">
-      <h3 class="text-xl font-bold text-gray-900 mb-2">
+      <CardTitle tag="h3" size="default" spacing="tight">
         {{ project.title }}
-      </h3>
+      </CardTitle>
       <p class="text-gray-600 mb-4 line-clamp-3">
         {{ project.description }}
       </p>

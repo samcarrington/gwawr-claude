@@ -14,9 +14,9 @@
           </div>
 
           <!-- Title -->
-          <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <PageTitle size="large" spacing="default">
             {{ post.title }}
-          </h1>
+          </PageTitle>
 
           <!-- Meta Information -->
           <div
@@ -95,18 +95,18 @@
                 {{ post.excerpt }}
               </p>
 
-              <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">
+              <SectionTitle size="default" align="left" spacing="tight">
                 Introduction
-              </h2>
+              </SectionTitle>
               <p class="text-gray-700 leading-relaxed">
                 This article would contain the full content of the blog post.
                 The content would typically be fetched from a headless CMS or
                 parsed from markdown files using a tool like @nuxt/content.
               </p>
 
-              <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">
+              <SectionTitle size="default" align="left" spacing="tight">
                 Key Concepts
-              </h2>
+              </SectionTitle>
               <p class="text-gray-700 leading-relaxed">
                 The actual implementation would include rich text content with
                 proper formatting, code blocks, images, and other multimedia
@@ -125,9 +125,9 @@ const example = () => {
 };</code></pre>
               </div>
 
-              <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">
+              <SectionTitle size="default" align="left" spacing="tight">
                 Conclusion
-              </h2>
+              </SectionTitle>
               <p class="text-gray-700 leading-relaxed">
                 This placeholder demonstrates the structure and layout that
                 would be used for actual blog post content in the final
@@ -175,9 +175,9 @@ const example = () => {
     <section class="py-16 bg-gray-50">
       <UContainer>
         <div class="max-w-6xl mx-auto">
-          <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">
+          <SectionTitle size="large" align="center" spacing="loose">
             Related Articles
-          </h2>
+          </SectionTitle>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <BlogCard
               v-for="relatedPost in relatedPosts"

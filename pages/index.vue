@@ -6,9 +6,9 @@
     >
       <UContainer class="text-center">
         <div class="max-w-4xl mx-auto">
-          <h1 class="text-5xl md:text-7xl font-bold text-gray-900 mb-6">
+          <PageTitle size="hero" spacing="default">
             Hi, I'm <span class="text-primary">Sam Carrington</span>
-          </h1>
+          </PageTitle>
           <p class="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
             Cloud Architect and Engineering Leader with a passion for creative
             technology and innovation.
@@ -38,9 +38,9 @@
     <section class="py-20 bg-white">
       <UContainer>
         <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <SectionTitle size="large" spacing="tight">
             What I Do
-          </h2>
+          </SectionTitle>
           <p class="text-xl text-gray-600 max-w-2xl mx-auto">
             I specialize in building modern web applications with a focus on
             performance, user experience, and scalable architecture.

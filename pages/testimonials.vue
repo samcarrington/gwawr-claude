@@ -3,9 +3,9 @@
     <UContainer>
       <!-- Page Header -->
       <div class="text-center mb-16">
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+        <PageTitle size="large" spacing="default">
           What People Say
-        </h1>
+        </PageTitle>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
           Here's what clients, colleagues, and collaborators have said about
           working with me. These testimonials reflect my commitment to quality,

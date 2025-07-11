@@ -3,9 +3,9 @@
     <UContainer>
       <!-- Page Header -->
       <div class="text-center mb-16">
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+        <PageTitle size="large" spacing="default">
           Developer's Journal
-        </h1>
+        </PageTitle>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
           Thoughts, tutorials, and insights on web development, technology
           trends, and the ever-evolving world of software engineering.
@@ -30,7 +30,7 @@
 
       <!-- Featured Post -->
       <section v-if="featuredPost" class="mb-16">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Featured Article</h2>
+        <SectionTitle size="default" align="left" spacing="default">Featured Article</SectionTitle>
         <article
           class="bg-gradient-to-r from-primary/5 to-primary/10 rounded-2xl p-8 md:p-12"
         >
@@ -43,9 +43,9 @@
                   {{ featuredPost.category }} • Featured
                 </span>
               </div>
-              <h3 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              <CardTitle tag="h3" size="large" spacing="tight">
                 {{ featuredPost.title }}
-              </h3>
+              </CardTitle>
               <p class="text-lg text-gray-600 mb-6">
                 {{ featuredPost.excerpt }}
               </p>
@@ -88,7 +88,7 @@
 
       <!-- Blog Posts Grid -->
       <section>
-        <h2 class="text-2xl font-bold text-gray-900 mb-8">Recent Articles</h2>
+        <SectionTitle size="default" align="left" spacing="loose">Recent Articles</SectionTitle>
         <div
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           role="list"
@@ -111,7 +111,7 @@
             name="i-heroicons-document-magnifying-glass"
             class="w-16 h-16 mx-auto mb-4"
           />
-          <h3 class="text-xl font-semibold mb-2">No articles found</h3>
+          <CardTitle tag="h3" size="default" align="center" spacing="tight">No articles found</CardTitle>
           <p class="text-lg">
             Try selecting a different category or check back later for new
             content.
