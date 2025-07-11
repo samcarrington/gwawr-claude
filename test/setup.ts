@@ -48,17 +48,17 @@ global.UButton = defineComponent({
   inheritAttrs: false
 })
 
-global.UContainer = {
+global.UContainer = defineComponent({
   name: 'UContainer',
   template: '<div :class="$attrs.class"><slot /></div>',
   props: ['class']
-}
+})
 
-global.UIcon = {
+global.UIcon = defineComponent({
   name: 'UIcon',
   template: '<i :class="$attrs.class"></i>',
   props: ['name', 'class']
-}
+})
 
 // Global test utilities
 global.ResizeObserver = vi.fn().mockImplementation(() => ({
