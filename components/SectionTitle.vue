@@ -1,83 +1,64 @@
 <template>
-  <h2 :class="titleClasses">
+  <BaseTitle
+    tag="h2"
+    :size="size"
+    :align="align"
+    :color="color"
+    :spacing="spacing"
+    :weight="weight"
+    :class="$attrs.class"
+  >
     <slot />
-  </h2>
+  </BaseTitle>
 </template>
 
 <script setup lang="ts">
 interface Props {
   size?: 'default' | 'large' | 'small';
   align?: 'left' | 'center' | 'right';
-  color?: 'default' | 'primary' | 'secondary';
+  color?: 'default' | 'primary' | 'secondary' | 'tertiary';
   spacing?: 'default' | 'tight' | 'loose';
+  weight?: 'normal' | 'medium' | 'semibold' | 'bold';
 }
+
+defineOptions({
+  inheritAttrs: false,
+});
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'default',
   align: 'center',
   color: 'default',
   spacing: 'default',
+  weight: 'bold',
 });
 
-const titleClasses = computed(() => {
-  const classes = ['font-bold'];
-  
-  // Size classes using theme typography
+// Map SectionTitle sizes to BaseTitle sizes
+const size = computed(() => {
   switch (props.size) {
     case 'large':
-      classes.push('text-3xl md:text-4xl');
-      break;
+      return '3xl';
     case 'small':
-      classes.push('text-xl md:text-2xl');
-      break;
+      return 'xl';
     case 'default':
     default:
-      classes.push('text-2xl md:text-3xl');
-      break;
+      return '2xl';
   }
-  
-  // Alignment classes
-  switch (props.align) {
-    case 'left':
-      classes.push('text-left');
-      break;
-    case 'right':
-      classes.push('text-right');
-      break;
-    case 'center':
-    default:
-      classes.push('text-center');
-      break;
-  }
-  
-  // Color classes using theme colors
-  switch (props.color) {
-    case 'primary':
-      classes.push('text-primary');
-      break;
-    case 'secondary':
-      classes.push('text-secondary');
-      break;
-    case 'default':
-    default:
-      classes.push('text-gray-900');
-      break;
-  }
-  
-  // Spacing classes using theme spacing
+});
+
+// Map SectionTitle spacing to BaseTitle spacing
+const spacing = computed(() => {
   switch (props.spacing) {
     case 'tight':
-      classes.push('mb-4');
-      break;
+      return 'lg';
     case 'loose':
-      classes.push('mb-8');
-      break;
+      return 'xl';
     case 'default':
     default:
-      classes.push('mb-6');
-      break;
+      return 'xl';
   }
-  
-  return classes.join(' ');
 });
+
+// Pass through other props
+const { align, color, weight } = toRefs(props);
 </script>
