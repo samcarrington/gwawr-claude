@@ -108,7 +108,7 @@ export function transformBlogPost(entry: ContentfulEntry<ContentfulBlogPost>): B
   const fields = entry.fields
   
   return {
-    id: parseInt(entry.sys.id, 36), // Convert Contentful ID to number
+    id: entry.sys.id, // Use Contentful ID directly as string
     title: fields.title,
     slug: fields.slug,
     excerpt: fields.excerpt,
