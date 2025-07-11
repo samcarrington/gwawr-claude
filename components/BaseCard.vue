@@ -116,7 +116,7 @@ const headerClasses = computed(() => {
   
   // Remove padding for header if card has padding
   if (props.padding !== 'none') {
-    classes.push('first:rounded-t-' + props.rounded);
+    classes.push('rounded-t-' + props.rounded);
   }
   
   return classes.join(' ');
