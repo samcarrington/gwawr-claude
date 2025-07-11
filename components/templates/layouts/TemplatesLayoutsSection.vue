@@ -32,6 +32,14 @@
 </template>
 
 <script setup lang="ts">
+import { 
+  getAlignClass, 
+  getDescriptionAlignClass, 
+  getBackgroundClass, 
+  getPaddingClass, 
+  getMaxWidthClass 
+} from '../../../utils/layout-classes';
+
 interface Props {
   title?: string;
   description?: string;
@@ -63,25 +71,6 @@ const props = withDefaults(defineProps<Props>(), {
 const sectionClasses = computed(() => {
   const classes = [];
 
-  // Background classes
-  const backgroundClasses = {
-    white: 'bg-white',
-    neutral: 'bg-neutral-50',
-    primary: 'bg-primary-50',
-    secondary: 'bg-secondary-50',
-    tertiary: 'bg-tertiary-50',
-    transparent: '',
-  };
-
-  // Padding classes
-  const paddingClasses = {
-    none: '',
-    sm: 'py-8',
-    md: 'py-12',
-    lg: 'py-20',
-    xl: 'py-24',
-  };
-
   // Variant classes
   const variantClasses = {
     default: '',
@@ -89,8 +78,8 @@ const sectionClasses = computed(() => {
     highlight: 'relative border-l-4 border-primary',
   };
 
-  classes.push(backgroundClasses[props.background] || backgroundClasses.transparent);
-  classes.push(paddingClasses[props.padding] || paddingClasses.lg);
+  classes.push(getBackgroundClass(props.background));
+  classes.push(getPaddingClass(props.padding));
   classes.push(variantClasses[props.variant] || variantClasses.default);
 
   // Border and rounded classes
@@ -107,14 +96,7 @@ const sectionClasses = computed(() => {
 const headerClasses = computed(() => {
   const classes = [];
 
-  // Header alignment
-  const alignClasses = {
-    left: 'text-left',
-    center: 'text-center',
-    right: 'text-right',
-  };
-
-  classes.push(alignClasses[props.headerAlign] || alignClasses.center);
+  classes.push(getAlignClass(props.headerAlign, 'center'));
   classes.push('mb-16');
 
   return classes.join(' ');
@@ -123,29 +105,8 @@ const headerClasses = computed(() => {
 const contentClasses = computed(() => {
   const classes = [];
 
-  // Content alignment
-  const alignClasses = {
-    left: 'text-left',
-    center: 'text-center',
-    right: 'text-right',
-  };
-
-  // Max width classes
-  const maxWidthClasses = {
-    none: '',
-    sm: 'max-w-sm mx-auto',
-    md: 'max-w-md mx-auto',
-    lg: 'max-w-lg mx-auto',
-    xl: 'max-w-xl mx-auto',
-    '2xl': 'max-w-2xl mx-auto',
-    '3xl': 'max-w-3xl mx-auto',
-    '4xl': 'max-w-4xl mx-auto',
-    '5xl': 'max-w-5xl mx-auto',
-    '6xl': 'max-w-6xl mx-auto',
-  };
-
-  classes.push(alignClasses[props.contentAlign] || alignClasses.left);
-  classes.push(maxWidthClasses[props.maxWidth] || maxWidthClasses.none);
+  classes.push(getAlignClass(props.contentAlign, 'left'));
+  classes.push(getMaxWidthClass(props.maxWidth));
 
   return classes.join(' ');
 });
@@ -153,14 +114,7 @@ const contentClasses = computed(() => {
 const descriptionClasses = computed(() => {
   const classes = ['text-xl text-gray-600 leading-relaxed'];
 
-  // Description alignment and width
-  const alignClasses = {
-    left: 'text-left max-w-none',
-    center: 'text-center max-w-3xl mx-auto',
-    right: 'text-right max-w-none ml-auto',
-  };
-
-  classes.push(alignClasses[props.headerAlign] || alignClasses.center);
+  classes.push(getDescriptionAlignClass(props.headerAlign, 'center'));
 
   return classes.join(' ');
 });
@@ -168,14 +122,7 @@ const descriptionClasses = computed(() => {
 const footerClasses = computed(() => {
   const classes = ['mt-16'];
 
-  // Footer alignment
-  const alignClasses = {
-    left: 'text-left',
-    center: 'text-center',
-    right: 'text-right',
-  };
-
-  classes.push(alignClasses[props.headerAlign] || alignClasses.center);
+  classes.push(getAlignClass(props.headerAlign, 'center'));
 
   return classes.join(' ');
 });

@@ -32,6 +32,15 @@
 </template>
 
 <script setup lang="ts">
+import { 
+  getAlignClass, 
+  getDescriptionAlignClass, 
+  getBackgroundClass, 
+  getPaddingClass, 
+  getGapClass, 
+  getGridColumnClass 
+} from '../../../utils/layout-classes';
+
 interface Props {
   title?: string;
   description?: string;
@@ -59,27 +68,8 @@ const props = withDefaults(defineProps<Props>(), {
 const sectionClasses = computed(() => {
   const classes = [];
 
-  // Background classes
-  const backgroundClasses = {
-    white: 'bg-white',
-    neutral: 'bg-neutral-50',
-    primary: 'bg-primary-50',
-    secondary: 'bg-secondary-50',
-    tertiary: 'bg-tertiary-50',
-    transparent: '',
-  };
-
-  // Padding classes
-  const paddingClasses = {
-    none: '',
-    sm: 'py-8',
-    md: 'py-12',
-    lg: 'py-20',
-    xl: 'py-24',
-  };
-
-  classes.push(backgroundClasses[props.background] || backgroundClasses.transparent);
-  classes.push(paddingClasses[props.padding] || paddingClasses.lg);
+  classes.push(getBackgroundClass(props.background));
+  classes.push(getPaddingClass(props.padding));
 
   return classes.join(' ');
 });
@@ -87,14 +77,7 @@ const sectionClasses = computed(() => {
 const headerClasses = computed(() => {
   const classes = [];
 
-  // Header alignment
-  const alignClasses = {
-    left: 'text-left',
-    center: 'text-center',
-    right: 'text-right',
-  };
-
-  classes.push(alignClasses[props.headerAlign] || alignClasses.center);
+  classes.push(getAlignClass(props.headerAlign, 'center'));
   classes.push('mb-16');
 
   return classes.join(' ');
@@ -103,29 +86,10 @@ const headerClasses = computed(() => {
 const gridClasses = computed(() => {
   const classes = ['grid'];
 
-  // Gap classes
-  const gapClasses = {
-    xs: 'gap-2',
-    sm: 'gap-4',
-    md: 'gap-6',
-    lg: 'gap-8',
-    xl: 'gap-12',
-  };
-
-  // Column classes
-  const columnClasses = {
-    1: 'grid-cols-1',
-    2: 'grid-cols-1 md:grid-cols-2',
-    3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
-    4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
-    5: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5',
-    6: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6',
-  };
-
-  classes.push(gapClasses[props.gap] || gapClasses.lg);
+  classes.push(getGapClass(props.gap));
   
   if (props.responsive) {
-    classes.push(columnClasses[props.columns] || columnClasses[3]);
+    classes.push(getGridColumnClass(props.columns));
   } else {
     classes.push(`grid-cols-${props.columns}`);
   }
@@ -136,14 +100,7 @@ const gridClasses = computed(() => {
 const descriptionClasses = computed(() => {
   const classes = ['text-xl text-gray-600 leading-relaxed'];
 
-  // Description alignment and width
-  const alignClasses = {
-    left: 'text-left max-w-none',
-    center: 'text-center max-w-3xl mx-auto',
-    right: 'text-right max-w-none ml-auto',
-  };
-
-  classes.push(alignClasses[props.headerAlign] || alignClasses.center);
+  classes.push(getDescriptionAlignClass(props.headerAlign, 'center'));
 
   return classes.join(' ');
 });
@@ -151,14 +108,7 @@ const descriptionClasses = computed(() => {
 const footerClasses = computed(() => {
   const classes = ['mt-16'];
 
-  // Footer alignment
-  const alignClasses = {
-    left: 'text-left',
-    center: 'text-center',
-    right: 'text-right',
-  };
-
-  classes.push(alignClasses[props.headerAlign] || alignClasses.center);
+  classes.push(getAlignClass(props.headerAlign, 'center'));
 
   return classes.join(' ');
 });
