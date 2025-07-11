@@ -12,9 +12,9 @@
 
     <!-- Category Badge -->
     <div v-if="category" class="absolute top-4 left-4">
-      <span class="px-3 py-1 bg-primary text-white text-sm rounded-full font-medium">
+      <Badge variant="primary" size="sm">
         {{ category }}
-      </span>
+      </Badge>
     </div>
 
     <!-- Additional slot for custom overlays -->

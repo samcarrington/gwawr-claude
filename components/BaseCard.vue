@@ -52,8 +52,8 @@ const props = withDefaults(defineProps<Props>(), {
 const variantClasses = {
   default: 'bg-white shadow-lg',
   elevated: 'bg-white shadow-xl',
-  flat: 'bg-gray-50',
-  outline: 'bg-white border border-gray-200',
+  flat: 'bg-neutral-50',
+  outline: 'bg-white border border-neutral-200',
 } as const;
 
 const sizeClasses = {
@@ -91,9 +91,9 @@ const cardClasses = computed(() => {
     } else if (props.variant === 'elevated') {
       classes.push('hover:shadow-2xl');
     } else if (props.variant === 'flat') {
-      classes.push('hover:bg-gray-100');
+      classes.push('hover:bg-neutral-100');
     } else if (props.variant === 'outline') {
-      classes.push('hover:border-gray-300 hover:shadow-sm');
+      classes.push('hover:border-neutral-300 hover:shadow-sm');
     }
     classes.push('transition-all duration-300');
   }

@@ -27,14 +27,17 @@
 
         <!-- Mobile menu button -->
         <div class="md:hidden">
-          <UButton
+          <BaseButton
             variant="ghost"
             size="sm"
-            icon="i-heroicons-bars-3"
+            color="neutral"
+            :aria-label="isMenuOpen ? 'Close menu' : 'Open menu'"
             @click="isMenuOpen = !isMenuOpen"
-            :aria-expanded="isMenuOpen"
-            aria-label="Toggle menu"
-          />
+          >
+            <template #leading>
+              <UIcon name="i-heroicons-bars-3" />
+            </template>
+          </BaseButton>
         </div>
       </div>
 
