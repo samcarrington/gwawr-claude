@@ -2,7 +2,19 @@
 
 ## Overview
 
-This design system provides a consistent visual language and component library for the GWAWR website. Built using Tailwind CSS v4 with custom theme configuration, it ensures cohesive design across all pages and components.
+This design system provides a consistent visual language and component library for the GWAWR website. Built using Tailwind CSS v4 with custom theme configuration and atomic design principles, it ensures cohesive design across all pages and components.
+
+> **📖 For comprehensive documentation and usage examples, see the [Design System Guide](./design-system-guide.md)**
+> 
+> **🎨 For interactive component showcase, visit [/design-system](/design-system)**
+
+### Key Features
+- **Atomic Design**: Components organized by atoms, molecules, organisms, and templates
+- **Cascade Naming**: Consistent naming convention for scalable component architecture  
+- **Theme-driven**: All styling controlled through centralized theme configuration
+- **Shared Utilities**: DRY layout utilities in `utils/layout-classes.ts`
+- **Type Safe**: Full TypeScript support with proper prop definitions
+- **Responsive First**: Mobile-first approach with consistent breakpoints
 
 ## Theme Configuration
 
