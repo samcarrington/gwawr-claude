@@ -3,9 +3,9 @@
     <UContainer>
       <!-- Page Header -->
       <div class="text-center mb-12">
-        <PageTitle size="large" spacing="tight">
+        <AtomsTypographyPage size="large" spacing="tight">
           My Projects
-        </PageTitle>
+        </AtomsTypographyPage>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto">
           A showcase of my recent work in web development, from full-stack
           applications to creative frontend projects.
@@ -13,12 +13,12 @@
       </div>
 
       <!-- Featured Project -->
-      <ProjectHero v-if="featuredProject" :project="featuredProject" />
+      <OrganismsHeroesProject v-if="featuredProject" :project="featuredProject" />
 
       <!-- Filter Tabs -->
       <div class="mb-12">
         <div class="flex flex-wrap gap-3 justify-center">
-          <BaseButton
+          <AtomsButtonsBase
             v-for="category in categories"
             :key="category"
             :variant="selectedCategory === category ? 'solid' : 'outline'"
@@ -27,13 +27,13 @@
             @click="selectedCategory = category"
           >
             {{ category }}
-          </BaseButton>
+          </AtomsButtonsBase>
         </div>
       </div>
 
       <!-- Projects Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <ProjectCard
+        <OrganismsCardsProject
           v-for="project in filteredProjects"
           :key="project.id"
           :project="project"

@@ -12,9 +12,9 @@
 
     <!-- Category Badge -->
     <div v-if="category" class="absolute top-4 left-4">
-      <Badge variant="primary" size="sm">
+      <AtomsBadges variant="primary" size="sm">
         {{ category }}
-      </Badge>
+      </AtomsBadges>
     </div>
 
     <!-- Additional slot for custom overlays -->

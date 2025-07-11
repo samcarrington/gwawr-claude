@@ -1,14 +1,13 @@
 <template>
   <div class="min-h-screen bg-gray-50 flex flex-col">
-    <Header />
+    <OrganismsNavigationHeader />
     <main class="flex-grow">
       <slot />
     </main>
-    <Footer />
+    <OrganismsNavigationFooter />
   </div>
 </template>
 
 <script setup>
-import Header from '~/components/Header.vue';
-import Footer from '~/components/Footer.vue';
+// Components are now auto-imported by Nuxt
 </script>

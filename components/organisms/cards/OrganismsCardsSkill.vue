@@ -1,5 +1,5 @@
 <template>
-  <BaseCard
+  <MoleculesCardsBase
     variant="flat"
     size="md"
     padding="lg"
@@ -17,13 +17,13 @@
     <p class="text-gray-600 mb-4">
       {{ description }}
     </p>
-    <TagList
+    <MoleculesListsTags
       :tags="technologies"
       variant="primary"
       size="sm"
       align="center"
     />
-  </BaseCard>
+  </MoleculesCardsBase>
 </template>
 
 <script setup>

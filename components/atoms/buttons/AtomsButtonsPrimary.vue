@@ -1,5 +1,5 @@
 <template>
-  <BaseButton
+  <AtomsButtonsBase
     variant="solid"
     color="primary"
     v-bind="$attrs"
@@ -12,7 +12,7 @@
     <template #trailing v-if="$slots.trailing">
       <slot name="trailing" />
     </template>
-  </BaseButton>
+  </AtomsButtonsBase>
 </template>
 
 <script setup lang="ts">

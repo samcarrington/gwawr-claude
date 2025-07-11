@@ -27,7 +27,7 @@
 
         <!-- Mobile menu button -->
         <div class="md:hidden">
-          <BaseButton
+          <AtomsButtonsBase
             variant="ghost"
             size="sm"
             color="neutral"
@@ -37,7 +37,7 @@
             <template #leading>
               <UIcon name="i-heroicons-bars-3" />
             </template>
-          </BaseButton>
+          </AtomsButtonsBase>
         </div>
       </div>
 

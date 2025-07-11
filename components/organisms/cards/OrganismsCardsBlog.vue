@@ -1,5 +1,5 @@
 <template>
-  <BaseCard
+  <MoleculesCardsBase
     tag="article"
     variant="default"
     size="md"
@@ -10,7 +10,7 @@
   >
     <!-- Featured Image -->
     <template #header>
-      <CardImage
+      <MoleculesCardsImage
         :src="post.featuredImage"
         :alt="post.title"
         :category="post.category"
@@ -33,9 +33,9 @@
       </div>
 
       <!-- Title -->
-      <CardTitle tag="h2" size="default" spacing="default" hover class="line-clamp-2">
+      <AtomsTypographyCard tag="h2" size="default" spacing="default" hover class="line-clamp-2">
         {{ post.title }}
-      </CardTitle>
+      </AtomsTypographyCard>
 
       <!-- Excerpt -->
       <p class="text-gray-600 mb-4 line-clamp-3">
@@ -44,7 +44,7 @@
 
       <!-- Tags -->
       <div class="mb-4">
-        <TagList
+        <MoleculesListsTags
           :tags="post.tags"
           variant="default"
           size="xs"
@@ -65,7 +65,7 @@
         <UIcon name="i-heroicons-arrow-right" class="ml-1 w-4 h-4" />
       </NuxtLink>
     </template>
-  </BaseCard>
+  </MoleculesCardsBase>
 </template>
 
 <script setup lang="ts">
