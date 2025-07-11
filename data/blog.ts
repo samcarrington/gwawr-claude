@@ -7,7 +7,7 @@ import type { BlogPost } from '~/types/blog';
  */
 export const blogPosts: BlogPost[] = [
   {
-    id: 1,
+    id: '1XvYNQKLVEJ4cY6oM5ZyXh',
     title: 'Building Scalable Vue.js Applications with Composition API',
     slug: 'building-scalable-vue-applications-composition-api',
     excerpt:
@@ -21,7 +21,7 @@ export const blogPosts: BlogPost[] = [
     featured: true,
   },
   {
-    id: 2,
+    id: '2BkwPQMLYDK5dZ7pN6AzYi',
     title: 'Modern CSS Techniques: Container Queries and Subgrid',
     slug: 'modern-css-techniques-container-queries-subgrid',
     excerpt:
@@ -35,7 +35,7 @@ export const blogPosts: BlogPost[] = [
     featured: false,
   },
   {
-    id: 3,
+    id: '3CmxQRNMZEL6eA8qO7BaZj',
     title: 'TypeScript Best Practices for Large Applications',
     slug: 'typescript-best-practices-large-applications',
     excerpt:
@@ -49,7 +49,7 @@ export const blogPosts: BlogPost[] = [
     featured: false,
   },
   {
-    id: 4,
+    id: '4DnyRSONA9M7fB9rP8CbAk',
     title: 'Deploying Nuxt.js Applications to Production',
     slug: 'deploying-nuxt-applications-production',
     excerpt:
@@ -63,7 +63,7 @@ export const blogPosts: BlogPost[] = [
     featured: false,
   },
   {
-    id: 5,
+    id: '5EozSTPOB0N8gC0sQ9DcBl',
     title: 'JavaScript Design Patterns in 2024',
     slug: 'javascript-design-patterns-2024',
     excerpt:
@@ -77,7 +77,7 @@ export const blogPosts: BlogPost[] = [
     featured: false,
   },
   {
-    id: 6,
+    id: '6FpATUQPC1O9hD1tR0EdCm',
     title: 'API Design: RESTful vs GraphQL Considerations',
     slug: 'api-design-restful-vs-graphql-considerations',
     excerpt:
