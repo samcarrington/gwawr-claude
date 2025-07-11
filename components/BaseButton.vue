@@ -3,7 +3,7 @@
     :class="[buttonClasses, $attrs.class]"
     :size="size"
     :variant="variant"
-    :color="color"
+    :color="uButtonColor"
     :disabled="disabled"
     :loading="loading"
     :to="to"
@@ -53,6 +53,22 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   click: [event: MouseEvent];
 }>();
+
+// Translate our color prop to UButton's expected color format
+const uButtonColor = computed(() => {
+  // Map our design system colors to UButton colors
+  const colorMap = {
+    primary: 'primary',
+    secondary: 'secondary', 
+    tertiary: 'info', // Map tertiary to info for UButton
+    success: 'success',
+    warning: 'warning',
+    error: 'error',
+    neutral: 'gray', // Map neutral to gray for UButton
+  } as const;
+  
+  return colorMap[props.color] || 'primary';
+});
 
 // Only handle additional styling not covered by app.config.ts
 const buttonClasses = computed(() => {

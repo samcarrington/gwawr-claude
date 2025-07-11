@@ -48,7 +48,7 @@ export default defineAppConfig({
           ghost: 'text-secondary bg-transparent hover:bg-secondary/10 disabled:bg-transparent disabled:hover:bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary',
           link: 'text-secondary hover:text-secondary-600 disabled:text-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary',
         },
-        tertiary: {
+        info: {
           solid: 'shadow-sm ring-1 ring-inset ring-tertiary/20 text-white bg-tertiary hover:bg-tertiary-600 disabled:bg-tertiary disabled:hover:bg-tertiary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tertiary',
           outline: 'shadow-sm ring-1 ring-inset ring-tertiary text-tertiary bg-transparent hover:bg-tertiary/10 disabled:bg-transparent disabled:hover:bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tertiary',
           soft: 'text-tertiary bg-tertiary/10 hover:bg-tertiary/20 disabled:bg-tertiary/10 disabled:hover:bg-tertiary/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tertiary',
@@ -76,7 +76,7 @@ export default defineAppConfig({
           ghost: 'text-error bg-transparent hover:bg-error/10 disabled:bg-transparent disabled:hover:bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-error',
           link: 'text-error hover:text-error-600 disabled:text-error focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-error',
         },
-        neutral: {
+        gray: {
           solid: 'shadow-sm ring-1 ring-inset ring-neutral-300 text-white bg-neutral-700 hover:bg-neutral-800 disabled:bg-neutral-700 disabled:hover:bg-neutral-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-600',
           outline: 'shadow-sm ring-1 ring-inset ring-neutral-300 text-neutral-700 bg-transparent hover:bg-neutral-100 disabled:bg-transparent disabled:hover:bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-600',
           soft: 'text-neutral-700 bg-neutral-100 hover:bg-neutral-200 disabled:bg-neutral-100 disabled:hover:bg-neutral-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-600',
