@@ -1,33 +1,24 @@
 <template>
-  <div
-    class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
+  <BaseCard
+    variant="default"
+    size="md"
+    padding="md"
+    hover
+    overflow
   >
     <!-- Project Image -->
-    <div class="relative aspect-video bg-gray-200">
-      <img
-        v-if="project.image"
+    <template #header>
+      <CardImage
         :src="project.image"
         :alt="project.title"
-        class="w-full h-full object-cover"
+        :category="project.category"
+        aspect-ratio="video"
+        fallback-icon="i-heroicons-photo"
       />
-      <div
-        v-else
-        class="w-full h-full flex items-center justify-center text-gray-400"
-      >
-        <UIcon name="i-heroicons-photo" class="w-16 h-16" />
-      </div>
-      <!-- Category Badge -->
-      <div class="absolute top-4 left-4">
-        <span
-          class="px-3 py-1 bg-primary text-white text-sm rounded-full font-medium"
-        >
-          {{ project.category }}
-        </span>
-      </div>
-    </div>
+    </template>
 
     <!-- Project Content -->
-    <div class="p-6">
+    <template #default>
       <CardTitle tag="h3" size="default" spacing="tight">
         {{ project.title }}
       </CardTitle>
@@ -36,17 +27,18 @@
       </p>
 
       <!-- Technologies -->
-      <div class="flex flex-wrap gap-2 mb-4">
-        <span
-          v-for="tech in project.technologies"
-          :key="tech"
-          class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
-        >
-          {{ tech }}
-        </span>
+      <div class="mb-4">
+        <TagList
+          :tags="project.technologies"
+          variant="default"
+          size="xs"
+        />
       </div>
 
-      <!-- Project Links -->
+    </template>
+
+    <!-- Project Links -->
+    <template #footer>
       <div class="flex gap-3">
         <UButton
           v-if="project.liveUrl"
@@ -71,8 +63,8 @@
           Code
         </UButton>
       </div>
-    </div>
-  </div>
+    </template>
+  </BaseCard>
 </template>
 
 <script setup>

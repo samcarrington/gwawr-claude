@@ -1,34 +1,28 @@
 <template>
-  <article
-    class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group"
+  <BaseCard
+    tag="article"
+    variant="default"
+    size="md"
+    padding="md"
+    hover
+    overflow
+    class="group"
   >
     <!-- Featured Image -->
-    <div class="relative aspect-[16/9] bg-gray-200 overflow-hidden">
-      <img
-        v-if="post.featuredImage"
+    <template #header>
+      <CardImage
         :src="post.featuredImage"
         :alt="post.title"
-        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        :category="post.category"
+        aspect-ratio="wide"
+        fallback-icon="i-heroicons-document-text"
+        hover
+        gradient
       />
-      <div
-        v-else
-        class="w-full h-full flex items-center justify-center text-gray-400 bg-gradient-to-br from-gray-100 to-gray-200"
-      >
-        <UIcon name="i-heroicons-document-text" class="w-16 h-16" />
-      </div>
-
-      <!-- Category Badge -->
-      <div class="absolute top-4 left-4">
-        <span
-          class="px-3 py-1 bg-primary text-white text-sm rounded-full font-medium"
-        >
-          {{ post.category }}
-        </span>
-      </div>
-    </div>
+    </template>
 
     <!-- Post Content -->
-    <div class="p-6">
+    <template #default>
       <!-- Meta Information -->
       <div class="flex items-center text-sm text-gray-500 mb-3">
         <time :datetime="post.publishedAt">
@@ -49,17 +43,19 @@
       </p>
 
       <!-- Tags -->
-      <div class="flex flex-wrap gap-2 mb-4">
-        <span
-          v-for="tag in post.tags"
-          :key="tag"
-          class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full hover:bg-gray-200 transition-colors"
-        >
-          #{{ tag }}
-        </span>
+      <div class="mb-4">
+        <TagList
+          :tags="post.tags"
+          variant="default"
+          size="xs"
+          prefix="#"
+        />
       </div>
 
-      <!-- Read More Link -->
+    </template>
+
+    <!-- Read More Link -->
+    <template #footer>
       <NuxtLink
         :to="`/blog/${post.slug}`"
         class="inline-flex items-center text-primary font-medium hover:text-primary/80 transition-colors"
@@ -68,8 +64,8 @@
         Read More
         <UIcon name="i-heroicons-arrow-right" class="ml-1 w-4 h-4" />
       </NuxtLink>
-    </div>
-  </article>
+    </template>
+  </BaseCard>
 </template>
 
 <script setup lang="ts">

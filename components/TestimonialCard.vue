@@ -1,6 +1,9 @@
 <template>
-  <div
-    class="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300"
+  <BaseCard
+    variant="default"
+    size="md"
+    padding="lg"
+    hover
   >
     <!-- Quote Icon -->
     <div class="mb-6">
@@ -54,7 +57,7 @@
         ]"
       />
     </div>
-  </div>
+  </BaseCard>
 </template>
 
 <script setup>

@@ -1,6 +1,10 @@
 <template>
-  <div
-    class="text-center p-8 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"
+  <BaseCard
+    variant="flat"
+    size="md"
+    padding="lg"
+    hover
+    class="text-center"
   >
     <div
       class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6"
@@ -13,16 +17,13 @@
     <p class="text-gray-600 mb-4">
       {{ description }}
     </p>
-    <div class="flex flex-wrap gap-2 justify-center">
-      <span
-        v-for="tech in technologies"
-        :key="tech"
-        class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
-      >
-        {{ tech }}
-      </span>
-    </div>
-  </div>
+    <TagList
+      :tags="technologies"
+      variant="primary"
+      size="sm"
+      align="center"
+    />
+  </BaseCard>
 </template>
 
 <script setup>
