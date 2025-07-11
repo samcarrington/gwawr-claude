@@ -21,21 +21,21 @@ const props = withDefaults(defineProps<Props>(), {
 
 // Define class mappings using theme configuration
 const variantClasses = {
-  default: 'bg-gray-100 text-gray-700',
+  default: 'bg-neutral-100 text-neutral-700',
   primary: 'bg-primary text-white',
   secondary: 'bg-secondary text-white',
   tertiary: 'bg-tertiary text-white',
-  success: 'bg-green-500 text-white',
+  success: 'bg-success text-white',
   warning: 'bg-warning text-white',
   error: 'bg-error text-white',
 } as const;
 
 const outlineVariantClasses = {
-  default: 'border-gray-300 text-gray-700',
+  default: 'border-neutral-300 text-neutral-700',
   primary: 'border-primary text-primary',
   secondary: 'border-secondary text-secondary',
   tertiary: 'border-tertiary text-tertiary',
-  success: 'border-green-500 text-green-600',
+  success: 'border-success text-success-600',
   warning: 'border-warning text-warning',
   error: 'border-error text-error',
 } as const;

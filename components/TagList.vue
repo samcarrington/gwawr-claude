@@ -79,7 +79,7 @@ const tagClasses = computed(() => {
         classes.push('border-tertiary text-tertiary');
         break;
       case 'success':
-        classes.push('border-green-500 text-green-600');
+        classes.push('border-success text-success-600');
         break;
       case 'warning':
         classes.push('border-warning text-warning');
@@ -88,7 +88,7 @@ const tagClasses = computed(() => {
         classes.push('border-error text-error');
         break;
       default:
-        classes.push('border-gray-300 text-gray-700');
+        classes.push('border-neutral-300 text-neutral-700');
         break;
     }
   } else {
@@ -103,7 +103,7 @@ const tagClasses = computed(() => {
         classes.push('bg-tertiary/10 text-tertiary');
         break;
       case 'success':
-        classes.push('bg-green-100 text-green-700');
+        classes.push('bg-success-100 text-success-700');
         break;
       case 'warning':
         classes.push('bg-warning/10 text-warning');
@@ -112,7 +112,7 @@ const tagClasses = computed(() => {
         classes.push('bg-error/10 text-error');
         break;
       default:
-        classes.push('bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors');
+        classes.push('bg-neutral-100 text-neutral-700 hover:bg-neutral-200 transition-colors');
         break;
     }
   }

@@ -56,7 +56,7 @@ const alignClasses = {
 } as const;
 
 const colorClasses = {
-  default: 'text-gray-900', // default
+  default: 'text-neutral-900', // default
   primary: 'text-primary',
   secondary: 'text-secondary',
   tertiary: 'text-tertiary',
