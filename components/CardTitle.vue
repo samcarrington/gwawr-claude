@@ -45,8 +45,7 @@ const size = computed(() => {
       return '2xl';
     case 'small':
       return 'md';
-    case 'default':
-    default:
+    default: // 'default' and fallback
       return 'lg';
   }
 });
@@ -60,8 +59,7 @@ const spacing = computed(() => {
       return 'lg';
     case 'none':
       return 'none';
-    case 'default':
-    default:
+    default: // 'default' and fallback
       return 'md';
   }
 });

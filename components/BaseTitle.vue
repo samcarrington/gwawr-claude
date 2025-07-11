@@ -29,121 +29,67 @@ const props = withDefaults(defineProps<Props>(), {
   weight: 'bold',
 });
 
+// Define class mappings for better maintainability
+const weightClasses = {
+  normal: 'font-normal',
+  medium: 'font-medium',
+  semibold: 'font-semibold',
+  bold: 'font-bold', // default
+} as const;
+
+const sizeClasses = {
+  xs: 'text-sm',
+  sm: 'text-base',
+  md: 'text-lg',
+  lg: 'text-xl', // default
+  xl: 'text-2xl',
+  '2xl': 'text-2xl md:text-3xl',
+  '3xl': 'text-3xl md:text-4xl',
+  '4xl': 'text-4xl md:text-5xl',
+  '5xl': 'text-5xl md:text-7xl',
+} as const;
+
+const alignClasses = {
+  left: 'text-left', // default
+  center: 'text-center',
+  right: 'text-right',
+} as const;
+
+const colorClasses = {
+  default: 'text-gray-900', // default
+  primary: 'text-primary',
+  secondary: 'text-secondary',
+  tertiary: 'text-tertiary',
+} as const;
+
+const spacingClasses = {
+  none: '', // no margin
+  xs: 'mb-1',
+  sm: 'mb-2',
+  md: 'mb-3', // default
+  lg: 'mb-4',
+  xl: 'mb-6',
+} as const;
+
 const titleClasses = computed(() => {
-  const classes = [];
-  
-  // Font weight classes
-  switch (props.weight) {
-    case 'normal':
-      classes.push('font-normal');
-      break;
-    case 'medium':
-      classes.push('font-medium');
-      break;
-    case 'semibold':
-      classes.push('font-semibold');
-      break;
-    case 'bold':
-    default:
-      classes.push('font-bold');
-      break;
+  const classes = [
+    weightClasses[props.weight] || weightClasses.bold,
+    sizeClasses[props.size] || sizeClasses.lg,
+    alignClasses[props.align] || alignClasses.left,
+    colorClasses[props.color] || colorClasses.default,
+  ];
+
+  // Add spacing class if not 'none'
+  const spacingClass = spacingClasses[props.spacing] || spacingClasses.md;
+  if (spacingClass) {
+    classes.push(spacingClass);
   }
-  
-  // Size classes using theme typography (comprehensive scale)
-  switch (props.size) {
-    case 'xs':
-      classes.push('text-sm');
-      break;
-    case 'sm':
-      classes.push('text-base');
-      break;
-    case 'md':
-      classes.push('text-lg');
-      break;
-    case 'lg':
-      classes.push('text-xl');
-      break;
-    case 'xl':
-      classes.push('text-2xl');
-      break;
-    case '2xl':
-      classes.push('text-2xl md:text-3xl');
-      break;
-    case '3xl':
-      classes.push('text-3xl md:text-4xl');
-      break;
-    case '4xl':
-      classes.push('text-4xl md:text-5xl');
-      break;
-    case '5xl':
-      classes.push('text-5xl md:text-7xl');
-      break;
-    default:
-      classes.push('text-xl');
-      break;
-  }
-  
-  // Alignment classes
-  switch (props.align) {
-    case 'center':
-      classes.push('text-center');
-      break;
-    case 'right':
-      classes.push('text-right');
-      break;
-    case 'left':
-    default:
-      classes.push('text-left');
-      break;
-  }
-  
-  // Color classes using theme colors
-  switch (props.color) {
-    case 'primary':
-      classes.push('text-primary');
-      break;
-    case 'secondary':
-      classes.push('text-secondary');
-      break;
-    case 'tertiary':
-      classes.push('text-tertiary');
-      break;
-    case 'default':
-    default:
-      classes.push('text-gray-900');
-      break;
-  }
-  
-  // Spacing classes using theme spacing
-  switch (props.spacing) {
-    case 'none':
-      // No margin bottom
-      break;
-    case 'xs':
-      classes.push('mb-1');
-      break;
-    case 'sm':
-      classes.push('mb-2');
-      break;
-    case 'md':
-      classes.push('mb-3');
-      break;
-    case 'lg':
-      classes.push('mb-4');
-      break;
-    case 'xl':
-      classes.push('mb-6');
-      break;
-    default:
-      classes.push('mb-3');
-      break;
-  }
-  
-  // Hover effects
+
+  // Add hover effects
   if (props.hover) {
     classes.push('group-hover:text-primary transition-colors');
   }
-  
+
   return classes.join(' ');
 });
 </script>

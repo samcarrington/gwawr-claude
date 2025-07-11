@@ -40,8 +40,7 @@ const size = computed(() => {
       return '3xl';
     case 'small':
       return 'xl';
-    case 'default':
-    default:
+    default: // 'default' and fallback
       return '2xl';
   }
 });
@@ -51,10 +50,7 @@ const spacing = computed(() => {
   switch (props.spacing) {
     case 'tight':
       return 'lg';
-    case 'loose':
-      return 'xl';
-    case 'default':
-    default:
+    default: // 'loose', 'default' and fallback
       return 'xl';
   }
 });
