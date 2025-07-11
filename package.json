@@ -10,6 +10,9 @@
     "postinstall": "nuxt prepare",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
     "test:routes": "./scripts/test-routes.sh",
     "test:dev": "npm run dev & sleep 5 && npm run test:routes && kill %1",
     "_comment": "TODO: Replace test:dev with cross-platform solution - see task-23.1"
@@ -24,6 +27,11 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "prettier": "^3.6.2"
+    "@nuxt/test-utils": "^3.19.2",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vue/test-utils": "^2.4.6",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.6.2",
+    "vitest": "^3.2.4"
   }
 }
