@@ -45,9 +45,9 @@
             View Live Project
           </ButtonPrimary>
           <ButtonSecondary
-            v-if="project.repoUrl"
+            v-if="project.repositoryUrl"
             size="lg"
-            :to="project.repoUrl"
+            :to="project.repositoryUrl"
             target="_blank"
             external
           >
