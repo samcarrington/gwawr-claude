@@ -6,24 +6,83 @@ import type {
   ContentfulTag,
   ContentfulAsset,
 } from '~/types/contentful'
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
+import { BLOCKS, MARKS, INLINES } from '@contentful/rich-text-types'
+import { marked } from 'marked'
 
 /**
- * Rich text document processor
- * Converts Contentful rich text to HTML string
+ * Detect content type and render appropriately
+ * Handles both markdown strings and Contentful Rich Text documents
  */
-export function processRichText(document: any): string {
-  if (!document) return ''
+export function renderContent(content: any): string {
+  if (!content) return ''
   
-  // Simple implementation - in a real app you'd use @contentful/rich-text-html-renderer
-  // For now, we'll extract plain text or implement basic conversion
-  if (typeof document === 'string') return document
-  
-  // If it's a rich text document, extract content
-  if (document.nodeType === 'document' && document.content) {
-    return extractTextFromNodes(document.content)
+  // If it's a string, assume it's markdown and render it
+  if (typeof content === 'string') {
+    return renderMarkdown(content)
   }
   
-  return JSON.stringify(document)
+  // If it's a Contentful Rich Text document, render it
+  if (typeof content === 'object' && content.nodeType === 'document') {
+    return renderRichText(content)
+  }
+  
+  // Fallback for any other content type
+  return String(content)
+}
+
+/**
+ * Render markdown string to HTML
+ */
+export function renderMarkdown(markdown: string): string {
+  try {
+    const result = marked(markdown, {
+      breaks: true,
+      gfm: true,
+    })
+    // Handle both sync and async marked results
+    return typeof result === 'string' ? result : markdown
+  } catch (error) {
+    console.warn('[Content Renderer] Failed to parse markdown:', error)
+    return markdown
+  }
+}
+
+/**
+ * Render Contentful Rich Text document to HTML
+ */
+export function renderRichText(document: any): string {
+  try {
+    return documentToHtmlString(document, {
+      renderNode: {
+        [BLOCKS.PARAGRAPH]: (node, next) => `<p class="mb-4">${next(node.content)}</p>`,
+        [BLOCKS.HEADING_1]: (node, next) => `<h1 class="text-3xl font-bold mb-6">${next(node.content)}</h1>`,
+        [BLOCKS.HEADING_2]: (node, next) => `<h2 class="text-2xl font-bold mb-4">${next(node.content)}</h2>`,
+        [BLOCKS.HEADING_3]: (node, next) => `<h3 class="text-xl font-bold mb-3">${next(node.content)}</h3>`,
+        [BLOCKS.UL_LIST]: (node, next) => `<ul class="list-disc pl-6 mb-4">${next(node.content)}</ul>`,
+        [BLOCKS.OL_LIST]: (node, next) => `<ol class="list-decimal pl-6 mb-4">${next(node.content)}</ol>`,
+        [BLOCKS.LIST_ITEM]: (node, next) => `<li class="mb-2">${next(node.content)}</li>`,
+        [BLOCKS.QUOTE]: (node, next) => `<blockquote class="border-l-4 border-gray-300 pl-4 italic mb-4">${next(node.content)}</blockquote>`,
+        [INLINES.HYPERLINK]: (node, next) => `<a href="${node.data.uri}" class="text-primary hover:underline" target="_blank" rel="noopener noreferrer">${next(node.content)}</a>`,
+      },
+      renderMark: {
+        [MARKS.BOLD]: (text) => `<strong>${text}</strong>`,
+        [MARKS.ITALIC]: (text) => `<em>${text}</em>`,
+        [MARKS.CODE]: (text) => `<code class="bg-gray-100 px-2 py-1 rounded text-sm">${text}</code>`,
+      },
+    })
+  } catch (error) {
+    console.warn('[Content Renderer] Failed to render rich text:', error)
+    return extractTextFromNodes(document.content || [])
+  }
+}
+
+/**
+ * Legacy function - kept for backward compatibility
+ * Use renderContent() for new implementations
+ */
+export function processRichText(document: any): string {
+  return renderContent(document)
 }
 
 /**
@@ -349,7 +408,7 @@ export function transformProject(entry: any) {
       title: fields.title || 'Untitled Project',
       slug: fields.slug || `project-${entry.sys.id}`,
       description: fields.description || '',
-      fullDescription: fields.fullDescription,
+      fullDescription: fields.fullDescription ? renderContent(fields.fullDescription) : undefined,
       technologies: extractTechnologyNames(fields.technologies),
       images: extractImageUrls(fields.images),
       liveUrl: fields.liveUrl || undefined,
