@@ -19,6 +19,21 @@
 
     <!-- Project Content -->
     <template #default>
+      <!-- Status and Featured Badge -->
+      <div class="flex items-center gap-2 mb-3">
+        <AtomsBadges
+          :label="project.status"
+          :variant="getStatusVariant(project.status)"
+          size="sm"
+        />
+        <AtomsBadges
+          v-if="project.featured"
+          label="Featured"
+          variant="primary"
+          size="sm"
+        />
+      </div>
+
       <AtomsTypographyCard tag="h3" size="default" spacing="tight">
         {{ project.title }}
       </AtomsTypographyCard>
@@ -52,28 +67,41 @@
           Live Demo
         </UButton>
         <UButton
-          v-if="project.repoUrl"
+          v-if="project.repositoryUrl"
           size="sm"
           variant="ghost"
-          :to="project.repoUrl"
+          :to="project.repositoryUrl"
           target="_blank"
           external
         >
           <UIcon name="i-heroicons-code-bracket" class="mr-1" />
-          Code
+          Repository
         </UButton>
       </div>
     </template>
   </MoleculesCardsBase>
 </template>
 
-<script setup>
-defineProps({
-  project: {
-    type: Object,
-    required: true,
-  },
-});
+<script setup lang="ts">
+import type { Project } from '~/types/project'
+
+defineProps<{
+  project: Project
+}>()
+
+// Get badge variant based on project status
+function getStatusVariant(status: Project['status']): string {
+  switch (status) {
+    case 'completed':
+      return 'success'
+    case 'in-progress':
+      return 'warning'
+    case 'planned':
+      return 'info'
+    default:
+      return 'default'
+  }
+}
 </script>
 
 <style scoped>

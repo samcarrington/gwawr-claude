@@ -113,8 +113,12 @@ export function transformBlogPost(entry: ContentfulEntry<ContentfulBlogPost>): B
     slug: fields.slug,
     excerpt: fields.excerpt,
     content: processRichText(fields.content),
-    category: fields.category ? transformCategory(fields.category).name : 'Uncategorized',
-    tags: fields.tags ? fields.tags.map(tag => transformTag(tag).name) : [],
+    category: fields.category ? 
+      (typeof fields.category === 'string' ? fields.category : transformCategory(fields.category).name) : 
+      'Uncategorized',
+    tags: fields.tags ? 
+      fields.tags.map(tag => typeof tag === 'string' ? tag : transformTag(tag).name) : 
+      [],
     featuredImage: getAssetUrl(fields.featuredImage),
     publishedAt: fields.publishedAt,
     readTime: fields.readTime,
@@ -213,6 +217,66 @@ export function getRelatedPosts(posts: BlogPost[], currentPost: BlogPost, limit 
       post.id !== currentPost.id
     )
     .slice(0, limit)
+}
+
+/**
+ * Transform Contentful project to our Project type
+ */
+export function transformProject(entry: any) {
+  const fields = entry.fields
+  
+  return {
+    id: entry.sys.id,
+    title: fields.title,
+    slug: fields.slug,
+    description: fields.description,
+    fullDescription: fields.fullDescription,
+    technologies: fields.technologies || [],
+    images: fields.images || [],
+    liveUrl: fields.liveUrl,
+    repositoryUrl: fields.repositoryUrl,
+    featured: fields.featured || false,
+    category: fields.category,
+    startDate: fields.date, // Legacy field name
+    endDate: fields.endDate,
+    status: fields.status || 'completed',
+  }
+}
+
+/**
+ * Transform multiple projects
+ */
+export function transformProjects(entries: any[]) {
+  return entries.map(transformProject)
+}
+
+/**
+ * Transform Contentful testimonial to our Testimonial type
+ */
+export function transformTestimonial(entry: any) {
+  const fields = entry.fields
+  
+  return {
+    id: entry.sys.id,
+    title: fields.title,
+    content: fields.content || fields.testimonialText, // Handle both field names
+    clientName: fields.clientName,
+    clientTitle: fields.clientTitle,
+    clientCompany: fields.clientCompany,
+    company: fields.company, // Legacy field
+    name: fields.name, // Legacy field - may be overridden by clientName
+    rating: fields.rating,
+    featured: fields.featured || false,
+    projectReference: fields.projectReference,
+    attribution: fields.attribution, // Legacy person link
+  }
+}
+
+/**
+ * Transform multiple testimonials
+ */
+export function transformTestimonials(entries: any[]) {
+  return entries.map(transformTestimonial)
 }
 
 /**

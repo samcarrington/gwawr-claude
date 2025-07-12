@@ -1,6 +1,59 @@
 <template>
   <div>
-    <!-- Article Header -->
+    <!-- Loading State -->
+    <div v-if="postPending" class="min-h-screen">
+      <!-- Header Loading -->
+      <section class="py-12 bg-gradient-to-r from-gray-50 to-gray-100">
+        <UContainer>
+          <div class="max-w-4xl mx-auto text-center">
+            <USkeleton class="h-8 w-32 mx-auto mb-6" />
+            <USkeleton class="h-12 w-3/4 mx-auto mb-8" />
+            <div class="flex items-center justify-center gap-4 mb-8">
+              <USkeleton class="h-6 w-32" />
+              <USkeleton class="h-6 w-32" />
+            </div>
+            <div class="flex flex-wrap gap-2 justify-center">
+              <USkeleton class="h-8 w-16" v-for="i in 3" :key="i" />
+            </div>
+          </div>
+        </UContainer>
+      </section>
+      
+      <!-- Content Loading -->
+      <article class="py-12">
+        <UContainer>
+          <div class="max-w-4xl mx-auto space-y-6">
+            <USkeleton class="h-6 w-full" v-for="i in 10" :key="i" />
+          </div>
+        </UContainer>
+      </article>
+    </div>
+
+    <!-- Error State -->
+    <div v-else-if="postError" class="min-h-screen flex items-center justify-center">
+      <UContainer>
+        <div class="text-center">
+          <UAlert
+            color="red"
+            variant="soft"
+            title="Failed to load article"
+            :description="postError.message || 'The article could not be found or loaded.'"
+            class="mb-8"
+          />
+          <NuxtLink
+            to="/blog"
+            class="inline-flex items-center bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+          >
+            <UIcon name="i-heroicons-arrow-left" class="w-4 h-4 mr-2" />
+            Back to Blog
+          </NuxtLink>
+        </div>
+      </UContainer>
+    </div>
+
+    <!-- Article Content -->
+    <div v-else-if="post">
+      <!-- Article Header -->
     <section class="py-12 bg-gradient-to-r from-gray-50 to-gray-100">
       <UContainer>
         <div class="max-w-4xl mx-auto text-center">
@@ -171,148 +224,174 @@ const example = () => {
       </UContainer>
     </article>
 
-    <!-- Related Posts -->
-    <section class="py-16 bg-gray-50">
-      <UContainer>
-        <div class="max-w-6xl mx-auto">
-          <AtomsTypographySection size="large" align="center" spacing="loose">
-            Related Articles
-          </AtomsTypographySection>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <OrganismsCardsBlog
-              v-for="relatedPost in relatedPosts"
-              :key="relatedPost.id"
-              :post="relatedPost"
-            />
+      <!-- Related Posts -->
+      <section class="py-16 bg-gray-50">
+        <UContainer>
+          <div class="max-w-6xl mx-auto">
+            <AtomsTypographySection size="large" align="center" spacing="loose">
+              Related Articles
+            </AtomsTypographySection>
+            
+            <!-- Related Posts Loading -->
+            <div v-if="relatedPending" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div v-for="i in 3" :key="i" class="space-y-4">
+                <USkeleton class="h-48 w-full rounded-lg" />
+                <USkeleton class="h-4 w-3/4" />
+                <USkeleton class="h-4 w-1/2" />
+              </div>
+            </div>
+            
+            <!-- Related Posts Content -->
+            <div v-else-if="relatedPosts && relatedPosts.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <OrganismsCardsBlog
+                v-for="relatedPost in relatedPosts"
+                :key="relatedPost.id"
+                :post="relatedPost"
+              />
+            </div>
+            
+            <!-- No Related Posts -->
+            <div v-else class="text-center py-8 text-gray-500">
+              <p>No related articles found.</p>
+            </div>
           </div>
-        </div>
-      </UContainer>
-    </section>
+        </UContainer>
+      </section>
 
-    <!-- Call-to-Action -->
-    <OrganismsSectionsCallToAction
-      variant="dark"
-      title="Enjoyed This Article?"
-      description="If you found this helpful, check out my other projects or get in touch to discuss your next development challenge."
-    >
-      <template #primary-button="{ variant, classes }">
-        <UButton
-          size="lg"
-          :variant="variant"
-          :class="classes"
-          @click="navigateTo('/projects')"
-          aria-label="View my portfolio projects"
-        >
-          View My Projects
-        </UButton>
-      </template>
-      <template #secondary-button="{ variant, classes }">
-        <UButton
-          size="lg"
-          :variant="variant"
-          :class="classes"
-          @click="openEmailClient"
-          aria-label="Send me an email to start a conversation"
-        >
-          Start a Conversation
-        </UButton>
-      </template>
-    </OrganismsSectionsCallToAction>
+      <!-- Call-to-Action -->
+      <OrganismsSectionsCallToAction
+        variant="dark"
+        title="Enjoyed This Article?"
+        description="If you found this helpful, check out my other projects or get in touch to discuss your next development challenge."
+      >
+        <template #primary-button="{ variant, classes }">
+          <UButton
+            size="lg"
+            :variant="variant"
+            :class="classes"
+            @click="navigateTo('/projects')"
+            aria-label="View my portfolio projects"
+          >
+            View My Projects
+          </UButton>
+        </template>
+        <template #secondary-button="{ variant, classes }">
+          <UButton
+            size="lg"
+            :variant="variant"
+            :class="classes"
+            @click="openEmailClient"
+            aria-label="Send me an email to start a conversation"
+          >
+            Start a Conversation
+          </UButton>
+        </template>
+      </OrganismsSectionsCallToAction>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { formatDate } from '~/utils/date';
-import type { BlogPost } from '~/types/blog';
-import { getBlogPostBySlug, getRelatedBlogPosts } from '~/data/blog';
+import { formatDate } from '~/utils/date'
 
-const route = useRoute();
-const router = useRouter();
+const route = useRoute()
 
-// Find the post by slug
-const post = computed(() => {
-  const foundPost = getBlogPostBySlug(route.params.slug as string);
-  if (!foundPost) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Blog post not found',
-    });
+// Get post data using new Contentful strategy
+const { data: post, error: postError, pending: postPending } = await useBlogPost(route.params.slug as string)
+
+// Handle 404 when post is not found
+if (!postPending.value && !post.value && !postError.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Blog post not found',
+  })
+}
+
+// Get related posts using post ID (only when post is loaded)
+const { data: relatedPosts, pending: relatedPending } = await useRelatedBlogPosts(
+  computed(() => post.value?.id || ''),
+  3
+)
+
+// Page metadata (reactive to post data)
+useHead(() => {
+  if (!post.value) {
+    return {
+      title: 'Loading... - Sam Carrington'
+    }
   }
-  return foundPost;
-});
-
-// Get related posts (same category, excluding current post)
-const relatedPosts = computed(() => {
-  return getRelatedBlogPosts(post.value, 3);
-});
-
-// Page metadata
-useHead(() => ({
-  title: `${post.value.title} - Sam Carrington`,
-  meta: [
-    {
-      name: 'description',
-      content: post.value.excerpt,
-    },
-    {
-      property: 'og:title',
-      content: post.value.title,
-    },
-    {
-      property: 'og:description',
-      content: post.value.excerpt,
-    },
-    {
-      property: 'og:type',
-      content: 'article',
-    },
-    {
-      property: 'article:published_time',
-      content: post.value.publishedAt,
-    },
-    {
-      property: 'article:author',
-      content: 'Sam Carrington',
-    },
-    {
-      property: 'article:section',
-      content: post.value.category,
-    },
-    ...post.value.tags.map(tag => ({
-      property: 'article:tag',
-      content: tag,
-    })),
-  ],
-}));
+  
+  return {
+    title: `${post.value.title} - Sam Carrington`,
+    meta: [
+      {
+        name: 'description',
+        content: post.value.excerpt,
+      },
+      {
+        property: 'og:title',
+        content: post.value.title,
+      },
+      {
+        property: 'og:description',
+        content: post.value.excerpt,
+      },
+      {
+        property: 'og:type',
+        content: 'article',
+      },
+      {
+        property: 'article:published_time',
+        content: post.value.publishedAt,
+      },
+      {
+        property: 'article:author',
+        content: 'Sam Carrington',
+      },
+      {
+        property: 'article:section',
+        content: post.value.category,
+      },
+      ...(post.value.tags || []).map(tag => ({
+        property: 'article:tag',
+        content: tag,
+      })),
+    ],
+  }
+})
 
 // Social sharing functions
 const shareOnTwitter = () => {
-  const url = encodeURIComponent(window.location.href);
+  if (!post.value) return
+  
+  const url = encodeURIComponent(window.location.href)
   const text = encodeURIComponent(
     `Check out this article: ${post.value.title}`
-  );
+  )
   window.open(
     `https://twitter.com/intent/tweet?url=${url}&text=${text}`,
     '_blank'
-  );
-};
+  )
+}
 
 const copyLink = async () => {
   try {
-    await navigator.clipboard.writeText(window.location.href);
+    await navigator.clipboard.writeText(window.location.href)
     // You could add a toast notification here
-    console.log('Link copied to clipboard');
+    console.log('Link copied to clipboard')
   } catch (err) {
-    console.error('Failed to copy link:', err);
+    console.error('Failed to copy link:', err)
   }
-};
+}
 
 // Navigation functions
 const openEmailClient = () => {
-  const subject = encodeURIComponent(`Re: ${post.value.title}`);
+  if (!post.value) return
+  
+  const subject = encodeURIComponent(`Re: ${post.value.title}`)
   const body = encodeURIComponent(
     `Hi Sam,\n\nI just read your article "${post.value.title}" and wanted to discuss it further.\n\nBest regards,`
-  );
-  window.location.href = `mailto:sam@gwawr.com?subject=${subject}&body=${body}`;
-};
+  )
+  window.location.href = `mailto:sam@gwawr.com?subject=${subject}&body=${body}`
+}
 </script>

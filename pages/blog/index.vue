@@ -14,9 +14,12 @@
 
       <!-- Category Filter -->
       <div class="mb-12">
-        <div class="flex flex-wrap gap-3 justify-center">
+        <div v-if="categoriesPending" class="flex flex-wrap gap-3 justify-center">
+          <USkeleton class="h-10 w-20" v-for="i in 5" :key="i" />
+        </div>
+        <div v-else class="flex flex-wrap gap-3 justify-center">
           <AtomsButtonsBase
-            v-for="category in categories"
+            v-for="category in allCategories"
             :key="category"
             :variant="selectedCategory === category ? 'solid' : 'outline'"
             size="md"
@@ -29,9 +32,29 @@
       </div>
 
       <!-- Featured Post -->
-      <section v-if="featuredPost" class="mb-16">
+      <section class="mb-16">
         <AtomsTypographySection size="default" align="left" spacing="default">Featured Article</AtomsTypographySection>
+        
+        <!-- Featured Post Loading State -->
+        <div v-if="featuredPending" class="bg-gradient-to-r from-primary/5 to-primary/10 rounded-2xl p-8 md:p-12">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <USkeleton class="h-8 w-32 mb-4" />
+              <USkeleton class="h-8 w-3/4 mb-4" />
+              <USkeleton class="h-6 w-full mb-2" />
+              <USkeleton class="h-6 w-2/3 mb-6" />
+              <USkeleton class="h-6 w-48 mb-6" />
+              <USkeleton class="h-12 w-32" />
+            </div>
+            <div class="relative">
+              <USkeleton class="aspect-[4/3] w-full rounded-lg" />
+            </div>
+          </div>
+        </div>
+        
+        <!-- Featured Post Content -->
         <article
+          v-else-if="featuredPost"
           class="bg-gradient-to-r from-primary/5 to-primary/10 rounded-2xl p-8 md:p-12"
         >
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -84,18 +107,52 @@
             </div>
           </div>
         </article>
+        
+        <!-- No Featured Post -->
+        <div v-else class="text-center py-8 text-gray-500">
+          <p>No featured article at the moment.</p>
+        </div>
       </section>
 
       <!-- Blog Posts Grid -->
       <section class="mb-16">
         <AtomsTypographySection size="default" align="left" spacing="loose">Recent Articles</AtomsTypographySection>
+        
+        <!-- Error State -->
+        <UAlert
+          v-if="postsError"
+          color="red"
+          variant="soft"
+          title="Failed to load articles"
+          :description="postsError.message || 'Please try refreshing the page'"
+          class="mb-8"
+        />
+        
+        <!-- Loading State -->
         <div
+          v-else-if="postsPending"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          <div v-for="i in 6" :key="i" class="space-y-4">
+            <USkeleton class="h-48 w-full rounded-lg" />
+            <USkeleton class="h-4 w-3/4" />
+            <USkeleton class="h-4 w-1/2" />
+            <div class="flex gap-2">
+              <USkeleton class="h-6 w-16" />
+              <USkeleton class="h-6 w-20" />
+            </div>
+          </div>
+        </div>
+        
+        <!-- Posts Content -->
+        <div
+          v-else-if="regularPosts.length > 0"
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           role="list"
           aria-label="Blog posts"
         >
           <OrganismsCardsBlog
-            v-for="post in filteredPosts"
+            v-for="post in regularPosts"
             :key="post.id"
             :post="post"
             role="listitem"
@@ -104,7 +161,7 @@
 
         <!-- Empty State -->
         <div
-          v-if="filteredPosts.length === 0"
+          v-else
           class="text-center py-16 text-gray-500"
         >
           <UIcon
@@ -155,13 +212,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate } from '~/utils/date';
-import type { BlogPost } from '~/types/blog';
-import {
-  getSortedBlogPosts,
-  getFeaturedBlogPost,
-  getBlogCategories,
-} from '~/data/blog';
+import { formatDate } from '~/utils/date'
 
 // Page metadata
 useHead({
@@ -173,37 +224,40 @@ useHead({
         'Read the latest articles by Sam Carrington on web development, technology trends, and software engineering insights.',
     },
   ],
-});
+})
 
-// Get blog data
-const allBlogPosts = getSortedBlogPosts();
-const featuredPost = getFeaturedBlogPost();
+// Use new Contentful data fetching strategy (non-blocking for better UX)
+const { data: featuredPost, pending: featuredPending } = useFeaturedBlogPost()
+const { data: categories, pending: categoriesPending } = useBlogCategories()
 
-// Non-featured posts
-const regularPosts = computed(() =>
-  allBlogPosts.filter(post => !post.featured)
-);
+// Filter functionality using the new composable
+const {
+  selectedCategory,
+  posts: filteredPosts,
+  pending: postsPending,
+  error: postsError,
+} = useBlogPostFilter()
 
-// Filter functionality
-const selectedCategory = ref('All');
+// Add 'All' to categories and set as reactive
+const allCategories = computed(() => 
+  categories.value ? ['All', ...categories.value] : ['All']
+)
 
-const categories = computed(() => ['All', ...getBlogCategories()]);
+// Filter out featured post from regular posts
+const regularPosts = computed(() => {
+  if (!filteredPosts.value || !featuredPost.value) return filteredPosts.value || []
+  return filteredPosts.value.filter(post => post.id !== featuredPost.value?.id)
+})
 
-const filteredPosts = computed(() => {
-  if (selectedCategory.value === 'All') {
-    return regularPosts.value;
-  }
-  return regularPosts.value.filter(
-    post => post.category === selectedCategory.value
-  );
-});
+// Loading state
+const loading = computed(() => featuredPending.value || categoriesPending.value || postsPending.value)
 
 // Navigation functions
 const openEmailClient = () => {
-  const subject = encodeURIComponent('Blog Subscription');
+  const subject = encodeURIComponent('Blog Subscription')
   const body = encodeURIComponent(
     "Hi Sam,\n\nI'd like to stay updated with your latest blog posts and articles.\n\nBest regards,"
-  );
-  window.location.href = `mailto:sam@gwawr.com?subject=${subject}&body=${body}`;
-};
+  )
+  window.location.href = `mailto:sam@gwawr.com?subject=${subject}&body=${body}`
+}
 </script>

@@ -147,6 +147,7 @@ export interface ContentfulError {
 export interface ContentfulClientConfig {
   space: string
   accessToken: string
+  previewAccessToken?: string
   environment?: string
   host?: string
   timeout?: number

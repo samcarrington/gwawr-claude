@@ -206,4 +206,28 @@ A task is **Done** only when **ALL** of the following are complete:
   interactive UI.
 - When users mention to create a task, they mean to create a task using Backlog.md CLI tool.
 
+### **Task Naming Convention**
+
+**IMPORTANT**: Always use the correct task naming format:
+
+- ✅ **Correct**: `task-42` (use sequential numbering)
+- ❌ **Incorrect**: `task-high.1`, `task-medium.2`, `task-epic.X` (do not use priority prefixes in task IDs)
+
+**Priority should be set in the task front matter, not in the task ID:**
+
+```yaml
+---
+id: task-42
+title: Add GraphQL resolver
+priority: high    # Set priority here
+status: To Do
+---
+```
+
+**Why this matters:**
+- Task IDs must be sequential numbers for proper dependency tracking
+- Priority is metadata that can change; task ID should be permanent
+- Backlog.md CLI expects sequential numbering for task references
+- Incorrect naming breaks task dependency resolution
+
 <!-- BACKLOG.MD GUIDELINES END -->
