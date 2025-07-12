@@ -17,7 +17,10 @@
 
       <!-- Filter Tabs -->
       <div class="mb-12">
-        <div class="flex flex-wrap gap-3 justify-center">
+        <div v-if="pending" class="flex flex-wrap gap-3 justify-center">
+          <USkeleton class="h-10 w-20" v-for="i in 5" :key="i" />
+        </div>
+        <div v-else class="flex flex-wrap gap-3 justify-center">
           <AtomsButtonsBase
             v-for="category in categories"
             :key="category"
@@ -31,28 +34,79 @@
         </div>
       </div>
 
+      <!-- Status Filter -->
+      <div class="mb-8">
+        <div class="flex flex-wrap gap-2 justify-center">
+          <AtomsButtonsBase
+            v-for="status in statusOptions"
+            :key="status"
+            :variant="selectedStatus === status ? 'solid' : 'ghost'"
+            size="sm"
+            color="secondary"
+            @click="selectedStatus = status"
+          >
+            {{ status === 'All' ? 'All Status' : status.charAt(0).toUpperCase() + status.slice(1) }}
+          </AtomsButtonsBase>
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <UAlert
+        v-if="error"
+        color="red"
+        variant="soft"
+        title="Failed to load projects"
+        :description="error.message || 'Please try refreshing the page'"
+        class="mb-8"
+      />
+
+      <!-- Loading State -->
+      <div
+        v-else-if="pending"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+      >
+        <div v-for="i in 6" :key="i" class="space-y-4">
+          <USkeleton class="h-48 w-full rounded-lg" />
+          <USkeleton class="h-4 w-3/4" />
+          <USkeleton class="h-4 w-1/2" />
+          <div class="flex gap-2">
+            <USkeleton class="h-6 w-16" />
+            <USkeleton class="h-6 w-20" />
+          </div>
+        </div>
+      </div>
+
       <!-- Projects Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div
+        v-else-if="projects.length > 0"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        role="list"
+        aria-label="Projects"
+      >
         <OrganismsCardsProject
-          v-for="project in filteredProjects"
+          v-for="project in projects"
           :key="project.id"
           :project="project"
+          role="listitem"
         />
       </div>
 
       <!-- Empty State -->
       <div
-        v-if="filteredProjects.length === 0"
-        class="text-center py-12 text-gray-500"
+        v-else
+        class="text-center py-16 text-gray-500"
       >
         <UIcon name="i-heroicons-folder-open" class="w-16 h-16 mx-auto mb-4" />
-        <p class="text-lg">No projects found for this category.</p>
+        <AtomsTypographyCard tag="h3" size="default" align="center" spacing="tight">No projects found</AtomsTypographyCard>
+        <p class="text-lg">
+          Try selecting a different category or status, or check back later for new projects.
+        </p>
       </div>
     </UContainer>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 // Page metadata
 useHead({
   title: 'Projects - Sam Carrington',
@@ -63,119 +117,26 @@ useHead({
         'Browse my portfolio of web development projects, featuring full-stack applications, frontend showcases, and creative coding experiments.',
     },
   ],
-});
+})
 
-// Sample projects data
-const projects = [
-  {
-    id: 1,
-    title: 'E-Commerce Platform',
-    description:
-      'A full-stack e-commerce solution built with Nuxt.js and Node.js. Features include user authentication, shopping cart, payment processing, and admin dashboard.',
-    category: 'Full-Stack',
-    technologies: ['Nuxt.js', 'Node.js', 'PostgreSQL', 'Stripe', 'Tailwind'],
-    image: null,
-    liveUrl: 'https://example.com',
-    repoUrl: 'https://github.com/example/ecommerce',
-    featured: true,
-    date: '2024-12',
-  },
-  {
-    id: 2,
-    title: 'Task Management App',
-    description:
-      'A collaborative task management application with real-time updates, team workspaces, and progress tracking.',
-    category: 'Full-Stack',
-    technologies: ['Vue.js', 'Express.js', 'MongoDB', 'Socket.io'],
-    image: null,
-    liveUrl: 'https://example.com',
-    repoUrl: 'https://github.com/example/taskapp',
-    featured: false,
-    date: '2024-11',
-  },
-  {
-    id: 3,
-    title: 'Portfolio Website',
-    description:
-      'A responsive portfolio website showcasing modern design principles and smooth animations.',
-    category: 'Frontend',
-    technologies: ['Nuxt.js', 'Tailwind CSS', 'GSAP', 'Netlify'],
-    image: null,
-    liveUrl: 'https://example.com',
-    repoUrl: 'https://github.com/example/portfolio',
-    featured: false,
-    date: '2024-10',
-  },
-  {
-    id: 4,
-    title: 'Weather Dashboard',
-    description:
-      'An interactive weather dashboard with location-based forecasts and data visualizations.',
-    category: 'Frontend',
-    technologies: ['React', 'Chart.js', 'OpenWeather API', 'CSS Modules'],
-    image: null,
-    liveUrl: 'https://example.com',
-    repoUrl: 'https://github.com/example/weather',
-    featured: false,
-    date: '2024-09',
-  },
-  {
-    id: 5,
-    title: 'API Documentation Site',
-    description:
-      'A comprehensive API documentation platform with interactive examples and code snippets.',
-    category: 'Documentation',
-    technologies: ['VuePress', 'Markdown', 'Prism.js', 'GitHub Pages'],
-    image: null,
-    liveUrl: 'https://example.com',
-    repoUrl: 'https://github.com/example/api-docs',
-    featured: false,
-    date: '2024-08',
-  },
-  {
-    id: 6,
-    title: 'Mobile App Backend',
-    description:
-      'RESTful API backend for a mobile application with user management and data synchronization.',
-    category: 'Backend',
-    technologies: ['Node.js', 'Express', 'JWT', 'Redis', 'Docker'],
-    image: null,
-    liveUrl: null,
-    repoUrl: 'https://github.com/example/mobile-api',
-    featured: false,
-    date: '2024-07',
-  },
-];
+// Use new Contentful data fetching strategy (non-blocking for better UX)
+const { data: featuredProjects } = useFeaturedProjects(1)
 
-// Sort projects by date (most recent first)
-const sortedProjects = computed(() =>
-  projects.sort((a, b) => new Date(b.date) - new Date(a.date))
-);
+// Filter functionality using the new composable
+const {
+  selectedCategory,
+  selectedStatus,
+  categories,
+  statusOptions,
+  projects,
+  pending,
+  error,
+} = useProjectFilter()
 
-// Featured project (most recent)
-const featuredProject = computed(() =>
-  sortedProjects.value.find(project => project.featured)
-);
-
-// Non-featured projects
-const regularProjects = computed(() =>
-  sortedProjects.value.filter(project => !project.featured)
-);
-
-// Filter functionality
-const selectedCategory = ref('All');
-
-const categories = computed(() => [
-  'All',
-  ...new Set(projects.map(project => project.category)),
-]);
-
-const filteredProjects = computed(() => {
-  if (selectedCategory.value === 'All') {
-    return regularProjects.value;
-  }
-  return regularProjects.value.filter(
-    project => project.category === selectedCategory.value
-  );
-});
+// Featured project (first featured project)
+const featuredProject = computed(() => 
+  featuredProjects.value && featuredProjects.value.length > 0 
+    ? featuredProjects.value[0] 
+    : null
+)
 </script>

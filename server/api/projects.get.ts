@@ -10,6 +10,56 @@ export default defineEventHandler(async (event) => {
     // Set cache headers
     setHeader(event, 'Cache-Control', 'public, max-age=600') // 10 minutes for projects
     
+    // Check if Contentful is configured
+    const runtimeConfig = useRuntimeConfig()
+    const spaceId = runtimeConfig.contentfulSpaceId
+    const accessToken = runtimeConfig.contentfulAccessToken
+    
+    if (!spaceId || !accessToken) {
+      console.warn('[API] Contentful not configured, using mock data for projects')
+      
+      // Fallback to mock data
+      const { getProjects } = await import('~/data/projects')
+      const mockProjects = getProjects()
+      
+      // Apply filters to mock data
+      let filteredProjects = mockProjects
+      
+      if (query.category && query.category !== 'All') {
+        filteredProjects = filteredProjects.filter(project => project.category === query.category)
+      }
+      
+      if (query.featured !== undefined) {
+        filteredProjects = filteredProjects.filter(project => project.featured === (query.featured === 'true'))
+      }
+      
+      if (query.status) {
+        filteredProjects = filteredProjects.filter(project => project.status === query.status)
+      }
+      
+      if (query.search) {
+        const searchTerm = query.search.toLowerCase()
+        filteredProjects = filteredProjects.filter(project => 
+          project.title.toLowerCase().includes(searchTerm) ||
+          project.description.toLowerCase().includes(searchTerm) ||
+          project.category.toLowerCase().includes(searchTerm) ||
+          project.technologies.some(tech => tech.toLowerCase().includes(searchTerm))
+        )
+      }
+      
+      // Apply pagination
+      const limit = query.limit ? parseInt(query.limit as string) : 20
+      const skip = query.skip ? parseInt(query.skip as string) : 0
+      const paginatedProjects = filteredProjects.slice(skip, skip + limit)
+      
+      return {
+        items: paginatedProjects,
+        total: filteredProjects.length,
+        skip,
+        limit,
+      }
+    }
+    
     // Build Contentful query
     const contentfulQuery: ContentfulQueryOptions = {
       content_type: 'project',
@@ -54,12 +104,28 @@ export default defineEventHandler(async (event) => {
   } catch (error) {
     console.error('[API] Failed to fetch projects:', error)
     
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Failed to fetch projects',
-      data: {
-        error: error instanceof Error ? error.message : 'Unknown error',
-      },
-    })
+    // Fallback to mock data on error
+    try {
+      console.warn('[API] Falling back to mock data for projects due to error')
+      const { getProjects } = await import('~/data/projects')
+      const mockProjects = getProjects()
+      
+      return {
+        items: mockProjects,
+        total: mockProjects.length,
+        skip: 0,
+        limit: mockProjects.length,
+      }
+    } catch (fallbackError) {
+      console.error('[API] Even mock data fallback failed:', fallbackError)
+      
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Failed to fetch projects',
+        data: {
+          error: error instanceof Error ? error.message : 'Unknown error',
+        },
+      })
+    }
   }
 })

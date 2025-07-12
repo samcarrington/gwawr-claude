@@ -226,9 +226,9 @@ useHead({
   ],
 })
 
-// Use new Contentful data fetching strategy
-const { data: featuredPost, pending: featuredPending } = await useFeaturedBlogPost()
-const { data: categories, pending: categoriesPending } = await useBlogCategories()
+// Use new Contentful data fetching strategy (non-blocking for better UX)
+const { data: featuredPost, pending: featuredPending } = useFeaturedBlogPost()
+const { data: categories, pending: categoriesPending } = useBlogCategories()
 
 // Filter functionality using the new composable
 const {

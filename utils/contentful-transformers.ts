@@ -113,8 +113,12 @@ export function transformBlogPost(entry: ContentfulEntry<ContentfulBlogPost>): B
     slug: fields.slug,
     excerpt: fields.excerpt,
     content: processRichText(fields.content),
-    category: fields.category ? transformCategory(fields.category).name : 'Uncategorized',
-    tags: fields.tags ? fields.tags.map(tag => transformTag(tag).name) : [],
+    category: fields.category ? 
+      (typeof fields.category === 'string' ? fields.category : transformCategory(fields.category).name) : 
+      'Uncategorized',
+    tags: fields.tags ? 
+      fields.tags.map(tag => typeof tag === 'string' ? tag : transformTag(tag).name) : 
+      [],
     featuredImage: getAssetUrl(fields.featuredImage),
     publishedAt: fields.publishedAt,
     readTime: fields.readTime,

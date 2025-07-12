@@ -30,7 +30,7 @@ export class ContentfulClient {
     })
 
     // Preview client for draft content (if preview token is available)
-    const previewToken = process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
+    const previewToken = config.previewAccessToken
     if (previewToken) {
       this.previewClient = createClient({
         space: config.space,
@@ -229,11 +229,14 @@ export class ContentfulClient {
  * Create and configure Contentful client instance
  */
 export function createContentfulClient(): ContentfulClient {
+  const runtimeConfig = useRuntimeConfig()
+  
   const config: ContentfulClientConfig = {
-    space: process.env.CONTENTFUL_SPACE_ID || '',
-    accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || '',
-    environment: process.env.CONTENTFUL_ENVIRONMENT || 'master',
-    host: process.env.CONTENTFUL_HOST || 'cdn.contentful.com',
+    space: runtimeConfig.contentfulSpaceId || '',
+    accessToken: runtimeConfig.contentfulAccessToken || '',
+    previewAccessToken: runtimeConfig.contentfulPreviewAccessToken,
+    environment: runtimeConfig.contentfulEnvironment || 'master',
+    host: runtimeConfig.contentfulHost || 'cdn.contentful.com',
     timeout: 10000,
     retryOnError: true,
   }

@@ -1,27 +1,4 @@
-// TODO: Create proper Project type definition
-interface Project {
-  id: string
-  title: string
-  slug: string
-  description: string
-  fullDescription?: string
-  technologies: string[]
-  images: any[]
-  liveUrl?: string
-  repositoryUrl?: string
-  featured: boolean
-  category?: string
-  startDate?: string
-  endDate?: string
-  status: 'completed' | 'in-progress' | 'planned'
-}
-
-interface ProjectsResponse {
-  items: Project[]
-  total: number
-  skip: number
-  limit: number
-}
+import type { Project, ProjectsResponse } from '~/types/project'
 
 interface UseProjectsOptions {
   category?: string
@@ -55,7 +32,9 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
   // Generate cache key based on query parameters
   const key = computed(() => {
     const queryString = JSON.stringify(query.value, Object.keys(query.value).sort())
-    return `projects-${Buffer.from(queryString).toString('base64')}`
+    // Use btoa for browser compatibility
+    const encoded = import.meta.client ? btoa(queryString) : Buffer.from(queryString).toString('base64')
+    return `projects-${encoded}`
   })
   
   // Choose fetch method based on options
@@ -142,13 +121,28 @@ export const useProjectFilter = () => {
   const searchQuery = ref<string>('')
   const showFeaturedOnly = ref<boolean>(false)
   
-  // Reactive projects based on filters
-  const { data: projects, pending, error, refresh } = useProjects({
-    category: computed(() => selectedCategory.value === 'All' ? undefined : selectedCategory.value),
-    status: computed(() => selectedStatus.value === 'All' ? undefined : selectedStatus.value as any),
-    search: computed(() => searchQuery.value || undefined),
-    featured: computed(() => showFeaturedOnly.value || undefined),
+  // Create reactive options for useProjects
+  const projectsOptions = computed(() => ({
+    category: selectedCategory.value === 'All' ? undefined : selectedCategory.value,
+    status: selectedStatus.value === 'All' ? undefined : selectedStatus.value as Project['status'],
+    search: searchQuery.value || undefined,
+    featured: showFeaturedOnly.value || undefined,
     lazy: true,
+  }))
+  
+  // Use the reactive options with useLazyFetch for client-side filtering
+  const { data: projects, pending, error, refresh } = useLazyFetch<ProjectsResponse>('/api/projects', {
+    key: computed(() => `projects-filter-${JSON.stringify(projectsOptions.value)}`),
+    query: computed(() => {
+      const params: Record<string, any> = {}
+      if (projectsOptions.value.category) params.category = projectsOptions.value.category
+      if (projectsOptions.value.status) params.status = projectsOptions.value.status
+      if (projectsOptions.value.search) params.search = projectsOptions.value.search
+      if (projectsOptions.value.featured !== undefined) params.featured = projectsOptions.value.featured
+      return params
+    }),
+    default: () => ({ items: [], total: 0, skip: 0, limit: 0 }),
+    server: false, // Client-side only for filtering
   })
   
   // Get unique categories from all projects

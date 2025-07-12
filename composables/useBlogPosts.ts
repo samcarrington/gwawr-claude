@@ -37,7 +37,9 @@ export const useBlogPosts = (options: UseBlogPostsOptions = {}) => {
   // Generate cache key based on query parameters
   const key = computed(() => {
     const queryString = JSON.stringify(query.value, Object.keys(query.value).sort())
-    return `blog-posts-${Buffer.from(queryString).toString('base64')}`
+    // Use btoa for browser compatibility (available in both browser and Node.js via polyfill)
+    const encoded = import.meta.client ? btoa(queryString) : Buffer.from(queryString).toString('base64')
+    return `blog-posts-${encoded}`
   })
   
   // Choose fetch method based on options
@@ -146,12 +148,31 @@ export const useBlogPostFilter = () => {
   const searchQuery = ref<string>('')
   const showFeaturedOnly = ref<boolean>(false)
   
-  // Reactive blog posts based on filters
-  const { data: posts, pending, error, refresh } = useBlogPosts({
-    category: computed(() => selectedCategory.value === 'All' ? undefined : selectedCategory.value),
-    search: computed(() => searchQuery.value || undefined),
-    featured: computed(() => showFeaturedOnly.value || undefined),
+  // Create reactive options for useBlogPosts
+  const blogPostsOptions = computed(() => ({
+    category: selectedCategory.value === 'All' ? undefined : selectedCategory.value,
+    search: searchQuery.value || undefined,
+    featured: showFeaturedOnly.value || undefined,
     lazy: true,
+  }))
+  
+  // Use the reactive options with useLazyFetch for client-side filtering
+  const { data: posts, pending, error, refresh } = useLazyFetch<{
+    items: BlogPost[]
+    total: number
+    skip: number
+    limit: number
+  }>('/api/blog/posts', {
+    key: computed(() => `blog-filter-${JSON.stringify(blogPostsOptions.value)}`),
+    query: computed(() => {
+      const params: Record<string, any> = {}
+      if (blogPostsOptions.value.category) params.category = blogPostsOptions.value.category
+      if (blogPostsOptions.value.search) params.search = blogPostsOptions.value.search
+      if (blogPostsOptions.value.featured !== undefined) params.featured = blogPostsOptions.value.featured
+      return params
+    }),
+    default: () => ({ items: [], total: 0, skip: 0, limit: 0 }),
+    server: false, // Client-side only for filtering
   })
   
   // Reset filters

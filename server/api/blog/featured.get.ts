@@ -6,6 +6,19 @@ export default defineEventHandler(async (event) => {
     // Set cache headers
     setHeader(event, 'Cache-Control', 'public, max-age=300') // 5 minutes
     
+    // Check if Contentful is configured
+    const runtimeConfig = useRuntimeConfig()
+    const spaceId = runtimeConfig.contentfulSpaceId
+    const accessToken = runtimeConfig.contentfulAccessToken
+    
+    if (!spaceId || !accessToken) {
+      console.warn('[API] Contentful not configured, using mock data for featured post')
+      
+      // Fallback to mock data
+      const { getFeaturedBlogPost } = await import('~/data/blog')
+      return getFeaturedBlogPost()
+    }
+    
     // Get Contentful client and fetch featured posts
     const client = getContentfulClient()
     const response = await client.getEntriesByType('blogPost', {
@@ -25,12 +38,21 @@ export default defineEventHandler(async (event) => {
   } catch (error) {
     console.error('[API] Failed to fetch featured blog post:', error)
     
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Failed to fetch featured blog post',
-      data: {
-        error: error instanceof Error ? error.message : 'Unknown error',
-      },
-    })
+    // Fallback to mock data on error
+    try {
+      console.warn('[API] Falling back to mock data for featured post due to error')
+      const { getFeaturedBlogPost } = await import('~/data/blog')
+      return getFeaturedBlogPost()
+    } catch (fallbackError) {
+      console.error('[API] Even mock data fallback failed:', fallbackError)
+      
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Failed to fetch featured blog post',
+        data: {
+          error: error instanceof Error ? error.message : 'Unknown error',
+        },
+      })
+    }
   }
 })

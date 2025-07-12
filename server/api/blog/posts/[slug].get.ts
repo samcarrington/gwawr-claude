@@ -16,6 +16,28 @@ export default defineEventHandler(async (event) => {
     // Set cache headers
     setHeader(event, 'Cache-Control', 'public, max-age=600') // 10 minutes for individual posts
     
+    // Check if Contentful is configured
+    const runtimeConfig = useRuntimeConfig()
+    const spaceId = runtimeConfig.contentfulSpaceId
+    const accessToken = runtimeConfig.contentfulAccessToken
+    
+    if (!spaceId || !accessToken) {
+      console.warn('[API] Contentful not configured, using mock data for blog post')
+      
+      // Fallback to mock data
+      const { getBlogPostBySlug } = await import('~/data/blog')
+      const mockPost = getBlogPostBySlug(slug)
+      
+      if (!mockPost) {
+        throw createError({
+          statusCode: 404,
+          statusMessage: 'Blog post not found',
+        })
+      }
+      
+      return mockPost
+    }
+    
     // Get Contentful client and fetch data
     const client = getContentfulClient()
     const entry = await client.getEntryBySlug('blogPost', slug, {
@@ -41,12 +63,30 @@ export default defineEventHandler(async (event) => {
       throw error
     }
     
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Failed to fetch blog post',
-      data: {
-        error: error instanceof Error ? error.message : 'Unknown error',
-      },
-    })
+    // Fallback to mock data on error
+    try {
+      console.warn('[API] Falling back to mock data for blog post due to error')
+      const { getBlogPostBySlug } = await import('~/data/blog')
+      const mockPost = getBlogPostBySlug(getRouterParam(event, 'slug') as string)
+      
+      if (!mockPost) {
+        throw createError({
+          statusCode: 404,
+          statusMessage: 'Blog post not found',
+        })
+      }
+      
+      return mockPost
+    } catch (fallbackError) {
+      console.error('[API] Even mock data fallback failed:', fallbackError)
+      
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Failed to fetch blog post',
+        data: {
+          error: error instanceof Error ? error.message : 'Unknown error',
+        },
+      })
+    }
   }
 })

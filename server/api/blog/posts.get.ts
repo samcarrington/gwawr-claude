@@ -10,6 +10,52 @@ export default defineEventHandler(async (event) => {
     // Set cache headers
     setHeader(event, 'Cache-Control', 'public, max-age=300') // 5 minutes
     
+    // Check if Contentful is configured
+    const runtimeConfig = useRuntimeConfig()
+    const spaceId = runtimeConfig.contentfulSpaceId
+    const accessToken = runtimeConfig.contentfulAccessToken
+    
+    if (!spaceId || !accessToken) {
+      console.warn('[API] Contentful not configured, using mock data')
+      
+      // Fallback to mock data
+      const { getSortedBlogPosts } = await import('~/data/blog')
+      const mockPosts = getSortedBlogPosts()
+      
+      // Apply filters to mock data
+      let filteredPosts = mockPosts
+      
+      if (query.category && query.category !== 'All') {
+        filteredPosts = filteredPosts.filter(post => post.category === query.category)
+      }
+      
+      if (query.featured !== undefined) {
+        filteredPosts = filteredPosts.filter(post => post.featured === (query.featured === 'true'))
+      }
+      
+      if (query.search) {
+        const searchTerm = query.search.toLowerCase()
+        filteredPosts = filteredPosts.filter(post => 
+          post.title.toLowerCase().includes(searchTerm) ||
+          post.excerpt.toLowerCase().includes(searchTerm) ||
+          post.category.toLowerCase().includes(searchTerm) ||
+          post.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+        )
+      }
+      
+      // Apply pagination
+      const limit = query.limit ? parseInt(query.limit as string) : 20
+      const skip = query.skip ? parseInt(query.skip as string) : 0
+      const paginatedPosts = filteredPosts.slice(skip, skip + limit)
+      
+      return {
+        items: paginatedPosts,
+        total: filteredPosts.length,
+        skip,
+        limit,
+      }
+    }
+    
     // Build Contentful query
     const contentfulQuery: ContentfulQueryOptions = {
       content_type: 'blogPost',
@@ -49,12 +95,28 @@ export default defineEventHandler(async (event) => {
   } catch (error) {
     console.error('[API] Failed to fetch blog posts:', error)
     
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Failed to fetch blog posts',
-      data: {
-        error: error instanceof Error ? error.message : 'Unknown error',
-      },
-    })
+    // Fallback to mock data on any error
+    try {
+      console.warn('[API] Falling back to mock data due to error')
+      const { getSortedBlogPosts } = await import('~/data/blog')
+      const mockPosts = getSortedBlogPosts()
+      
+      return {
+        items: mockPosts,
+        total: mockPosts.length,
+        skip: 0,
+        limit: mockPosts.length,
+      }
+    } catch (fallbackError) {
+      console.error('[API] Even mock data fallback failed:', fallbackError)
+      
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Failed to fetch blog posts',
+        data: {
+          error: error instanceof Error ? error.message : 'Unknown error',
+        },
+      })
+    }
   }
 })
