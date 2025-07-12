@@ -1,32 +1,6 @@
 import { getContentfulClient } from '~/utils/contentful-client'
+import { transformProjects } from '~/utils/contentful-transformers'
 import type { ContentfulQueryOptions } from '~/types/contentful'
-
-// TODO: Create transformProjects function similar to transformBlogPosts
-// For now, using a basic transformation
-function transformProject(entry: any) {
-  const fields = entry.fields
-  
-  return {
-    id: entry.sys.id,
-    title: fields.title,
-    slug: fields.slug,
-    description: fields.description,
-    fullDescription: fields.fullDescription,
-    technologies: fields.technologies || [],
-    images: fields.images || [],
-    liveUrl: fields.liveUrl,
-    repositoryUrl: fields.repositoryUrl,
-    featured: fields.featured || false,
-    category: fields.category,
-    startDate: fields.date, // Legacy field name
-    endDate: fields.endDate,
-    status: fields.status || 'completed',
-  }
-}
-
-function transformProjects(entries: any[]) {
-  return entries.map(transformProject)
-}
 
 export default defineEventHandler(async (event) => {
   try {

@@ -1,26 +1,5 @@
 import { getContentfulClient } from '~/utils/contentful-client'
-
-// TODO: Move to utils/contentful-transformers.ts
-function transformProject(entry: any) {
-  const fields = entry.fields
-  
-  return {
-    id: entry.sys.id,
-    title: fields.title,
-    slug: fields.slug,
-    description: fields.description,
-    fullDescription: fields.fullDescription,
-    technologies: fields.technologies || [],
-    images: fields.images || [],
-    liveUrl: fields.liveUrl,
-    repositoryUrl: fields.repositoryUrl,
-    featured: fields.featured || false,
-    category: fields.category,
-    startDate: fields.date, // Legacy field name
-    endDate: fields.endDate,
-    status: fields.status || 'completed',
-  }
-}
+import { transformProject } from '~/utils/contentful-transformers'
 
 export default defineEventHandler(async (event) => {
   try {

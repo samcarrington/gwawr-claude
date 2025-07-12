@@ -1,24 +1,5 @@
 import { getContentfulClient } from '~/utils/contentful-client'
-
-// TODO: Move to utils/contentful-transformers.ts
-function transformTestimonial(entry: any) {
-  const fields = entry.fields
-  
-  return {
-    id: entry.sys.id,
-    title: fields.title,
-    content: fields.content || fields.testimonialText, // Handle both field names
-    clientName: fields.clientName,
-    clientTitle: fields.clientTitle,
-    clientCompany: fields.clientCompany,
-    company: fields.company, // Legacy field
-    name: fields.name, // Legacy field - may be overridden by clientName
-    rating: fields.rating,
-    featured: fields.featured || false,
-    projectReference: fields.projectReference,
-    attribution: fields.attribution, // Legacy person link
-  }
-}
+import { transformTestimonial } from '~/utils/contentful-transformers'
 
 export default defineEventHandler(async (event) => {
   try {

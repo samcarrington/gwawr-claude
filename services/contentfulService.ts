@@ -2,6 +2,10 @@ import { getContentfulClient } from '~/utils/contentful-client'
 import { 
   transformBlogPost, 
   transformBlogPosts,
+  transformProject,
+  transformProjects,
+  transformTestimonial,
+  transformTestimonials,
   handleTransformationError
 } from '~/utils/contentful-transformers'
 import type { ContentfulQueryOptions } from '~/types/contentful'
@@ -191,24 +195,7 @@ export class ContentfulService {
       }
       
       const response = await this.client.getEntriesByType('project', query)
-      
-      // Basic transformation (TODO: Create proper transformer)
-      const transformedProjects = response.items.map((entry: any) => ({
-        id: entry.sys.id,
-        title: entry.fields.title,
-        slug: entry.fields.slug,
-        description: entry.fields.description,
-        fullDescription: entry.fields.fullDescription,
-        technologies: entry.fields.technologies || [],
-        images: entry.fields.images || [],
-        liveUrl: entry.fields.liveUrl,
-        repositoryUrl: entry.fields.repositoryUrl,
-        featured: entry.fields.featured || false,
-        category: entry.fields.category,
-        startDate: entry.fields.date,
-        endDate: entry.fields.endDate,
-        status: entry.fields.status || 'completed',
-      }))
+      const transformedProjects = transformProjects(response.items)
       
       return {
         items: transformedProjects,
@@ -233,23 +220,7 @@ export class ContentfulService {
         limit,
       })
       
-      // Basic transformation (TODO: Create proper transformer)
-      return response.items.map((entry: any) => ({
-        id: entry.sys.id,
-        title: entry.fields.title,
-        slug: entry.fields.slug,
-        description: entry.fields.description,
-        fullDescription: entry.fields.fullDescription,
-        technologies: entry.fields.technologies || [],
-        images: entry.fields.images || [],
-        liveUrl: entry.fields.liveUrl,
-        repositoryUrl: entry.fields.repositoryUrl,
-        featured: entry.fields.featured || false,
-        category: entry.fields.category,
-        startDate: entry.fields.date,
-        endDate: entry.fields.endDate,
-        status: entry.fields.status || 'completed',
-      }))
+      return transformProjects(response.items)
     } catch (error) {
       handleTransformationError(error, 'getFeaturedProjects')
       return []
@@ -291,22 +262,7 @@ export class ContentfulService {
       }
       
       const response = await this.client.getEntriesByType('testimonial', query)
-      
-      // Basic transformation (TODO: Create proper transformer)
-      const transformedTestimonials = response.items.map((entry: any) => ({
-        id: entry.sys.id,
-        title: entry.fields.title,
-        content: entry.fields.content || entry.fields.testimonialText,
-        clientName: entry.fields.clientName,
-        clientTitle: entry.fields.clientTitle,
-        clientCompany: entry.fields.clientCompany,
-        company: entry.fields.company,
-        name: entry.fields.name,
-        rating: entry.fields.rating,
-        featured: entry.fields.featured || false,
-        projectReference: entry.fields.projectReference,
-        attribution: entry.fields.attribution,
-      }))
+      const transformedTestimonials = transformTestimonials(response.items)
       
       return {
         items: transformedTestimonials,
@@ -332,21 +288,7 @@ export class ContentfulService {
         include: 2,
       })
       
-      // Basic transformation (TODO: Create proper transformer)
-      return response.items.map((entry: any) => ({
-        id: entry.sys.id,
-        title: entry.fields.title,
-        content: entry.fields.content || entry.fields.testimonialText,
-        clientName: entry.fields.clientName,
-        clientTitle: entry.fields.clientTitle,
-        clientCompany: entry.fields.clientCompany,
-        company: entry.fields.company,
-        name: entry.fields.name,
-        rating: entry.fields.rating,
-        featured: entry.fields.featured || false,
-        projectReference: entry.fields.projectReference,
-        attribution: entry.fields.attribution,
-      }))
+      return transformTestimonials(response.items)
     } catch (error) {
       handleTransformationError(error, 'getFeaturedTestimonials')
       return []

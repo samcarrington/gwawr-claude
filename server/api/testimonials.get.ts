@@ -1,30 +1,6 @@
 import { getContentfulClient } from '~/utils/contentful-client'
+import { transformTestimonials } from '~/utils/contentful-transformers'
 import type { ContentfulQueryOptions } from '~/types/contentful'
-
-// TODO: Create transformTestimonials function similar to transformBlogPosts
-// For now, using a basic transformation
-function transformTestimonial(entry: any) {
-  const fields = entry.fields
-  
-  return {
-    id: entry.sys.id,
-    title: fields.title,
-    content: fields.content || fields.testimonialText, // Handle both field names
-    clientName: fields.clientName,
-    clientTitle: fields.clientTitle,
-    clientCompany: fields.clientCompany,
-    company: fields.company, // Legacy field
-    name: fields.name, // Legacy field - may be overridden by clientName
-    rating: fields.rating,
-    featured: fields.featured || false,
-    projectReference: fields.projectReference,
-    attribution: fields.attribution, // Legacy person link
-  }
-}
-
-function transformTestimonials(entries: any[]) {
-  return entries.map(transformTestimonial)
-}
 
 export default defineEventHandler(async (event) => {
   try {
