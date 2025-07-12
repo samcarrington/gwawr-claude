@@ -51,7 +51,9 @@ export const useTestimonials = (options: UseTestimonialsOptions = {}) => {
   // Generate cache key based on query parameters
   const key = computed(() => {
     const queryString = JSON.stringify(query.value, Object.keys(query.value).sort())
-    return `testimonials-${Buffer.from(queryString).toString('base64')}`
+    // Use btoa for browser compatibility
+    const encoded = import.meta.client ? btoa(queryString) : Buffer.from(queryString).toString('base64')
+    return `testimonials-${encoded}`
   })
   
   // Choose fetch method based on options

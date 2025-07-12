@@ -220,26 +220,149 @@ export function getRelatedPosts(posts: BlogPost[], currentPost: BlogPost, limit 
 }
 
 /**
+ * Extract technology names from Contentful entries or strings
+ * Handles both string arrays and arrays of Contentful technology entries
+ */
+function extractTechnologyNames(technologies: any): string[] {
+  if (!technologies) return []
+  
+  // If it's already an array of strings, return as is
+  if (Array.isArray(technologies) && technologies.every(tech => typeof tech === 'string')) {
+    return technologies
+  }
+  
+  // If it's an array of Contentful entries
+  if (Array.isArray(technologies)) {
+    return technologies.map(tech => {
+      // If it's a Contentful entry with fields.name
+      if (tech && typeof tech === 'object' && tech.fields && tech.fields.name) {
+        return tech.fields.name
+      }
+      // If it's a string
+      if (typeof tech === 'string') {
+        return tech
+      }
+      // Fallback: log warning and return safe value
+      console.warn('[Project Transformer] Technology is not a string or proper entry:', JSON.stringify(tech, null, 2))
+      return 'Unknown Technology'
+    }).filter(Boolean)
+  }
+  
+  // If it's a single entry/string
+  if (typeof technologies === 'object' && technologies.fields && technologies.fields.name) {
+    return [technologies.fields.name]
+  }
+  
+  if (typeof technologies === 'string') {
+    return [technologies]
+  }
+  
+  return []
+}
+
+/**
+ * Extract category name from Contentful entry, array, or string
+ * Handles both single category strings and arrays of Contentful category entries
+ * Takes the first category from an array if multiple categories are provided
+ */
+function extractCategoryName(category: any): string {
+  if (!category) return 'Uncategorized'
+  
+  // If it's already a string, return as is
+  if (typeof category === 'string') {
+    return category
+  }
+  
+  // If it's an array of categories, take the first one
+  if (Array.isArray(category)) {
+    if (category.length === 0) return 'Uncategorized'
+    const firstCategory = category[0]
+    
+    // Recursively extract from the first item
+    if (typeof firstCategory === 'string') {
+      return firstCategory
+    }
+    
+    if (typeof firstCategory === 'object' && firstCategory.fields) {
+      return firstCategory.fields.name || firstCategory.fields.title || 'Uncategorized'
+    }
+    
+    console.warn('[Project Transformer] First category in array is not a valid entry:', JSON.stringify(firstCategory, null, 2))
+    return 'Uncategorized'
+  }
+  
+  // If it's a Contentful entry with fields.name or fields.title
+  if (typeof category === 'object' && category.fields) {
+    return category.fields.name || category.fields.title || 'Uncategorized'
+  }
+  
+  // Fallback: log the actual structure and return safe value
+  console.warn('[Project Transformer] Category is not a string, array, or proper entry:', JSON.stringify(category, null, 2))
+  return 'Uncategorized'
+}
+
+/**
+ * Extract image URLs from Contentful assets
+ */
+function extractImageUrls(images: any): string[] {
+  if (!images) return []
+  
+  // If it's already an array of strings, return as is
+  if (Array.isArray(images) && images.every(img => typeof img === 'string')) {
+    return images
+  }
+  
+  // If it's an array of Contentful assets
+  if (Array.isArray(images)) {
+    return images.map(img => getAssetUrl(img)).filter(Boolean) as string[]
+  }
+  
+  // If it's a single asset
+  if (typeof images === 'object' && images.fields) {
+    const url = getAssetUrl(images)
+    return url ? [url] : []
+  }
+  
+  return []
+}
+
+/**
  * Transform Contentful project to our Project type
  */
 export function transformProject(entry: any) {
-  const fields = entry.fields
-  
-  return {
-    id: entry.sys.id,
-    title: fields.title,
-    slug: fields.slug,
-    description: fields.description,
-    fullDescription: fields.fullDescription,
-    technologies: fields.technologies || [],
-    images: fields.images || [],
-    liveUrl: fields.liveUrl,
-    repositoryUrl: fields.repositoryUrl,
-    featured: fields.featured || false,
-    category: fields.category,
-    startDate: fields.date, // Legacy field name
-    endDate: fields.endDate,
-    status: fields.status || 'completed',
+  try {
+    if (!entry || !entry.sys || !entry.fields) {
+      console.warn('[Project Transformer] Invalid entry structure:', entry)
+      return null
+    }
+
+    const fields = entry.fields
+    
+    // Validate required fields
+    if (!fields.title || !fields.slug) {
+      console.warn('[Project Transformer] Missing required fields (title/slug):', entry.sys.id)
+      return null
+    }
+    
+    return {
+      id: entry.sys.id,
+      title: fields.title || 'Untitled Project',
+      slug: fields.slug || `project-${entry.sys.id}`,
+      description: fields.description || '',
+      fullDescription: fields.fullDescription,
+      technologies: extractTechnologyNames(fields.technologies),
+      images: extractImageUrls(fields.images),
+      liveUrl: fields.liveUrl || undefined,
+      repositoryUrl: fields.repositoryUrl || undefined,
+      featured: Boolean(fields.featured),
+      category: extractCategoryName(fields.category),
+      startDate: fields.date || fields.startDate || undefined,
+      endDate: fields.endDate || undefined,
+      status: fields.status || 'completed',
+    }
+  } catch (error) {
+    handleTransformationError(error, `Project transformation for entry ${entry?.sys?.id || 'unknown'}`)
+    return null
   }
 }
 
@@ -247,7 +370,7 @@ export function transformProject(entry: any) {
  * Transform multiple projects
  */
 export function transformProjects(entries: any[]) {
-  return entries.map(transformProject)
+  return entries.map(transformProject).filter(Boolean)
 }
 
 /**

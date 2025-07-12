@@ -63,8 +63,8 @@
       <div class="relative">
         <div class="aspect-video bg-white rounded-lg shadow-lg overflow-hidden">
           <img
-            v-if="project.image"
-            :src="project.image"
+            v-if="projectImage"
+            :src="projectImage"
             :alt="project.title"
             class="w-full h-full object-cover"
           />
@@ -80,11 +80,17 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  project: {
-    type: Object,
-    required: true,
-  },
-});
+<script setup lang="ts">
+import type { Project } from '~/types/project'
+
+const props = defineProps<{
+  project: Project
+}>()
+
+// Get the first image from the images array
+const projectImage = computed(() => {
+  return props.project.images && props.project.images.length > 0 
+    ? props.project.images[0] 
+    : null
+})
 </script>
