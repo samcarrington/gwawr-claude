@@ -15,9 +15,13 @@
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
           {{ project.title }}
         </h2>
-        <p class="text-lg text-gray-600 mb-6">
-          {{ project.description }}
-        </p>
+        <div class="text-lg text-gray-600 mb-6">
+          <AtomsContentRenderer 
+            :content="project.description" 
+            size="lg"
+            fallback-text="No description available"
+          />
+        </div>
 
         <!-- Technologies -->
         <div class="flex flex-wrap gap-2 mb-6">
@@ -32,7 +36,7 @@
 
         <!-- Project Links -->
         <div class="flex gap-4">
-          <ButtonPrimary
+          <AtomsButtonsPrimary
             v-if="project.liveUrl"
             size="lg"
             :to="project.liveUrl"
@@ -43,8 +47,8 @@
               <UIcon name="i-heroicons-globe-alt" />
             </template>
             View Live Project
-          </ButtonPrimary>
-          <ButtonSecondary
+          </AtomsButtonsPrimary>
+          <AtomsButtonsSecondary
             v-if="project.repositoryUrl"
             size="lg"
             :to="project.repositoryUrl"
@@ -55,7 +59,7 @@
               <UIcon name="i-heroicons-code-bracket" />
             </template>
             View Code
-          </ButtonSecondary>
+          </AtomsButtonsSecondary>
         </div>
       </div>
 

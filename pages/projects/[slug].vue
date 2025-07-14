@@ -81,10 +81,9 @@
             <!-- Full Description -->
             <section v-if="project.fullDescription" class="mb-12">
               <h2 class="text-2xl font-bold text-gray-900 mb-6">About This Project</h2>
-              <AtomsContentRenderer 
-                :content="project.fullDescription" 
-                size="lg"
-                fallback-text="No detailed description available for this project."
+              <div 
+                class="prose prose-gray max-w-none prose-lg prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-primary prose-strong:text-gray-900 prose-code:bg-gray-100 prose-code:text-gray-800 prose-blockquote:border-primary prose-blockquote:text-gray-700"
+                v-html="project.fullDescription"
               />
             </section>
 

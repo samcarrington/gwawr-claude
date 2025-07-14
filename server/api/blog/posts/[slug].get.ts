@@ -1,4 +1,4 @@
-import { getContentfulClient } from '~/utils/contentful-client'
+import { createClient } from 'contentful'
 import { transformBlogPost } from '~/utils/contentful-transformers'
 
 export default defineEventHandler(async (event) => {
@@ -17,9 +17,9 @@ export default defineEventHandler(async (event) => {
     setHeader(event, 'Cache-Control', 'public, max-age=600') // 10 minutes for individual posts
     
     // Check if Contentful is configured
-    const runtimeConfig = useRuntimeConfig()
-    const spaceId = runtimeConfig.contentfulSpaceId
-    const accessToken = runtimeConfig.contentfulAccessToken
+    const config = useRuntimeConfig(event)
+    const spaceId = config.contentfulSpaceId
+    const accessToken = config.contentfulAccessToken
     
     if (!spaceId || !accessToken) {
       console.warn('[API] Contentful not configured, using mock data for blog post')
@@ -38,11 +38,20 @@ export default defineEventHandler(async (event) => {
       return mockPost
     }
     
-    // Get Contentful client and fetch data
-    const client = getContentfulClient()
-    const entry = await client.getEntryBySlug('blogPost', slug, {
-      include: 2, // Include linked entries up to 2 levels deep
+    // Create Contentful client and fetch data
+    const client = createClient({
+      space: spaceId,
+      accessToken: accessToken,
     })
+    
+    const response = await client.getEntries({
+      content_type: 'blogPost',
+      'fields.slug': slug,
+      include: 2, // Include linked entries up to 2 levels deep
+      limit: 1,
+    })
+    
+    const entry = response.items[0]
     
     if (!entry) {
       throw createError({

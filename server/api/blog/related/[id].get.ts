@@ -1,8 +1,20 @@
-import { getContentfulClient } from '~/utils/contentful-client'
+import { createClient } from 'contentful'
 import { transformBlogPosts } from '~/utils/contentful-transformers'
 
 export default defineEventHandler(async (event) => {
   try {
+    // Get runtime config and validate Contentful configuration
+    const config = useRuntimeConfig(event)
+    const spaceId = config.contentfulSpaceId
+    const accessToken = config.contentfulAccessToken
+    
+    if (!spaceId || !accessToken) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Contentful configuration is missing',
+      })
+    }
+    
     // Get ID from route parameters
     const id = getRouterParam(event, 'id')
     
@@ -20,8 +32,11 @@ export default defineEventHandler(async (event) => {
     // Set cache headers
     setHeader(event, 'Cache-Control', 'public, max-age=600') // 10 minutes
     
-    // Get Contentful client
-    const client = getContentfulClient()
+    // Create Contentful client
+    const client = createClient({
+      space: spaceId,
+      accessToken: accessToken,
+    })
     
     // First, get the current post to find its category
     const currentPost = await client.getEntry(id)
@@ -41,7 +56,8 @@ export default defineEventHandler(async (event) => {
     }
     
     // Fetch related posts in the same category, excluding current post
-    const response = await client.getEntriesByType('blogPost', {
+    const response = await client.getEntries({
+      content_type: 'blogPost',
       'fields.category': currentCategory,
       'sys.id[ne]': id, // Exclude current post
       order: '-fields.publishedAt',

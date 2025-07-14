@@ -37,9 +37,13 @@
       <AtomsTypographyCard tag="h3" size="default" spacing="tight">
         {{ project.title }}
       </AtomsTypographyCard>
-      <p class="text-gray-600 mb-4 line-clamp-3">
-        {{ project.description }}
-      </p>
+      <div class="text-gray-600 mb-4 line-clamp-3">
+        <AtomsContentRenderer 
+          :content="project.description" 
+          size="sm"
+          fallback-text="No description available"
+        />
+      </div>
 
       <!-- Technologies -->
       <div class="mb-4">
