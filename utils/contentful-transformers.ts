@@ -9,6 +9,7 @@ import type {
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
 import { BLOCKS, MARKS, INLINES } from '@contentful/rich-text-types'
 import { marked } from 'marked'
+import { sanitizeUrl } from '~/utils/url'
 
 /**
  * Detect content type and render appropriately
@@ -63,7 +64,10 @@ export function renderRichText(document: any): string {
         [BLOCKS.OL_LIST]: (node, next) => `<ol class="list-decimal pl-6 mb-4">${next(node.content)}</ol>`,
         [BLOCKS.LIST_ITEM]: (node, next) => `<li class="mb-2">${next(node.content)}</li>`,
         [BLOCKS.QUOTE]: (node, next) => `<blockquote class="border-l-4 border-gray-300 pl-4 italic mb-4">${next(node.content)}</blockquote>`,
-        [INLINES.HYPERLINK]: (node, next) => `<a href="${node.data.uri}" class="text-primary hover:underline" target="_blank" rel="noopener noreferrer">${next(node.content)}</a>`,
+        [INLINES.HYPERLINK]: (node, next) => {
+          const safeUri = sanitizeUrl(node.data.uri)
+          return `<a href="${safeUri}" class="text-primary hover:underline" target="_blank" rel="noopener noreferrer">${next(node.content)}</a>`
+        },
       },
       renderMark: {
         [MARKS.BOLD]: (text) => `<strong>${text}</strong>`,
