@@ -1,10 +1,12 @@
 ---
-trigger: always_on
+trigger: model_decision
+description: Whenever a user mentions backlog, assume they want you to use the command line tool
 ---
 
 # === BACKLOG.MD GUIDELINES START ===
 
 # Instructions for the usage of Backlog.md CLI Tool for planning and execution of tasks on the project
+
 
 ## 1. Source of Truth
 

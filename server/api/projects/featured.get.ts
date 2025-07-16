@@ -37,8 +37,8 @@ export default defineEventHandler(async (event) => {
       limit,
     })
     
-    // Transform the data
-    const transformedProjects = response.items.map(transformProject)
+    // Transform the data - use Promise.all to handle async transformations
+    const transformedProjects = await Promise.all(response.items.map(item => transformProject(item)))
     
     return transformedProjects
   } catch (error) {

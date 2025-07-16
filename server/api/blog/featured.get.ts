@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
     }
     
     // Transform the first (most recent) featured post
-    const transformedPost = transformBlogPost(response.items[0])
+    const transformedPost = await transformBlogPost(response.items[0])
     
     return transformedPost
   } catch (error) {

@@ -5,6 +5,9 @@
     :class="proseClasses"
     v-html="renderedContent"
   />
+  <div v-else-if="isLoading" class="text-gray-600">
+    <span class="inline-block animate-pulse">Loading content...</span>
+  </div>
   <div v-else-if="fallbackText" class="text-gray-600">
     {{ fallbackText }}
   </div>
@@ -24,11 +27,43 @@ const props = withDefaults(defineProps<Props>(), {
   fallbackText: 'No content available'
 })
 
-// Render the content using our smart renderer
-const renderedContent = computed(() => {
-  if (!props.content) return ''
-  return renderContent(props.content)
+// Track loading state
+const isLoading = ref(true)
+const renderedContent = ref('')
+
+// Render the content using our smart renderer (async)
+onMounted(async () => {
+  isLoading.value = true
+  try {
+    if (props.content) {
+      renderedContent.value = await renderContent(props.content)
+    } else {
+      renderedContent.value = ''
+    }
+  } catch (error) {
+    console.error('[AtomsContentRenderer] Error rendering content:', error)
+    renderedContent.value = ''
+  } finally {
+    isLoading.value = false
+  }
 })
+
+// Watch for content changes and re-render
+watch(() => props.content, async (newContent) => {
+  isLoading.value = true
+  try {
+    if (newContent) {
+      renderedContent.value = await renderContent(newContent)
+    } else {
+      renderedContent.value = ''
+    }
+  } catch (error) {
+    console.error('[AtomsContentRenderer] Error rendering content:', error)
+    renderedContent.value = ''
+  } finally {
+    isLoading.value = false
+  }
+}, { deep: true })
 
 // Dynamic prose classes based on size
 const proseClasses = computed(() => {

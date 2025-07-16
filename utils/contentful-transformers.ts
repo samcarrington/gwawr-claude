@@ -15,17 +15,17 @@ import { sanitizeUrl } from '~/utils/url'
  * Detect content type and render appropriately
  * Handles both markdown strings and Contentful Rich Text documents
  */
-export function renderContent(content: any): string {
+export async function renderContent(content: any): Promise<string> {
   if (!content) return ''
   
   // If it's a string, assume it's markdown and render it
   if (typeof content === 'string') {
-    return renderMarkdown(content)
+    return await renderMarkdown(content)
   }
   
   // If it's a Contentful Rich Text document, render it
   if (typeof content === 'object' && content.nodeType === 'document') {
-    return renderRichText(content)
+    return await renderRichText(content)
   }
   
   // Fallback for any other content type
@@ -35,14 +35,14 @@ export function renderContent(content: any): string {
 /**
  * Render markdown string to HTML
  */
-export function renderMarkdown(markdown: string): string {
+export async function renderMarkdown(markdown: string): Promise<string> {
   try {
-    const result = marked(markdown, {
+    // Properly await the Promise returned by marked
+    const result = await marked(markdown, {
       breaks: true,
       gfm: true,
     })
-    // Handle both sync and async marked results
-    return typeof result === 'string' ? result : markdown
+    return result
   } catch (error) {
     console.warn('[Content Renderer] Failed to parse markdown:', error)
     return markdown
@@ -52,7 +52,7 @@ export function renderMarkdown(markdown: string): string {
 /**
  * Render Contentful Rich Text document to HTML
  */
-export function renderRichText(document: any): string {
+export async function renderRichText(document: any): Promise<string> {
   try {
     return documentToHtmlString(document, {
       renderNode: {
@@ -85,8 +85,8 @@ export function renderRichText(document: any): string {
  * Legacy function - kept for backward compatibility
  * Use renderContent() for new implementations
  */
-export function processRichText(document: any): string {
-  return renderContent(document)
+export async function processRichText(document: any): Promise<string> {
+  return await renderContent(document)
 }
 
 /**
@@ -167,7 +167,7 @@ export function transformTag(entry: ContentfulEntry<ContentfulTag>): BlogTag {
 /**
  * Transform Contentful blog post to our BlogPost type
  */
-export function transformBlogPost(entry: ContentfulEntry<ContentfulBlogPost>): BlogPost {
+export async function transformBlogPost(entry: ContentfulEntry<ContentfulBlogPost>): Promise<BlogPost> {
   const fields = entry.fields
   
   return {
@@ -175,7 +175,7 @@ export function transformBlogPost(entry: ContentfulEntry<ContentfulBlogPost>): B
     title: fields.title,
     slug: fields.slug,
     excerpt: fields.excerpt,
-    content: processRichText(fields.content),
+    content: await processRichText(fields.content),
     category: fields.category ? 
       (typeof fields.category === 'string' ? fields.category : transformCategory(fields.category).name) : 
       'Uncategorized',
@@ -192,8 +192,9 @@ export function transformBlogPost(entry: ContentfulEntry<ContentfulBlogPost>): B
 /**
  * Transform multiple blog posts
  */
-export function transformBlogPosts(entries: ContentfulEntry<ContentfulBlogPost>[]): BlogPost[] {
-  return entries.map(transformBlogPost)
+export async function transformBlogPosts(entries: ContentfulEntry<ContentfulBlogPost>[]): Promise<BlogPost[]> {
+  // Use Promise.all to wait for all async transformations to complete
+  return Promise.all(entries.map(entry => transformBlogPost(entry)))
 }
 
 /**
@@ -392,7 +393,7 @@ function extractImageUrls(images: any): string[] {
 /**
  * Transform Contentful project to our Project type
  */
-export function transformProject(entry: any) {
+export async function transformProject(entry: any) {
   try {
     if (!entry || !entry.sys || !entry.fields) {
       console.warn('[Project Transformer] Invalid entry structure:', entry)
@@ -412,7 +413,7 @@ export function transformProject(entry: any) {
       title: fields.title || 'Untitled Project',
       slug: fields.slug || `project-${entry.sys.id}`,
       description: fields.description || '',
-      fullDescription: fields.fullDescription ? renderContent(fields.fullDescription) : undefined,
+      fullDescription: fields.fullDescription ? await renderContent(fields.fullDescription) : undefined,
       technologies: extractTechnologyNames(fields.technologies),
       images: extractImageUrls(fields.images),
       liveUrl: fields.liveUrl || undefined,
@@ -432,8 +433,10 @@ export function transformProject(entry: any) {
 /**
  * Transform multiple projects
  */
-export function transformProjects(entries: any[]) {
-  return entries.map(transformProject).filter(Boolean)
+export async function transformProjects(entries: any[]) {
+  // Use Promise.all to wait for all async transformations to complete
+  const results = await Promise.all(entries.map(entry => transformProject(entry)))
+  return results.filter(Boolean)
 }
 
 /**

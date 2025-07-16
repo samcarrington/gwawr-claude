@@ -1,5 +1,5 @@
 import type { BlogPost, BlogCategory, BlogTag } from '~/types/blog'
-import type { ContentfulApi } from 'contentful'
+import type { ContentfulClientApi } from 'contentful'
 import {
   transformBlogPost,
   transformBlogPosts,
@@ -15,7 +15,7 @@ import {
  */
 export const useContentful = () => {
   const { $contentful } = useNuxtApp()
-  const client = $contentful as ContentfulApi | null
+  const client = $contentful as ContentfulClientApi<undefined> | null
 
   // Check if Contentful is available
   const isContentfulAvailable = computed(() => Boolean(client))
@@ -54,7 +54,7 @@ export const useContentful = () => {
       const activeClient = (options?.preview && $contentfulPreview) ? $contentfulPreview : client
       
       const response = await activeClient.getEntries(query)
-      return transformBlogPosts(response.items)
+      return await transformBlogPosts(response.items)
     } catch (error) {
       console.error('[useContentful] Error fetching blog posts:', error)
       return []
@@ -81,7 +81,7 @@ export const useContentful = () => {
         limit: 1
       })
       
-      return response.items.length > 0 ? transformBlogPost(response.items[0]) : null
+      return response.items.length > 0 ? await transformBlogPost(response.items[0]) : null
     } catch (error) {
       console.error('[useContentful] Error fetching blog post:', error)
       return null
@@ -106,7 +106,7 @@ export const useContentful = () => {
         order: '-fields.publishedAt',
       })
 
-      return response.items.length > 0 ? transformBlogPost(response.items[0]) : null
+      return response.items.length > 0 ? await transformBlogPost(response.items[0]) : null
     } catch (error) {
       console.error('[useContentful] Error fetching featured blog post:', error)
       return null
@@ -181,7 +181,7 @@ export const useContentful = () => {
         limit,
         order: '-fields.publishedAt',
       })
-      return transformBlogPosts(response.items)
+      return await transformBlogPosts(response.items)
     } catch (error) {
       console.error('[useContentful] Error searching blog posts:', error)
       return []

@@ -65,7 +65,7 @@ export default defineEventHandler(async (event) => {
     })
     
     // Transform the data
-    const transformedPosts = transformBlogPosts(response.items)
+    const transformedPosts = await transformBlogPosts(response.items)
     
     return transformedPosts
   } catch (error) {
