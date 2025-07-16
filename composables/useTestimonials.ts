@@ -52,7 +52,7 @@ export const useTestimonials = (options: UseTestimonialsOptions = {}) => {
   const key = computed(() => {
     const queryString = JSON.stringify(query.value, Object.keys(query.value).sort())
     // Use btoa for browser compatibility
-    const encoded = import.meta.client ? btoa(queryString) : Buffer.from(queryString).toString('base64')
+    const encoded = Buffer.from(encodeURIComponent(queryString)).toString('base64')
     return `testimonials-${encoded}`
   })
   
