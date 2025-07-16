@@ -351,7 +351,7 @@ function extractCategoryName(category: any): string {
       return firstCategory.fields.name || firstCategory.fields.title || 'Uncategorized'
     }
     
-    console.warn('[Project Transformer] First category in array is not a valid entry:', JSON.stringify(firstCategory, null, 2))
+    console.warn('[Project Transformer] First category in array is not a valid entry:', JSON.stringify(firstCategory))
     return 'Uncategorized'
   }
   
