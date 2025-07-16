@@ -69,12 +69,12 @@ export interface ContentfulProject {
   slug: string
   description: string
   fullDescription?: any // Rich text document
-  technologies: string[]
+  technologies: string[] | ContentfulEntry<ContentfulCategory>[] // Can be strings or category entries
   images: ContentfulAsset[]
   liveUrl?: string
   repositoryUrl?: string
   featured: boolean
-  category: string
+  category: string | ContentfulEntry<ContentfulCategory>[] // Can be string or array of category entries
   startDate?: string
   endDate?: string
   status: 'completed' | 'in-progress' | 'planned'

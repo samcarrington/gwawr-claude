@@ -3,9 +3,9 @@ export interface Project {
   title: string
   slug: string
   description: string
-  fullDescription?: string
+  fullDescription?: string // Rendered HTML from markdown or Rich Text
   technologies: string[]
-  images: string[]
+  images: string[] // Array of image URLs
   liveUrl?: string
   repositoryUrl?: string
   featured: boolean

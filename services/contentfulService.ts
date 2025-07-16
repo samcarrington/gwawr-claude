@@ -56,7 +56,7 @@ export class ContentfulService {
       }
       
       const response = await this.client.getEntriesByType('blogPost', query)
-      const transformedPosts = transformBlogPosts(response.items)
+      const transformedPosts = await transformBlogPosts(response.items)
       
       return {
         items: transformedPosts,
@@ -79,7 +79,7 @@ export class ContentfulService {
         include: 2,
       })
       
-      return entry ? transformBlogPost(entry) : null
+      return entry ? await transformBlogPost(entry) : null
     } catch (error) {
       handleTransformationError(error, `getBlogPost(${slug})`)
       return null
@@ -97,7 +97,7 @@ export class ContentfulService {
         limit: 1,
       })
       
-      return response.items.length > 0 ? transformBlogPost(response.items[0]) : null
+      return response.items.length > 0 ? await transformBlogPost(response.items[0]) : null
     } catch (error) {
       handleTransformationError(error, 'getFeaturedBlogPost')
       return null
@@ -149,7 +149,7 @@ export class ContentfulService {
         limit,
       })
       
-      return transformBlogPosts(response.items)
+      return await transformBlogPosts(response.items)
     } catch (error) {
       handleTransformationError(error, `getRelatedBlogPosts(${postId})`)
       return []
@@ -195,7 +195,7 @@ export class ContentfulService {
       }
       
       const response = await this.client.getEntriesByType('project', query)
-      const transformedProjects = transformProjects(response.items)
+      const transformedProjects = await transformProjects(response.items)
       
       return {
         items: transformedProjects,
@@ -220,7 +220,7 @@ export class ContentfulService {
         limit,
       })
       
-      return transformProjects(response.items)
+      return await transformProjects(response.items)
     } catch (error) {
       handleTransformationError(error, 'getFeaturedProjects')
       return []
@@ -288,6 +288,7 @@ export class ContentfulService {
         include: 2,
       })
       
+      // Note: transformTestimonials may need to be updated to async if it uses renderContent
       return transformTestimonials(response.items)
     } catch (error) {
       handleTransformationError(error, 'getFeaturedTestimonials')

@@ -45,19 +45,7 @@ export const useProjects = (options: UseProjectsOptions = {}) => {
     query: query.value,
     default: () => ({ items: [], total: 0, skip: 0, limit: 0 }),
     server: options.server ?? true,
-    transform: (data: ProjectsResponse) => {
-      // Additional client-side transformation if needed
-      return {
-        ...data,
-        items: data.items.map(project => ({
-          ...project,
-          // Ensure technologies is always an array
-          technologies: project.technologies || [],
-          // Ensure status has a default
-          status: project.status || 'completed' as const,
-        }))
-      }
-    },
+    // Remove client-side transformation to prevent interference with server transformations
     onResponseError({ response }) {
       console.error('Failed to fetch projects:', response._data)
     }
@@ -73,14 +61,7 @@ export const useFeaturedProjects = (limit = 3) => {
     query: { limit },
     default: () => [],
     server: true,
-    transform: (data: Project[]) => {
-      // Ensure proper data structure
-      return data.map(project => ({
-        ...project,
-        technologies: project.technologies || [],
-        status: project.status || 'completed' as const,
-      }))
-    },
+    // Remove client-side transformation to prevent interference with server transformations
     onResponseError({ response }) {
       console.error('Failed to fetch featured projects:', response._data)
     }
@@ -130,7 +111,7 @@ export const useProjectFilter = () => {
     lazy: true,
   }))
   
-  // Use the reactive options with useLazyFetch for client-side filtering
+  // Use the reactive options with useLazyFetch for server and client-side filtering
   const { data: projects, pending, error, refresh } = useLazyFetch<ProjectsResponse>('/api/projects', {
     key: computed(() => `projects-filter-${JSON.stringify(projectsOptions.value)}`),
     query: computed(() => {
@@ -142,7 +123,7 @@ export const useProjectFilter = () => {
       return params
     }),
     default: () => ({ items: [], total: 0, skip: 0, limit: 0 }),
-    server: false, // Client-side only for filtering
+    server: true, // Enable server-side rendering to fix hydration mismatch
   })
   
   // Get unique categories from all projects

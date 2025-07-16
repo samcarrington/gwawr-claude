@@ -1,5 +1,5 @@
 import type { BlogPost, BlogCategory, BlogTag } from '~/types/blog'
-import type { ContentfulClient } from '~/utils/contentful-client'
+import type { ContentfulClientApi } from 'contentful'
 import {
   transformBlogPost,
   transformBlogPosts,
@@ -15,7 +15,7 @@ import {
  */
 export const useContentful = () => {
   const { $contentful } = useNuxtApp()
-  const client = $contentful as ContentfulClient
+  const client = $contentful as ContentfulClientApi<undefined> | null
 
   // Check if Contentful is available
   const isContentfulAvailable = computed(() => Boolean(client))
@@ -49,8 +49,12 @@ export const useContentful = () => {
         query['fields.featured'] = options.featured
       }
 
-      const response = await client.getEntries(query, options?.preview)
-      return transformBlogPosts(response.items)
+      // Use preview client if requested and available
+      const { $contentfulPreview } = useNuxtApp()
+      const activeClient = (options?.preview && $contentfulPreview) ? $contentfulPreview : client
+      
+      const response = await activeClient.getEntries(query)
+      return await transformBlogPosts(response.items)
     } catch (error) {
       console.error('[useContentful] Error fetching blog posts:', error)
       return []
@@ -67,8 +71,17 @@ export const useContentful = () => {
     }
 
     try {
-      const entry = await client.getEntryBySlug('blogPost', slug, {}, preview)
-      return entry ? transformBlogPost(entry) : null
+      // Use preview client if requested and available
+      const { $contentfulPreview } = useNuxtApp()
+      const activeClient = (preview && $contentfulPreview) ? $contentfulPreview : client
+      
+      const response = await activeClient.getEntries({
+        content_type: 'blogPost',
+        'fields.slug': slug,
+        limit: 1
+      })
+      
+      return response.items.length > 0 ? await transformBlogPost(response.items[0]) : null
     } catch (error) {
       console.error('[useContentful] Error fetching blog post:', error)
       return null
@@ -82,13 +95,18 @@ export const useContentful = () => {
     if (!client) return null
 
     try {
-      const response = await client.getEntriesByType('blogPost', {
+      // Use preview client if requested and available
+      const { $contentfulPreview } = useNuxtApp()
+      const activeClient = (preview && $contentfulPreview) ? $contentfulPreview : client
+      
+      const response = await activeClient.getEntries({
+        content_type: 'blogPost',
         'fields.featured': true,
         limit: 1,
         order: '-fields.publishedAt',
-      }, preview)
+      })
 
-      return response.items.length > 0 ? transformBlogPost(response.items[0]) : null
+      return response.items.length > 0 ? await transformBlogPost(response.items[0]) : null
     } catch (error) {
       console.error('[useContentful] Error fetching featured blog post:', error)
       return null
@@ -102,7 +120,8 @@ export const useContentful = () => {
     if (!client) return []
 
     try {
-      const response = await client.getEntriesByType('category', {
+      const response = await client.getEntries({
+        content_type: 'category',
         order: 'fields.name',
       })
       return transformCategories(response.items)
@@ -119,7 +138,8 @@ export const useContentful = () => {
     if (!client) return []
 
     try {
-      const response = await client.getEntriesByType('tag', {
+      const response = await client.getEntries({
+        content_type: 'tag',
         order: 'fields.name',
       })
       return transformTags(response.items)
@@ -155,12 +175,13 @@ export const useContentful = () => {
     if (!client || !query.trim()) return []
 
     try {
-      const response = await client.getEntriesByType('blogPost', {
+      const response = await client.getEntries({
+        content_type: 'blogPost',
         query,
         limit,
         order: '-fields.publishedAt',
       })
-      return transformBlogPosts(response.items)
+      return await transformBlogPosts(response.items)
     } catch (error) {
       console.error('[useContentful] Error searching blog posts:', error)
       return []
@@ -182,10 +203,10 @@ export const useContentful = () => {
 
     try {
       const [posts, categories, tags, featured] = await Promise.all([
-        client.getEntriesByType('blogPost'),
-        client.getEntriesByType('category'),
-        client.getEntriesByType('tag'),
-        client.getEntriesByType('blogPost', { 'fields.featured': true }),
+        client.getEntries({ content_type: 'blogPost' }),
+        client.getEntries({ content_type: 'category' }),
+        client.getEntries({ content_type: 'tag' }),
+        client.getEntries({ content_type: 'blogPost', 'fields.featured': true }),
       ])
 
       return {

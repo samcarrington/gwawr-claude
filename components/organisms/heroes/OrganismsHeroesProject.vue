@@ -15,9 +15,13 @@
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
           {{ project.title }}
         </h2>
-        <p class="text-lg text-gray-600 mb-6">
-          {{ project.description }}
-        </p>
+        <div class="text-lg text-gray-600 mb-6">
+          <AtomsContentRenderer 
+            :content="project.description" 
+            size="lg"
+            fallback-text="No description available"
+          />
+        </div>
 
         <!-- Technologies -->
         <div class="flex flex-wrap gap-2 mb-6">
@@ -32,7 +36,7 @@
 
         <!-- Project Links -->
         <div class="flex gap-4">
-          <ButtonPrimary
+          <AtomsButtonsPrimary
             v-if="project.liveUrl"
             size="lg"
             :to="project.liveUrl"
@@ -43,8 +47,8 @@
               <UIcon name="i-heroicons-globe-alt" />
             </template>
             View Live Project
-          </ButtonPrimary>
-          <ButtonSecondary
+          </AtomsButtonsPrimary>
+          <AtomsButtonsSecondary
             v-if="project.repositoryUrl"
             size="lg"
             :to="project.repositoryUrl"
@@ -55,7 +59,7 @@
               <UIcon name="i-heroicons-code-bracket" />
             </template>
             View Code
-          </ButtonSecondary>
+          </AtomsButtonsSecondary>
         </div>
       </div>
 
@@ -63,8 +67,8 @@
       <div class="relative">
         <div class="aspect-video bg-white rounded-lg shadow-lg overflow-hidden">
           <img
-            v-if="project.image"
-            :src="project.image"
+            v-if="projectImage"
+            :src="projectImage"
             :alt="project.title"
             class="w-full h-full object-cover"
           />
@@ -80,11 +84,17 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  project: {
-    type: Object,
-    required: true,
-  },
-});
+<script setup lang="ts">
+import type { Project } from '~/types/project'
+
+const props = defineProps<{
+  project: Project
+}>()
+
+// Get the first image from the images array
+const projectImage = computed(() => {
+  return props.project.images && props.project.images.length > 0 
+    ? props.project.images[0] 
+    : null
+})
 </script>

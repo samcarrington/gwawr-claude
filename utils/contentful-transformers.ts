@@ -6,24 +6,87 @@ import type {
   ContentfulTag,
   ContentfulAsset,
 } from '~/types/contentful'
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
+import { BLOCKS, MARKS, INLINES } from '@contentful/rich-text-types'
+import { marked } from 'marked'
+import { sanitizeUrl } from '~/utils/url'
 
 /**
- * Rich text document processor
- * Converts Contentful rich text to HTML string
+ * Detect content type and render appropriately
+ * Handles both markdown strings and Contentful Rich Text documents
  */
-export function processRichText(document: any): string {
-  if (!document) return ''
+export async function renderContent(content: any): Promise<string> {
+  if (!content) return ''
   
-  // Simple implementation - in a real app you'd use @contentful/rich-text-html-renderer
-  // For now, we'll extract plain text or implement basic conversion
-  if (typeof document === 'string') return document
-  
-  // If it's a rich text document, extract content
-  if (document.nodeType === 'document' && document.content) {
-    return extractTextFromNodes(document.content)
+  // If it's a string, assume it's markdown and render it
+  if (typeof content === 'string') {
+    return await renderMarkdown(content)
   }
   
-  return JSON.stringify(document)
+  // If it's a Contentful Rich Text document, render it
+  if (typeof content === 'object' && content.nodeType === 'document') {
+    return await renderRichText(content)
+  }
+  
+  // Fallback for any other content type
+  return String(content)
+}
+
+/**
+ * Render markdown string to HTML
+ */
+export async function renderMarkdown(markdown: string): Promise<string> {
+  try {
+    // Properly await the Promise returned by marked
+    const result = await marked(markdown, {
+      breaks: true,
+      gfm: true,
+    })
+    return result
+  } catch (error) {
+    console.warn('[Content Renderer] Failed to parse markdown:', error)
+    return markdown
+  }
+}
+
+/**
+ * Render Contentful Rich Text document to HTML
+ */
+export async function renderRichText(document: any): Promise<string> {
+  try {
+    return documentToHtmlString(document, {
+      renderNode: {
+        [BLOCKS.PARAGRAPH]: (node, next) => `<p class="mb-4">${next(node.content)}</p>`,
+        [BLOCKS.HEADING_1]: (node, next) => `<h1 class="text-3xl font-bold mb-6">${next(node.content)}</h1>`,
+        [BLOCKS.HEADING_2]: (node, next) => `<h2 class="text-2xl font-bold mb-4">${next(node.content)}</h2>`,
+        [BLOCKS.HEADING_3]: (node, next) => `<h3 class="text-xl font-bold mb-3">${next(node.content)}</h3>`,
+        [BLOCKS.UL_LIST]: (node, next) => `<ul class="list-disc pl-6 mb-4">${next(node.content)}</ul>`,
+        [BLOCKS.OL_LIST]: (node, next) => `<ol class="list-decimal pl-6 mb-4">${next(node.content)}</ol>`,
+        [BLOCKS.LIST_ITEM]: (node, next) => `<li class="mb-2">${next(node.content)}</li>`,
+        [BLOCKS.QUOTE]: (node, next) => `<blockquote class="border-l-4 border-gray-300 pl-4 italic mb-4">${next(node.content)}</blockquote>`,
+        [INLINES.HYPERLINK]: (node, next) => {
+          const safeUri = sanitizeUrl(node.data.uri)
+          return `<a href="${safeUri}" class="text-primary hover:underline" target="_blank" rel="noopener noreferrer">${next(node.content)}</a>`
+        },
+      },
+      renderMark: {
+        [MARKS.BOLD]: (text) => `<strong>${text}</strong>`,
+        [MARKS.ITALIC]: (text) => `<em>${text}</em>`,
+        [MARKS.CODE]: (text) => `<code class="bg-gray-100 px-2 py-1 rounded text-sm">${text}</code>`,
+      },
+    })
+  } catch (error) {
+    console.warn('[Content Renderer] Failed to render rich text:', error)
+    return extractTextFromNodes(document.content || [])
+  }
+}
+
+/**
+ * Legacy function - kept for backward compatibility
+ * Use renderContent() for new implementations
+ */
+export async function processRichText(document: any): Promise<string> {
+  return await renderContent(document)
 }
 
 /**
@@ -104,7 +167,7 @@ export function transformTag(entry: ContentfulEntry<ContentfulTag>): BlogTag {
 /**
  * Transform Contentful blog post to our BlogPost type
  */
-export function transformBlogPost(entry: ContentfulEntry<ContentfulBlogPost>): BlogPost {
+export async function transformBlogPost(entry: ContentfulEntry<ContentfulBlogPost>): Promise<BlogPost> {
   const fields = entry.fields
   
   return {
@@ -112,7 +175,7 @@ export function transformBlogPost(entry: ContentfulEntry<ContentfulBlogPost>): B
     title: fields.title,
     slug: fields.slug,
     excerpt: fields.excerpt,
-    content: processRichText(fields.content),
+    content: await processRichText(fields.content),
     category: fields.category ? 
       (typeof fields.category === 'string' ? fields.category : transformCategory(fields.category).name) : 
       'Uncategorized',
@@ -129,8 +192,9 @@ export function transformBlogPost(entry: ContentfulEntry<ContentfulBlogPost>): B
 /**
  * Transform multiple blog posts
  */
-export function transformBlogPosts(entries: ContentfulEntry<ContentfulBlogPost>[]): BlogPost[] {
-  return entries.map(transformBlogPost)
+export async function transformBlogPosts(entries: ContentfulEntry<ContentfulBlogPost>[]): Promise<BlogPost[]> {
+  // Use Promise.all to wait for all async transformations to complete
+  return Promise.all(entries.map(entry => transformBlogPost(entry)))
 }
 
 /**
@@ -220,34 +284,159 @@ export function getRelatedPosts(posts: BlogPost[], currentPost: BlogPost, limit 
 }
 
 /**
+ * Extract technology names from Contentful entries or strings
+ * Handles both string arrays and arrays of Contentful technology entries
+ */
+function extractTechnologyNames(technologies: any): string[] {
+  if (!technologies) return []
+  
+  // If it's already an array of strings, return as is
+  if (Array.isArray(technologies) && technologies.every(tech => typeof tech === 'string')) {
+    return technologies
+  }
+  
+  // If it's an array of Contentful entries
+  if (Array.isArray(technologies)) {
+    return technologies.map(tech => {
+      // If it's a Contentful entry with fields.name
+      if (tech && typeof tech === 'object' && tech.fields && tech.fields.name) {
+        return tech.fields.name
+      }
+      // If it's a string
+      if (typeof tech === 'string') {
+        return tech
+      }
+      // Fallback: log warning and return safe value
+      console.warn('[Project Transformer] Technology is not a string or proper entry:', JSON.stringify(tech, null, 2))
+      return 'Unknown Technology'
+    }).filter(Boolean)
+  }
+  
+  // If it's a single entry/string
+  if (typeof technologies === 'object' && technologies.fields && technologies.fields.name) {
+    return [technologies.fields.name]
+  }
+  
+  if (typeof technologies === 'string') {
+    return [technologies]
+  }
+  
+  return []
+}
+
+/**
+ * Extract category name from Contentful entry, array, or string
+ * Handles both single category strings and arrays of Contentful category entries
+ * Takes the first category from an array if multiple categories are provided
+ */
+function extractCategoryName(category: any): string {
+  if (!category) return 'Uncategorized'
+  
+  // If it's already a string, return as is
+  if (typeof category === 'string') {
+    return category
+  }
+  
+  // If it's an array of categories, take the first one
+  if (Array.isArray(category)) {
+    if (category.length === 0) return 'Uncategorized'
+    const firstCategory = category[0]
+    
+    // Recursively extract from the first item
+    if (typeof firstCategory === 'string') {
+      return firstCategory
+    }
+    
+    if (typeof firstCategory === 'object' && firstCategory.fields) {
+      return firstCategory.fields.name || firstCategory.fields.title || 'Uncategorized'
+    }
+    
+    console.warn('[Project Transformer] First category in array is not a valid entry:', JSON.stringify(firstCategory))
+    return 'Uncategorized'
+  }
+  
+  // If it's a Contentful entry with fields.name or fields.title
+  if (typeof category === 'object' && category.fields) {
+    return category.fields.name || category.fields.title || 'Uncategorized'
+  }
+  
+  // Fallback: log the actual structure and return safe value
+  console.warn('[Project Transformer] Category is not a string, array, or proper entry:', JSON.stringify(category, null, 2))
+  return 'Uncategorized'
+}
+
+/**
+ * Extract image URLs from Contentful assets
+ */
+function extractImageUrls(images: any): string[] {
+  if (!images) return []
+  
+  // If it's already an array of strings, return as is
+  if (Array.isArray(images) && images.every(img => typeof img === 'string')) {
+    return images
+  }
+  
+  // If it's an array of Contentful assets
+  if (Array.isArray(images)) {
+    return images.map(img => getAssetUrl(img)).filter(Boolean) as string[]
+  }
+  
+  // If it's a single asset
+  if (typeof images === 'object' && images.fields) {
+    const url = getAssetUrl(images)
+    return url ? [url] : []
+  }
+  
+  return []
+}
+
+/**
  * Transform Contentful project to our Project type
  */
-export function transformProject(entry: any) {
-  const fields = entry.fields
-  
-  return {
-    id: entry.sys.id,
-    title: fields.title,
-    slug: fields.slug,
-    description: fields.description,
-    fullDescription: fields.fullDescription,
-    technologies: fields.technologies || [],
-    images: fields.images || [],
-    liveUrl: fields.liveUrl,
-    repositoryUrl: fields.repositoryUrl,
-    featured: fields.featured || false,
-    category: fields.category,
-    startDate: fields.date, // Legacy field name
-    endDate: fields.endDate,
-    status: fields.status || 'completed',
+export async function transformProject(entry: any) {
+  try {
+    if (!entry || !entry.sys || !entry.fields) {
+      console.warn('[Project Transformer] Invalid entry structure:', entry)
+      return null
+    }
+
+    const fields = entry.fields
+    
+    // Validate required fields
+    if (!fields.title || !fields.slug) {
+      console.warn('[Project Transformer] Missing required fields (title/slug):', entry.sys.id)
+      return null
+    }
+    
+    return {
+      id: entry.sys.id,
+      title: fields.title || 'Untitled Project',
+      slug: fields.slug || `project-${entry.sys.id}`,
+      description: fields.description || '',
+      fullDescription: fields.fullDescription ? await renderContent(fields.fullDescription) : undefined,
+      technologies: extractTechnologyNames(fields.technologies),
+      images: extractImageUrls(fields.images),
+      liveUrl: fields.liveUrl || undefined,
+      repositoryUrl: fields.repositoryUrl || undefined,
+      featured: Boolean(fields.featured),
+      category: extractCategoryName(fields.category),
+      startDate: fields.date || fields.startDate || undefined,
+      endDate: fields.endDate || undefined,
+      status: fields.status || 'completed',
+    }
+  } catch (error) {
+    handleTransformationError(error, `Project transformation for entry ${entry?.sys?.id || 'unknown'}`)
+    return null
   }
 }
 
 /**
  * Transform multiple projects
  */
-export function transformProjects(entries: any[]) {
-  return entries.map(transformProject)
+export async function transformProjects(entries: any[]) {
+  // Use Promise.all to wait for all async transformations to complete
+  const results = await Promise.all(entries.map(entry => transformProject(entry)))
+  return results.filter(Boolean)
 }
 
 /**

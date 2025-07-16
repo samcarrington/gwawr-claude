@@ -296,22 +296,25 @@ import { formatDate } from '~/utils/date'
 
 const route = useRoute()
 
-// Get post data using new Contentful strategy
-const { data: post, error: postError, pending: postPending } = await useBlogPost(route.params.slug as string)
-
-// Handle 404 when post is not found
-if (!postPending.value && !post.value && !postError.value) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: 'Blog post not found',
-  })
-}
+ // Get post data using new Contentful strategy (non-blocking)
+const { data: post, error: postError, pending: postPending } = useBlogPost(route.params.slug as string)
 
 // Get related posts using post ID (only when post is loaded)
-const { data: relatedPosts, pending: relatedPending } = await useRelatedBlogPosts(
+const { data: relatedPosts, pending: relatedPending } = useRelatedBlogPosts(
   computed(() => post.value?.id || ''),
   3
 )
+
+// Watch for when post loading completes and handle 404
+watch([post, postError, postPending], ([postData, error, pending]) => {
+  // Only throw 404 after loading is complete and no post was found
+  if (!pending && !postData && !error) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Blog post not found',
+    })
+  }
+}, { immediate: true })
 
 // Page metadata (reactive to post data)
 useHead(() => {

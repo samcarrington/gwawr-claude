@@ -9,7 +9,7 @@
     <!-- Project Image -->
     <template #header>
       <MoleculesCardsImage
-        :src="project.image"
+        :src="projectImage"
         :alt="project.title"
         :category="project.category"
         aspect-ratio="video"
@@ -37,9 +37,13 @@
       <AtomsTypographyCard tag="h3" size="default" spacing="tight">
         {{ project.title }}
       </AtomsTypographyCard>
-      <p class="text-gray-600 mb-4 line-clamp-3">
-        {{ project.description }}
-      </p>
+      <div class="text-gray-600 mb-4 line-clamp-3">
+        <AtomsContentRenderer 
+          :content="project.description" 
+          size="sm"
+          fallback-text="No description available"
+        />
+      </div>
 
       <!-- Technologies -->
       <div class="mb-4">
@@ -85,9 +89,16 @@
 <script setup lang="ts">
 import type { Project } from '~/types/project'
 
-defineProps<{
+const props = defineProps<{
   project: Project
 }>()
+
+// Get the first image from the images array
+const projectImage = computed(() => {
+  return props.project.images && props.project.images.length > 0 
+    ? props.project.images[0] 
+    : null
+})
 
 // Get badge variant based on project status
 function getStatusVariant(status: Project['status']): string {

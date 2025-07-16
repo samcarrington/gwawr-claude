@@ -1,14 +1,14 @@
-import { getContentfulClient } from '~/utils/contentful-client'
+import { createClient } from 'contentful'
 
 export default defineEventHandler(async (event) => {
   try {
     // Set cache headers - categories change infrequently
     setHeader(event, 'Cache-Control', 'public, max-age=900') // 15 minutes
     
-    // Check if Contentful is configured
-    const runtimeConfig = useRuntimeConfig()
-    const spaceId = runtimeConfig.contentfulSpaceId
-    const accessToken = runtimeConfig.contentfulAccessToken
+    // Get runtime config and validate Contentful configuration
+    const config = useRuntimeConfig(event)
+    const spaceId = config.contentfulSpaceId
+    const accessToken = config.contentfulAccessToken
     
     if (!spaceId || !accessToken) {
       console.warn('[API] Contentful not configured, using mock data for categories')
@@ -18,9 +18,14 @@ export default defineEventHandler(async (event) => {
       return getBlogCategories()
     }
     
-    // Get Contentful client and fetch all blog posts to extract categories
-    const client = getContentfulClient()
-    const response = await client.getEntriesByType('blogPost', {
+    // Create Contentful client and fetch all blog posts to extract categories
+    const client = createClient({
+      space: spaceId,
+      accessToken: accessToken,
+    })
+    
+    const response = await client.getEntries({
+      content_type: 'blogPost',
       select: 'fields.category',
       limit: 1000, // Get all posts to extract unique categories
     })

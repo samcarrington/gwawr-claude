@@ -1,4 +1,4 @@
-import { getContentfulClient } from '~/utils/contentful-client'
+import { createClient } from 'contentful'
 import { transformProject } from '~/utils/contentful-transformers'
 
 export default defineEventHandler(async (event) => {
@@ -11,11 +11,8 @@ export default defineEventHandler(async (event) => {
     setHeader(event, 'Cache-Control', 'public, max-age=600') // 10 minutes
     
     // Check if Contentful is configured
-    const runtimeConfig = useRuntimeConfig()
-    const spaceId = runtimeConfig.contentfulSpaceId
-    const accessToken = runtimeConfig.contentfulAccessToken
-    
-    if (!spaceId || !accessToken) {
+    const config = useRuntimeConfig(event)
+    if (!config.contentfulSpaceId || !config.contentfulAccessToken) {
       console.warn('[API] Contentful not configured, using mock data for featured projects')
       
       // Fallback to mock data
@@ -25,16 +22,23 @@ export default defineEventHandler(async (event) => {
       return featuredProjects.slice(0, limit)
     }
     
-    // Get Contentful client and fetch featured projects
-    const client = getContentfulClient()
-    const response = await client.getEntriesByType('project', {
+    // Create Contentful client directly in server context
+    const client = createClient({
+      space: config.contentfulSpaceId,
+      accessToken: config.contentfulAccessToken,
+      environment: config.contentfulEnvironment || 'master',
+      host: config.contentfulHost || 'cdn.contentful.com',
+    })
+    
+    const response = await client.getEntries({
+      content_type: 'project',
       'fields.featured': true,
       order: '-fields.date',
       limit,
     })
     
-    // Transform the data
-    const transformedProjects = response.items.map(transformProject)
+    // Transform the data - use Promise.all to handle async transformations
+    const transformedProjects = await Promise.all(response.items.map(item => transformProject(item)))
     
     return transformedProjects
   } catch (error) {

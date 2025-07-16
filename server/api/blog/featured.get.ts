@@ -1,4 +1,4 @@
-import { getContentfulClient } from '~/utils/contentful-client'
+import { createClient } from 'contentful'
 import { transformBlogPost } from '~/utils/contentful-transformers'
 
 export default defineEventHandler(async (event) => {
@@ -7,11 +7,8 @@ export default defineEventHandler(async (event) => {
     setHeader(event, 'Cache-Control', 'public, max-age=300') // 5 minutes
     
     // Check if Contentful is configured
-    const runtimeConfig = useRuntimeConfig()
-    const spaceId = runtimeConfig.contentfulSpaceId
-    const accessToken = runtimeConfig.contentfulAccessToken
-    
-    if (!spaceId || !accessToken) {
+    const config = useRuntimeConfig(event)
+    if (!config.contentfulSpaceId || !config.contentfulAccessToken) {
       console.warn('[API] Contentful not configured, using mock data for featured post')
       
       // Fallback to mock data
@@ -19,9 +16,16 @@ export default defineEventHandler(async (event) => {
       return getFeaturedBlogPost()
     }
     
-    // Get Contentful client and fetch featured posts
-    const client = getContentfulClient()
-    const response = await client.getEntriesByType('blogPost', {
+    // Create Contentful client directly in server context
+    const client = createClient({
+      space: config.contentfulSpaceId,
+      accessToken: config.contentfulAccessToken,
+      environment: config.contentfulEnvironment || 'master',
+      host: config.contentfulHost || 'cdn.contentful.com',
+    })
+    
+    const response = await client.getEntries({
+      content_type: 'blogPost',
       'fields.featured': true,
       order: '-fields.publishedAt',
       limit: 1, // Only get the most recent featured post
@@ -32,7 +36,7 @@ export default defineEventHandler(async (event) => {
     }
     
     // Transform the first (most recent) featured post
-    const transformedPost = transformBlogPost(response.items[0])
+    const transformedPost = await transformBlogPost(response.items[0])
     
     return transformedPost
   } catch (error) {

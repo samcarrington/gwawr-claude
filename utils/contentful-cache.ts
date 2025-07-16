@@ -84,7 +84,9 @@ class ContentfulCache {
    */
   generateKey(method: string, params: any): string {
     const paramString = JSON.stringify(params, Object.keys(params).sort())
-    return `contentful:${method}:${Buffer.from(paramString).toString('base64')}`
+    // Use btoa for browser compatibility
+    const encoded = import.meta.client ? btoa(paramString) : Buffer.from(paramString).toString('base64')
+    return `contentful:${method}:${encoded}`
   }
 }
 

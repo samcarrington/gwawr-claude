@@ -1,9 +1,20 @@
-import { getContentfulClient } from '~/utils/contentful-client'
+import { createClient } from 'contentful'
 import { transformTestimonials } from '~/utils/contentful-transformers'
-import type { ContentfulQueryOptions } from '~/types/contentful'
 
 export default defineEventHandler(async (event) => {
   try {
+    // Get runtime config and validate Contentful configuration
+    const config = useRuntimeConfig(event)
+    const spaceId = config.contentfulSpaceId
+    const accessToken = config.contentfulAccessToken
+    
+    if (!spaceId || !accessToken) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Contentful configuration is missing',
+      })
+    }
+    
     // Get query parameters for filtering and pagination
     const query = getQuery(event) as Record<string, any>
     
@@ -11,7 +22,7 @@ export default defineEventHandler(async (event) => {
     setHeader(event, 'Cache-Control', 'public, max-age=900') // 15 minutes for testimonials
     
     // Build Contentful query
-    const contentfulQuery: ContentfulQueryOptions = {
+    const contentfulQuery: any = {
       content_type: 'testimonial',
       order: '-sys.createdAt', // Most recent first
       limit: query.limit ? parseInt(query.limit as string) : 20,
@@ -34,9 +45,13 @@ export default defineEventHandler(async (event) => {
       contentfulQuery['query'] = query.search
     }
     
-    // Get Contentful client and fetch data
-    const client = getContentfulClient()
-    const response = await client.getEntriesByType('testimonial', contentfulQuery)
+    // Create Contentful client and fetch data
+    const client = createClient({
+      space: spaceId,
+      accessToken: accessToken,
+    })
+    
+    const response = await client.getEntries(contentfulQuery)
     
     // Transform the data
     const transformedTestimonials = transformTestimonials(response.items)

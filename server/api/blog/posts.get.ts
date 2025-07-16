@@ -1,6 +1,5 @@
-import { getContentfulClient } from '~/utils/contentful-client'
+import { createClient } from 'contentful'
 import { transformBlogPosts } from '~/utils/contentful-transformers'
-import type { ContentfulQueryOptions } from '~/types/contentful'
 
 export default defineEventHandler(async (event) => {
   try {
@@ -11,11 +10,8 @@ export default defineEventHandler(async (event) => {
     setHeader(event, 'Cache-Control', 'public, max-age=300') // 5 minutes
     
     // Check if Contentful is configured
-    const runtimeConfig = useRuntimeConfig()
-    const spaceId = runtimeConfig.contentfulSpaceId
-    const accessToken = runtimeConfig.contentfulAccessToken
-    
-    if (!spaceId || !accessToken) {
+    const config = useRuntimeConfig(event)
+    if (!config.contentfulSpaceId || !config.contentfulAccessToken) {
       console.warn('[API] Contentful not configured, using mock data')
       
       // Fallback to mock data
@@ -57,7 +53,7 @@ export default defineEventHandler(async (event) => {
     }
     
     // Build Contentful query
-    const contentfulQuery: ContentfulQueryOptions = {
+    const contentfulQuery: any = {
       content_type: 'blogPost',
       order: '-fields.publishedAt', // Most recent first
       limit: query.limit ? parseInt(query.limit as string) : 20,
@@ -79,12 +75,18 @@ export default defineEventHandler(async (event) => {
       contentfulQuery['query'] = query.search
     }
     
-    // Get Contentful client and fetch data
-    const client = getContentfulClient()
-    const response = await client.getEntriesByType('blogPost', contentfulQuery)
+    // Create Contentful client directly in server context
+    const client = createClient({
+      space: config.contentfulSpaceId,
+      accessToken: config.contentfulAccessToken,
+      environment: config.contentfulEnvironment || 'master',
+      host: config.contentfulHost || 'cdn.contentful.com',
+    })
+    
+    const response = await client.getEntries(contentfulQuery)
     
     // Transform the data
-    const transformedPosts = transformBlogPosts(response.items)
+    const transformedPosts = await transformBlogPosts(response.items)
     
     return {
       items: transformedPosts,
