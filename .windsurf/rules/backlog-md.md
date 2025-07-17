@@ -1,6 +1,6 @@
 ---
 trigger: model_decision
-description: Whenever a user mentions backlog, assume they want you to use the command line tool
+description: Whenever a user mentions backlog, assume they want you to use the command line tool. CRUD verbs on a task also imply use of the Backlog CLI.
 ---
 
 # === BACKLOG.MD GUIDELINES START ===

@@ -2,8 +2,6 @@
 trigger: always_on
 ---
 
-# === GWAWR WEBSITE GUIDELINES START ===
-
 # General Operational Standards
 
 - Use Backlog, documented below, to manage all tasks and actions
@@ -21,5 +19,3 @@ trigger: always_on
 - Remember to use `lang="ts"` in script blocks if using TypeScript or importing types
 - Observe and comply with the coding standards described at https://code-style.gwawr.uk/typescript
 - As you write a component, also write a test for that component
-
-# === GWAWR WEBSITE GUIDELINES END ===
