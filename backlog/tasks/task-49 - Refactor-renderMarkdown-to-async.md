@@ -1,5 +1,9 @@
 # Task 49 – Refactor `renderMarkdown` and Call-Chain to Async
 
+## Notes
+
+Rendered by Windsurf
+
 ## Background
 
 The `marked` library (v5+) now returns a **Promise**. Our utility `renderMarkdown` currently assumes a synchronous return value. This discrepancy risks silent failures when the library is upgraded or when tree-shaking pulls the ESM build.
