@@ -69,11 +69,11 @@ export default defineEventHandler(async (event) => {
 
     return { project: transformedProject }
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[API] Failed to fetch project:', slug, error)
     
     // If it's already a createError, re-throw it
-    if (error.statusCode) {
+    if (isCreateError(error)) {
       throw error
     }
     
