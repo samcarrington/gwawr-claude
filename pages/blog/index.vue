@@ -14,7 +14,10 @@
 
       <!-- Category Filter -->
       <div class="mb-12">
-        <div v-if="categoriesPending" class="flex flex-wrap gap-3 justify-center">
+        <div
+          v-if="categoriesPending"
+          class="flex flex-wrap gap-3 justify-center"
+        >
           <USkeleton class="h-10 w-20" v-for="i in 5" :key="i" />
         </div>
         <div v-else class="flex flex-wrap gap-3 justify-center">
@@ -33,10 +36,15 @@
 
       <!-- Featured Post -->
       <section class="mb-16">
-        <AtomsTypographySection size="default" align="left" spacing="default">Featured Article</AtomsTypographySection>
-        
+        <AtomsTypographySection size="default" align="left" spacing="default"
+          >Featured Article</AtomsTypographySection
+        >
+
         <!-- Featured Post Loading State -->
-        <div v-if="featuredPending" class="bg-gradient-to-r from-primary/5 to-primary/10 rounded-2xl p-8 md:p-12">
+        <div
+          v-if="featuredPending"
+          class="bg-gradient-to-r from-primary/5 to-primary/10 rounded-2xl p-8 md:p-12"
+        >
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
               <USkeleton class="h-8 w-32 mb-4" />
@@ -51,7 +59,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Featured Post Content -->
         <article
           v-else-if="featuredPost"
@@ -107,7 +115,7 @@
             </div>
           </div>
         </article>
-        
+
         <!-- No Featured Post -->
         <div v-else class="text-center py-8 text-gray-500">
           <p>No featured article at the moment.</p>
@@ -116,8 +124,10 @@
 
       <!-- Blog Posts Grid -->
       <section class="mb-16">
-        <AtomsTypographySection size="default" align="left" spacing="loose">Recent Articles</AtomsTypographySection>
-        
+        <AtomsTypographySection size="default" align="left" spacing="loose"
+          >Recent Articles</AtomsTypographySection
+        >
+
         <!-- Error State -->
         <UAlert
           v-if="postsError"
@@ -127,7 +137,7 @@
           :description="postsError.message || 'Please try refreshing the page'"
           class="mb-8"
         />
-        
+
         <!-- Loading State -->
         <div
           v-else-if="postsPending"
@@ -143,7 +153,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Posts Content -->
         <div
           v-else-if="regularPosts.length > 0"
@@ -160,15 +170,18 @@
         </div>
 
         <!-- Empty State -->
-        <div
-          v-else
-          class="text-center py-16 text-gray-500"
-        >
+        <div v-else class="text-center py-16 text-gray-500">
           <UIcon
             name="i-heroicons-document-magnifying-glass"
             class="w-16 h-16 mx-auto mb-4"
           />
-          <AtomsTypographyCard tag="h3" size="default" align="center" spacing="tight">No articles found</AtomsTypographyCard>
+          <AtomsTypographyCard
+            tag="h3"
+            size="default"
+            align="center"
+            spacing="tight"
+            >No articles found</AtomsTypographyCard
+          >
           <p class="text-lg">
             Try selecting a different category or check back later for new
             content.
@@ -212,7 +225,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate } from '~/utils/date'
+import { formatDate } from '~/utils/date';
 
 // Page metadata
 useHead({
@@ -224,11 +237,11 @@ useHead({
         'Read the latest articles by Sam Carrington on web development, technology trends, and software engineering insights.',
     },
   ],
-})
+});
 
 // Use new Contentful data fetching strategy (non-blocking for better UX)
-const { data: featuredPost, pending: featuredPending } = useFeaturedBlogPost()
-const { data: categories, pending: categoriesPending } = useBlogCategories()
+const { data: featuredPost, pending: featuredPending } = useFeaturedBlogPost();
+const { data: categories, pending: categoriesPending } = useBlogCategories();
 
 // Filter functionality using the new composable
 const {
@@ -236,28 +249,31 @@ const {
   posts: filteredPosts,
   pending: postsPending,
   error: postsError,
-} = useBlogPostFilter()
+} = useBlogPostFilter();
 
 // Add 'All' to categories and set as reactive
-const allCategories = computed(() => 
+const allCategories = computed(() =>
   categories.value ? ['All', ...categories.value] : ['All']
-)
+);
 
 // Filter out featured post from regular posts
 const regularPosts = computed(() => {
-  if (!filteredPosts.value || !featuredPost.value) return filteredPosts.value || []
-  return filteredPosts.value.filter(post => post.id !== featuredPost.value?.id)
-})
+  if (!filteredPosts.value || !featuredPost.value)
+    return filteredPosts.value || [];
+  return filteredPosts.value.filter(post => post.id !== featuredPost.value?.id);
+});
 
 // Loading state
-const loading = computed(() => featuredPending.value || categoriesPending.value || postsPending.value)
+const loading = computed(
+  () => featuredPending.value || categoriesPending.value || postsPending.value
+);
 
 // Navigation functions
 const openEmailClient = () => {
-  const subject = encodeURIComponent('Blog Subscription')
+  const subject = encodeURIComponent('Blog Subscription');
   const body = encodeURIComponent(
     "Hi Sam,\n\nI'd like to stay updated with your latest blog posts and articles.\n\nBest regards,"
-  )
-  window.location.href = `mailto:sam@gwawr.com?subject=${subject}&body=${body}`
-}
+  );
+  window.location.href = `mailto:sam@gwawr.com?subject=${subject}&body=${body}`;
+};
 </script>

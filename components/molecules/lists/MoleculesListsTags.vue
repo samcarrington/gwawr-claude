@@ -13,7 +13,14 @@
 <script setup lang="ts">
 interface Props {
   tags: string[];
-  variant?: 'default' | 'primary' | 'secondary' | 'tertiary' | 'success' | 'warning' | 'error';
+  variant?:
+    | 'default'
+    | 'primary'
+    | 'secondary'
+    | 'tertiary'
+    | 'success'
+    | 'warning'
+    | 'error';
   size?: 'xs' | 'sm' | 'md';
   align?: 'left' | 'center' | 'right';
   prefix?: string;
@@ -30,7 +37,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const containerClasses = computed(() => {
   const classes = ['flex flex-wrap gap-2'];
-  
+
   switch (props.align) {
     case 'center':
       classes.push('justify-center');
@@ -42,13 +49,13 @@ const containerClasses = computed(() => {
       classes.push('justify-start');
       break;
   }
-  
+
   return classes.join(' ');
 });
 
 const tagClasses = computed(() => {
   const classes = ['rounded-full font-medium'];
-  
+
   // Size classes
   switch (props.size) {
     case 'xs':
@@ -64,7 +71,7 @@ const tagClasses = computed(() => {
       classes.push('px-2 py-1 text-xs');
       break;
   }
-  
+
   // Variant classes
   if (props.outline) {
     classes.push('border bg-transparent');
@@ -112,11 +119,13 @@ const tagClasses = computed(() => {
         classes.push('bg-error/10 text-error');
         break;
       default:
-        classes.push('bg-neutral-100 text-neutral-700 hover:bg-neutral-200 transition-colors');
+        classes.push(
+          'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 transition-colors'
+        );
         break;
     }
   }
-  
+
   return classes.join(' ');
 });
 

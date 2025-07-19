@@ -16,8 +16,8 @@
           {{ project.title }}
         </h2>
         <div class="text-lg text-gray-600 mb-6">
-          <AtomsContentRenderer 
-            :content="project.description" 
+          <AtomsContentRenderer
+            :content="project.description"
             size="lg"
             fallback-text="No description available"
           />
@@ -85,16 +85,16 @@
 </template>
 
 <script setup lang="ts">
-import type { Project } from '~/types/project'
+import type { Project } from '~/types/project';
 
 const props = defineProps<{
-  project: Project
-}>()
+  project: Project;
+}>();
 
 // Get the first image from the images array
 const projectImage = computed(() => {
-  return props.project.images && props.project.images.length > 0 
-    ? props.project.images[0] 
-    : null
-})
+  return props.project.images && props.project.images.length > 0
+    ? props.project.images[0]
+    : null;
+});
 </script>

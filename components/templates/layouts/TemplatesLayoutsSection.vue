@@ -4,9 +4,9 @@
       <!-- Section Header -->
       <div v-if="$slots.header || title || description" :class="headerClasses">
         <slot name="header">
-          <AtomsTypographySection 
+          <AtomsTypographySection
             v-if="title"
-            :size="titleSize" 
+            :size="titleSize"
             :spacing="titleSpacing"
             :align="headerAlign"
           >
@@ -32,25 +32,41 @@
 </template>
 
 <script setup lang="ts">
-import { 
-  getAlignClass, 
-  getDescriptionAlignClass, 
-  getBackgroundClass, 
-  getPaddingClass, 
-  getMaxWidthClass 
+import {
+  getAlignClass,
+  getDescriptionAlignClass,
+  getBackgroundClass,
+  getPaddingClass,
+  getMaxWidthClass,
 } from '../../../utils/layout-classes';
 
 interface Props {
   title?: string;
   description?: string;
   variant?: 'default' | 'featured' | 'highlight';
-  background?: 'white' | 'neutral' | 'primary' | 'secondary' | 'tertiary' | 'transparent';
+  background?:
+    | 'white'
+    | 'neutral'
+    | 'primary'
+    | 'secondary'
+    | 'tertiary'
+    | 'transparent';
   padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
   headerAlign?: 'left' | 'center' | 'right';
   contentAlign?: 'left' | 'center' | 'right';
   titleSize?: 'small' | 'default' | 'large';
   titleSpacing?: 'tight' | 'default' | 'loose';
-  maxWidth?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl';
+  maxWidth?:
+    | 'none'
+    | 'sm'
+    | 'md'
+    | 'lg'
+    | 'xl'
+    | '2xl'
+    | '3xl'
+    | '4xl'
+    | '5xl'
+    | '6xl';
   bordered?: boolean;
   rounded?: boolean;
 }

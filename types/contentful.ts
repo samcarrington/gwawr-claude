@@ -1,171 +1,171 @@
-import type { Entry, Asset } from 'contentful'
+import type { Entry, Asset } from 'contentful';
 
 // Base Contentful types
 export interface ContentfulEntry<T = any> extends Entry<T> {
   sys: {
-    id: string
-    type: 'Entry'
-    createdAt: string
-    updatedAt: string
-    locale: string
+    id: string;
+    type: 'Entry';
+    createdAt: string;
+    updatedAt: string;
+    locale: string;
     contentType: {
       sys: {
-        id: string
-        linkType: 'ContentType'
-        type: 'Link'
-      }
-    }
-  }
-  fields: T
+        id: string;
+        linkType: 'ContentType';
+        type: 'Link';
+      };
+    };
+  };
+  fields: T;
 }
 
 export interface ContentfulAsset extends Asset {
   fields: {
-    title: string
-    description?: string
+    title: string;
+    description?: string;
     file: {
-      url: string
+      url: string;
       details: {
-        size: number
+        size: number;
         image?: {
-          width: number
-          height: number
-        }
-      }
-      fileName: string
-      contentType: string
-    }
-  }
+          width: number;
+          height: number;
+        };
+      };
+      fileName: string;
+      contentType: string;
+    };
+  };
 }
 
 // Blog Content Types
 export interface ContentfulBlogPost {
-  title: string
-  slug: string
-  excerpt: string
-  content: any // Rich text document
-  category: ContentfulEntry<ContentfulCategory>
-  tags?: ContentfulEntry<ContentfulTag>[]
-  featuredImage?: ContentfulAsset
-  publishedAt: string
-  readTime: number
-  featured: boolean
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: any; // Rich text document
+  category: ContentfulEntry<ContentfulCategory>;
+  tags?: ContentfulEntry<ContentfulTag>[];
+  featuredImage?: ContentfulAsset;
+  publishedAt: string;
+  readTime: number;
+  featured: boolean;
 }
 
 export interface ContentfulCategory {
-  name: string
-  slug: string
-  description?: string
+  name: string;
+  slug: string;
+  description?: string;
 }
 
 export interface ContentfulTag {
-  name: string
-  slug: string
+  name: string;
+  slug: string;
 }
 
 // Project Content Types
 export interface ContentfulProject {
-  title: string
-  slug: string
-  description: string
-  fullDescription?: any // Rich text document
-  technologies: string[] | ContentfulEntry<ContentfulCategory>[] // Can be strings or category entries
-  images: ContentfulAsset[]
-  liveUrl?: string
-  repositoryUrl?: string
-  featured: boolean
-  category: string | ContentfulEntry<ContentfulCategory>[] // Can be string or array of category entries
-  startDate?: string
-  endDate?: string
-  status: 'completed' | 'in-progress' | 'planned'
+  title: string;
+  slug: string;
+  description: string;
+  fullDescription?: any; // Rich text document
+  technologies: string[] | ContentfulEntry<ContentfulCategory>[]; // Can be strings or category entries
+  images: ContentfulAsset[];
+  liveUrl?: string;
+  repositoryUrl?: string;
+  featured: boolean;
+  category: string | ContentfulEntry<ContentfulCategory>[]; // Can be string or array of category entries
+  startDate?: string;
+  endDate?: string;
+  status: 'completed' | 'in-progress' | 'planned';
 }
 
 // Testimonial Content Types
 export interface ContentfulTestimonial {
-  clientName: string
-  clientTitle?: string
-  company: string
-  testimonialText: any // Rich text document
-  clientImage?: ContentfulAsset
-  rating?: number
-  featured: boolean
-  projectReference?: ContentfulEntry<ContentfulProject>
+  clientName: string;
+  clientTitle?: string;
+  company: string;
+  testimonialText: any; // Rich text document
+  clientImage?: ContentfulAsset;
+  rating?: number;
+  featured: boolean;
+  projectReference?: ContentfulEntry<ContentfulProject>;
 }
 
 // About Content Types
 export interface ContentfulAbout {
-  title: string
-  bio: any // Rich text document
-  skills: string[]
-  experience: ContentfulEntry<ContentfulExperience>[]
-  resumeFile?: ContentfulAsset
-  profileImage?: ContentfulAsset
+  title: string;
+  bio: any; // Rich text document
+  skills: string[];
+  experience: ContentfulEntry<ContentfulExperience>[];
+  resumeFile?: ContentfulAsset;
+  profileImage?: ContentfulAsset;
 }
 
 export interface ContentfulExperience {
-  company: string
-  position: string
-  startDate: string
-  endDate?: string
-  current: boolean
-  description: any // Rich text document
-  technologies?: string[]
-  companyLogo?: ContentfulAsset
+  company: string;
+  position: string;
+  startDate: string;
+  endDate?: string;
+  current: boolean;
+  description: any; // Rich text document
+  technologies?: string[];
+  companyLogo?: ContentfulAsset;
 }
 
 // Content type definitions for Contentful client
 export interface ContentfulContentTypes {
-  blogPost: ContentfulBlogPost
-  category: ContentfulCategory
-  tag: ContentfulTag
-  project: ContentfulProject
-  testimonial: ContentfulTestimonial
-  about: ContentfulAbout
-  experience: ContentfulExperience
+  blogPost: ContentfulBlogPost;
+  category: ContentfulCategory;
+  tag: ContentfulTag;
+  project: ContentfulProject;
+  testimonial: ContentfulTestimonial;
+  about: ContentfulAbout;
+  experience: ContentfulExperience;
 }
 
 // API Response types
 export interface ContentfulCollection<T> {
-  items: ContentfulEntry<T>[]
-  total: number
-  skip: number
-  limit: number
+  items: ContentfulEntry<T>[];
+  total: number;
+  skip: number;
+  limit: number;
 }
 
 // Error types
 export interface ContentfulError {
   sys: {
-    id: string
-    type: 'Error'
-  }
-  name: string
-  message: string
-  details?: any
+    id: string;
+    type: 'Error';
+  };
+  name: string;
+  message: string;
+  details?: any;
 }
 
 // Client configuration
 export interface ContentfulClientConfig {
-  space: string
-  accessToken: string
-  previewAccessToken?: string
-  environment?: string
-  host?: string
-  timeout?: number
-  retryOnError?: boolean
-  logHandler?: (level: string, data: any) => void
+  space: string;
+  accessToken: string;
+  previewAccessToken?: string;
+  environment?: string;
+  host?: string;
+  timeout?: number;
+  retryOnError?: boolean;
+  logHandler?: (level: string, data: any) => void;
 }
 
 // Query options
 export interface ContentfulQueryOptions {
-  content_type?: string
-  'fields.slug'?: string
-  'fields.featured'?: boolean
-  'fields.category.sys.id'?: string
-  'fields.tags.sys.id[in]'?: string
-  order?: string
-  limit?: number
-  skip?: number
-  include?: number
-  locale?: string
-  preview?: boolean
+  content_type?: string;
+  'fields.slug'?: string;
+  'fields.featured'?: boolean;
+  'fields.category.sys.id'?: string;
+  'fields.tags.sys.id[in]'?: string;
+  order?: string;
+  limit?: number;
+  skip?: number;
+  include?: number;
+  locale?: string;
+  preview?: boolean;
 }

@@ -69,30 +69,63 @@ export const GRID_COLUMN_CLASSES = {
 } as const;
 
 // Utility functions for getting classes with fallbacks
-export const getAlignClass = (align: keyof typeof ALIGN_CLASSES, fallback: keyof typeof ALIGN_CLASSES = 'center') => {
-  return align in ALIGN_CLASSES ? ALIGN_CLASSES[align] : ALIGN_CLASSES[fallback];
+export const getAlignClass = (
+  align: keyof typeof ALIGN_CLASSES,
+  fallback: keyof typeof ALIGN_CLASSES = 'center'
+) => {
+  return align in ALIGN_CLASSES
+    ? ALIGN_CLASSES[align]
+    : ALIGN_CLASSES[fallback];
 };
 
-export const getDescriptionAlignClass = (align: keyof typeof DESCRIPTION_ALIGN_CLASSES, fallback: keyof typeof DESCRIPTION_ALIGN_CLASSES = 'center') => {
-  return align in DESCRIPTION_ALIGN_CLASSES ? DESCRIPTION_ALIGN_CLASSES[align] : DESCRIPTION_ALIGN_CLASSES[fallback];
+export const getDescriptionAlignClass = (
+  align: keyof typeof DESCRIPTION_ALIGN_CLASSES,
+  fallback: keyof typeof DESCRIPTION_ALIGN_CLASSES = 'center'
+) => {
+  return align in DESCRIPTION_ALIGN_CLASSES
+    ? DESCRIPTION_ALIGN_CLASSES[align]
+    : DESCRIPTION_ALIGN_CLASSES[fallback];
 };
 
-export const getBackgroundClass = (background: keyof typeof BACKGROUND_CLASSES, fallback: keyof typeof BACKGROUND_CLASSES = 'transparent') => {
-  return background in BACKGROUND_CLASSES ? BACKGROUND_CLASSES[background] : BACKGROUND_CLASSES[fallback];
+export const getBackgroundClass = (
+  background: keyof typeof BACKGROUND_CLASSES,
+  fallback: keyof typeof BACKGROUND_CLASSES = 'transparent'
+) => {
+  return background in BACKGROUND_CLASSES
+    ? BACKGROUND_CLASSES[background]
+    : BACKGROUND_CLASSES[fallback];
 };
 
-export const getPaddingClass = (padding: keyof typeof PADDING_CLASSES, fallback: keyof typeof PADDING_CLASSES = 'lg') => {
-  return padding in PADDING_CLASSES ? PADDING_CLASSES[padding] : PADDING_CLASSES[fallback];
+export const getPaddingClass = (
+  padding: keyof typeof PADDING_CLASSES,
+  fallback: keyof typeof PADDING_CLASSES = 'lg'
+) => {
+  return padding in PADDING_CLASSES
+    ? PADDING_CLASSES[padding]
+    : PADDING_CLASSES[fallback];
 };
 
-export const getGapClass = (gap: keyof typeof GAP_CLASSES, fallback: keyof typeof GAP_CLASSES = 'lg') => {
+export const getGapClass = (
+  gap: keyof typeof GAP_CLASSES,
+  fallback: keyof typeof GAP_CLASSES = 'lg'
+) => {
   return gap in GAP_CLASSES ? GAP_CLASSES[gap] : GAP_CLASSES[fallback];
 };
 
-export const getMaxWidthClass = (maxWidth: keyof typeof MAX_WIDTH_CLASSES, fallback: keyof typeof MAX_WIDTH_CLASSES = 'none') => {
-  return maxWidth in MAX_WIDTH_CLASSES ? MAX_WIDTH_CLASSES[maxWidth] : MAX_WIDTH_CLASSES[fallback];
+export const getMaxWidthClass = (
+  maxWidth: keyof typeof MAX_WIDTH_CLASSES,
+  fallback: keyof typeof MAX_WIDTH_CLASSES = 'none'
+) => {
+  return maxWidth in MAX_WIDTH_CLASSES
+    ? MAX_WIDTH_CLASSES[maxWidth]
+    : MAX_WIDTH_CLASSES[fallback];
 };
 
-export const getGridColumnClass = (columns: keyof typeof GRID_COLUMN_CLASSES, fallback: keyof typeof GRID_COLUMN_CLASSES = 3) => {
-  return columns in GRID_COLUMN_CLASSES ? GRID_COLUMN_CLASSES[columns] : GRID_COLUMN_CLASSES[fallback];
+export const getGridColumnClass = (
+  columns: keyof typeof GRID_COLUMN_CLASSES,
+  fallback: keyof typeof GRID_COLUMN_CLASSES = 3
+) => {
+  return columns in GRID_COLUMN_CLASSES
+    ? GRID_COLUMN_CLASSES[columns]
+    : GRID_COLUMN_CLASSES[fallback];
 };

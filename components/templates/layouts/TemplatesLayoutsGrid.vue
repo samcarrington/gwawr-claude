@@ -4,9 +4,9 @@
       <!-- Section Header -->
       <div v-if="$slots.header || title || description" :class="headerClasses">
         <slot name="header">
-          <AtomsTypographySection 
+          <AtomsTypographySection
             v-if="title"
-            :size="titleSize" 
+            :size="titleSize"
             :spacing="titleSpacing"
             :align="headerAlign"
           >
@@ -32,13 +32,13 @@
 </template>
 
 <script setup lang="ts">
-import { 
-  getAlignClass, 
-  getDescriptionAlignClass, 
-  getBackgroundClass, 
-  getPaddingClass, 
-  getGapClass, 
-  getGridColumnClass 
+import {
+  getAlignClass,
+  getDescriptionAlignClass,
+  getBackgroundClass,
+  getPaddingClass,
+  getGapClass,
+  getGridColumnClass,
 } from '../../../utils/layout-classes';
 
 interface Props {
@@ -46,7 +46,13 @@ interface Props {
   description?: string;
   columns?: 1 | 2 | 3 | 4 | 5 | 6;
   gap?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  background?: 'white' | 'neutral' | 'primary' | 'secondary' | 'tertiary' | 'transparent';
+  background?:
+    | 'white'
+    | 'neutral'
+    | 'primary'
+    | 'secondary'
+    | 'tertiary'
+    | 'transparent';
   padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
   headerAlign?: 'left' | 'center' | 'right';
   titleSize?: 'small' | 'default' | 'large';
@@ -87,7 +93,7 @@ const gridClasses = computed(() => {
   const classes = ['grid'];
 
   classes.push(getGapClass(props.gap));
-  
+
   if (props.responsive) {
     classes.push(getGridColumnClass(props.columns));
   } else {

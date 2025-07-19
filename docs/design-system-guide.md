@@ -1,6 +1,7 @@
 # GWAWR Design System Guide
 
 ## Table of Contents
+
 1. [Overview](#overview)
 2. [Getting Started](#getting-started)
 3. [Component Library](#component-library)
@@ -14,6 +15,7 @@
 The GWAWR Design System provides a comprehensive set of components, guidelines, and tools to ensure consistent, accessible, and maintainable user interfaces across the entire application. Built on Tailwind CSS v4 with custom theme configuration and atomic design principles.
 
 ### Key Features
+
 - **Atomic Design**: Components organized by atoms, molecules, organisms, and templates
 - **Cascade Naming**: Consistent naming convention for scalable component architecture
 - **Theme-driven**: All styling controlled through centralized theme configuration
@@ -22,6 +24,7 @@ The GWAWR Design System provides a comprehensive set of components, guidelines, 
 - **Type Safe**: Full TypeScript support with proper prop definitions
 
 ### Design Principles
+
 1. **Consistency**: Uniform visual language across all components
 2. **Accessibility**: Inclusive design for all users
 3. **Performance**: Optimized for speed and efficiency
@@ -33,6 +36,7 @@ The GWAWR Design System provides a comprehensive set of components, guidelines, 
 ### Installation & Setup
 
 The design system is built into the project and automatically available through:
+
 - **Components**: Auto-imported from `components/` directory
 - **Utilities**: Available in `utils/layout-classes.ts`
 - **Theme**: Configured in `app.config.ts` and `@theme.ts`
@@ -44,7 +48,7 @@ The design system is built into the project and automatically available through:
   <div>
     <!-- Using atomic components -->
     <AtomsTypographyPage size="large">Welcome</AtomsTypographyPage>
-    
+
     <!-- Using layout templates -->
     <TemplatesLayoutsSection title="Features" background="neutral">
       <TemplatesLayoutsGrid :columns="3" gap="lg">
@@ -64,6 +68,7 @@ The design system is built into the project and automatically available through:
 #### Typography Components
 
 **AtomsTypographyPage**
+
 - Purpose: Page-level headings and hero text
 - Sizes: `small`, `default`, `large`, `hero`
 - Spacing: `tight`, `default`, `loose`
@@ -75,6 +80,7 @@ The design system is built into the project and automatically available through:
 ```
 
 **AtomsTypographySection**
+
 - Purpose: Section headings and titles
 - Sizes: `small`, `default`, `large`
 - Alignment: `left`, `center`, `right`
@@ -86,6 +92,7 @@ The design system is built into the project and automatically available through:
 ```
 
 **AtomsTypographyCard**
+
 - Purpose: Card titles and content headings
 - HTML Tags: `h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `p`
 - Spacing: `tight`, `default`, `loose`
@@ -99,15 +106,16 @@ The design system is built into the project and automatically available through:
 #### Button Components
 
 **AtomsButtonsBase**
+
 - Purpose: Core button component with all variants
 - Colors: `primary`, `secondary`, `tertiary`, `success`, `warning`, `error`, `neutral`
 - Variants: `solid`, `outline`, `soft`, `ghost`, `link`
 - Sizes: `xs`, `sm`, `md`, `lg`, `xl`
 
 ```vue
-<AtomsButtonsBase 
-  color="primary" 
-  variant="solid" 
+<AtomsButtonsBase
+  color="primary"
+  variant="solid"
   size="lg"
   @click="handleClick"
 >
@@ -119,6 +127,7 @@ The design system is built into the project and automatically available through:
 ```
 
 **AtomsButtonsPrimary / AtomsButtonsSecondary**
+
 - Purpose: Specialized button variants
 - Pre-configured with specific colors and styling
 
@@ -135,6 +144,7 @@ The design system is built into the project and automatically available through:
 #### Badge Components
 
 **AtomsBadges**
+
 - Purpose: Status indicators and category labels
 - Variants: `default`, `primary`, `secondary`, `tertiary`, `success`, `warning`, `error`
 - Sizes: `xs`, `sm`, `md`, `lg`
@@ -151,6 +161,7 @@ The design system is built into the project and automatically available through:
 #### Card Components
 
 **MoleculesCardsBase**
+
 - Purpose: Basic card container with consistent styling
 - Variants: `default`, `elevated`, `outlined`
 - Padding: `sm`, `md`, `lg`
@@ -170,13 +181,14 @@ The design system is built into the project and automatically available through:
 ```
 
 **MoleculesCardsImage**
+
 - Purpose: Card with image and content
 - Image positions: `top`, `left`, `right`
 - Aspect ratios: `square`, `video`, `card`
 
 ```vue
-<MoleculesCardsImage 
-  :image="imageUrl" 
+<MoleculesCardsImage
+  :image="imageUrl"
   :alt="imageAlt"
   image-position="top"
   aspect-ratio="card"
@@ -191,6 +203,7 @@ The design system is built into the project and automatically available through:
 #### List Components
 
 **MoleculesListsTags**
+
 - Purpose: Tag lists with consistent spacing
 - Variants: `default`, `compact`, `loose`
 - Colors: Inherits from badge system
@@ -204,21 +217,25 @@ The design system is built into the project and automatically available through:
 #### Card Organisms
 
 **OrganismsCardsProject**
+
 - Purpose: Project showcase cards
 - Features: Image, title, description, tags, links
 - Responsive: Adapts to grid layouts
 
 **OrganismsCardsSkill**
+
 - Purpose: Skill/service cards
 - Features: Icon, title, description, technology list
 - Layout: Vertical with centered content
 
 **OrganismsCardsBlog**
+
 - Purpose: Blog post cards
 - Features: Image, title, excerpt, metadata
 - States: Default, featured, compact
 
 **OrganismsCardsTestimonial**
+
 - Purpose: Client testimonial cards
 - Features: Quote, author, company, avatar
 - Layout: Quote-first with author attribution
@@ -226,11 +243,13 @@ The design system is built into the project and automatically available through:
 #### Navigation Organisms
 
 **OrganismsNavigationHeader**
+
 - Purpose: Site header with navigation
 - Features: Logo, navigation links, responsive menu
 - Responsive: Hamburger menu on mobile
 
 **OrganismsNavigationFooter**
+
 - Purpose: Site footer with links and info
 - Features: Link groups, social media, legal links
 - Layout: Multi-column responsive design
@@ -238,6 +257,7 @@ The design system is built into the project and automatically available through:
 #### Section Organisms
 
 **OrganismsSectionsCallToAction**
+
 - Purpose: CTA sections with buttons
 - Variants: `light`, `dark`, `primary`, `secondary`
 - Features: Title, description, button slots
@@ -261,17 +281,14 @@ The design system is built into the project and automatically available through:
 #### Layout Templates
 
 **TemplatesLayoutsHero**
+
 - Purpose: Hero section layouts
 - Variants: `gradient`, `solid`, `image`
 - Sizes: `small`, `medium`, `large`, `fullscreen`
 - Features: Title, subtitle, actions, content slots
 
 ```vue
-<TemplatesLayoutsHero
-  variant="gradient"
-  size="fullscreen"
-  background="primary"
->
+<TemplatesLayoutsHero variant="gradient" size="fullscreen" background="primary">
   <template #title>
     <span class="text-primary">Your Name</span>
   </template>
@@ -285,6 +302,7 @@ The design system is built into the project and automatically available through:
 ```
 
 **TemplatesLayoutsGrid**
+
 - Purpose: Grid layout containers
 - Columns: 1-6 with responsive breakpoints
 - Gaps: `xs`, `sm`, `md`, `lg`, `xl`
@@ -308,6 +326,7 @@ The design system is built into the project and automatically available through:
 ```
 
 **TemplatesLayoutsSection**
+
 - Purpose: Content section containers
 - Variants: `default`, `featured`, `highlight`
 - Alignment: `left`, `center`, `right`
@@ -335,21 +354,25 @@ The design system is built into the project and automatically available through:
 The design system uses a semantic color approach with full 50-950 scales:
 
 #### Primary Colors
+
 - **Purpose**: Main brand colors, primary actions
 - **Scale**: `primary-50` (lightest) to `primary-950` (darkest)
 - **Usage**: Buttons, links, important elements
 
 #### Secondary Colors
+
 - **Purpose**: Supporting actions, success states
 - **Scale**: `secondary-50` to `secondary-950`
 - **Usage**: Secondary buttons, positive feedback
 
 #### Tertiary Colors
+
 - **Purpose**: Accents and highlights
 - **Scale**: `tertiary-50` to `tertiary-950`
 - **Usage**: Special content, creative elements
 
 #### System Colors
+
 - **Success**: Green tones for positive actions
 - **Warning**: Amber tones for caution states
 - **Error**: Red tones for destructive actions
@@ -409,7 +432,7 @@ export const ALIGN_CLASSES = {
   left: 'text-left',
   center: 'text-center',
   right: 'text-right',
-}
+};
 
 // Background classes
 export const BACKGROUND_CLASSES = {
@@ -417,12 +440,14 @@ export const BACKGROUND_CLASSES = {
   neutral: 'bg-neutral-50',
   primary: 'bg-primary-50',
   // ... more variants
-}
+};
 
 // Utility functions with fallbacks
 export const getAlignClass = (align, fallback = 'center') => {
-  return align in ALIGN_CLASSES ? ALIGN_CLASSES[align] : ALIGN_CLASSES[fallback]
-}
+  return align in ALIGN_CLASSES
+    ? ALIGN_CLASSES[align]
+    : ALIGN_CLASSES[fallback];
+};
 ```
 
 ### Grid System
@@ -471,13 +496,13 @@ maxWidth: {
 </template>
 
 <script setup lang="ts">
-import { getAlignClass, getBackgroundClass } from '@/utils/layout-classes'
+import { getAlignClass, getBackgroundClass } from '@/utils/layout-classes';
 
 interface Props {
-  variant?: 'default' | 'elevated' | 'outlined'
-  background?: 'white' | 'neutral' | 'primary'
-  align?: 'left' | 'center' | 'right'
-  padding?: 'sm' | 'md' | 'lg'
+  variant?: 'default' | 'elevated' | 'outlined';
+  background?: 'white' | 'neutral' | 'primary';
+  align?: 'left' | 'center' | 'right';
+  padding?: 'sm' | 'md' | 'lg';
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -485,21 +510,21 @@ const props = withDefaults(defineProps<Props>(), {
   background: 'white',
   align: 'left',
   padding: 'md',
-})
+});
 
 const componentClasses = computed(() => {
-  const classes = []
-  
-  classes.push(getBackgroundClass(props.background))
-  classes.push(getAlignClass(props.align))
-  
+  const classes = [];
+
+  classes.push(getBackgroundClass(props.background));
+  classes.push(getAlignClass(props.align));
+
   // Add variant-specific classes
   if (props.variant === 'elevated') {
-    classes.push('shadow-lg')
+    classes.push('shadow-lg');
   }
-  
-  return classes.join(' ')
-})
+
+  return classes.join(' ');
+});
 </script>
 ```
 
@@ -514,23 +539,23 @@ const componentClasses = computed(() => {
 ### Example Test Structure
 
 ```typescript
-import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
-import ComponentName from './ComponentName.vue'
+import { describe, it, expect } from 'vitest';
+import { mount } from '@vue/test-utils';
+import ComponentName from './ComponentName.vue';
 
 describe('ComponentName', () => {
   it('should render with default props', () => {
-    const wrapper = mount(ComponentName)
-    expect(wrapper.exists()).toBe(true)
-  })
+    const wrapper = mount(ComponentName);
+    expect(wrapper.exists()).toBe(true);
+  });
 
   it('should handle prop variations', () => {
     const wrapper = mount(ComponentName, {
-      props: { variant: 'elevated' }
-    })
-    expect(wrapper.classes()).toContain('shadow-lg')
-  })
-})
+      props: { variant: 'elevated' },
+    });
+    expect(wrapper.classes()).toContain('shadow-lg');
+  });
+});
 ```
 
 ### Styling Guidelines
@@ -554,6 +579,7 @@ describe('ComponentName', () => {
 ### Version Control
 
 The design system follows semantic versioning:
+
 - **Major (x.0.0)**: Breaking changes to component APIs
 - **Minor (x.y.0)**: New features and components
 - **Patch (x.y.z)**: Bug fixes and improvements
@@ -570,6 +596,7 @@ The design system follows semantic versioning:
 ### Breaking Changes
 
 When introducing breaking changes:
+
 1. Deprecate old API with warnings
 2. Provide migration guide
 3. Update all internal usage
@@ -578,6 +605,7 @@ When introducing breaking changes:
 ### Monitoring
 
 Regular maintenance includes:
+
 - **Performance Audits**: Bundle size and runtime performance
 - **Accessibility Reviews**: WCAG compliance checks
 - **Browser Testing**: Cross-browser compatibility
@@ -594,4 +622,4 @@ Regular maintenance includes:
 
 ---
 
-*This design system documentation is maintained by the development team and updated with each release. For questions or contributions, please refer to the project's contributing guidelines.*
+_This design system documentation is maintained by the development team and updated with each release. For questions or contributions, please refer to the project's contributing guidelines._
