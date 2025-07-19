@@ -16,7 +16,9 @@
       <!-- Featured Testimonials Section -->
       <div v-if="featuredTestimonials?.length" class="mb-16">
         <div class="text-center mb-8">
-          <h2 class="text-2xl font-bold text-gray-900 mb-2">Featured Testimonials</h2>
+          <h2 class="text-2xl font-bold text-gray-900 mb-2">
+            Featured Testimonials
+          </h2>
           <p class="text-gray-600">Highlighted feedback from valued clients</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -27,7 +29,9 @@
           >
             <!-- Featured Badge -->
             <div class="absolute -top-2 -right-2 z-10">
-              <div class="bg-primary text-white text-xs px-2 py-1 rounded-full font-semibold">
+              <div
+                class="bg-primary text-white text-xs px-2 py-1 rounded-full font-semibold"
+              >
                 ⭐ Featured
               </div>
             </div>
@@ -56,7 +60,7 @@
             <option value="3">3+ Stars</option>
           </select>
         </div>
-        
+
         <UButton
           :variant="showFeaturedOnly ? 'solid' : 'outline'"
           size="sm"
@@ -69,13 +73,19 @@
 
       <!-- Loading State -->
       <div v-if="pending" class="text-center py-12">
-        <UIcon name="i-heroicons-arrow-path" class="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
+        <UIcon
+          name="i-heroicons-arrow-path"
+          class="w-8 h-8 animate-spin text-primary mx-auto mb-4"
+        />
         <p class="text-gray-600">Loading testimonials...</p>
       </div>
 
       <!-- Error State -->
       <div v-else-if="error" class="text-center py-12">
-        <UIcon name="i-heroicons-exclamation-triangle" class="w-8 h-8 text-red-500 mx-auto mb-4" />
+        <UIcon
+          name="i-heroicons-exclamation-triangle"
+          class="w-8 h-8 text-red-500 mx-auto mb-4"
+        />
         <p class="text-red-600 mb-4">Failed to load testimonials</p>
         <UButton @click="refresh()" variant="outline">
           <UIcon name="i-heroicons-arrow-path" class="mr-2" />
@@ -86,8 +96,14 @@
       <!-- All Testimonials Grid -->
       <div v-else-if="filteredTestimonials?.length" class="mb-16">
         <div class="text-center mb-8">
-          <h2 class="text-2xl font-bold text-gray-900 mb-2">All Testimonials</h2>
-          <p class="text-gray-600">{{ filteredTestimonials.length }} testimonial{{ filteredTestimonials.length !== 1 ? 's' : '' }}</p>
+          <h2 class="text-2xl font-bold text-gray-900 mb-2">
+            All Testimonials
+          </h2>
+          <p class="text-gray-600">
+            {{ filteredTestimonials.length }} testimonial{{
+              filteredTestimonials.length !== 1 ? 's' : ''
+            }}
+          </p>
         </div>
         <div
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
@@ -105,9 +121,14 @@
 
       <!-- No Results State -->
       <div v-else class="text-center py-12">
-        <UIcon name="i-heroicons-chat-bubble-left-ellipsis" class="w-12 h-12 text-gray-400 mx-auto mb-4" />
+        <UIcon
+          name="i-heroicons-chat-bubble-left-ellipsis"
+          class="w-12 h-12 text-gray-400 mx-auto mb-4"
+        />
         <p class="text-gray-600 text-lg mb-2">No testimonials found</p>
-        <p class="text-gray-500">Try adjusting your filters or check back later.</p>
+        <p class="text-gray-500">
+          Try adjusting your filters or check back later.
+        </p>
       </div>
 
       <!-- Call-to-Action Section -->
@@ -159,55 +180,63 @@ useHead({
 });
 
 // Use simple useFetch for debugging
-const { data: testimonialsResponse, pending, error, refresh } = await useFetch('/api/testimonials', {
+const {
+  data: testimonialsResponse,
+  pending,
+  error,
+  refresh,
+} = await useFetch('/api/testimonials', {
   key: 'testimonials-all',
   query: { limit: 20 },
   default: () => ({ items: [], total: 0, skip: 0, limit: 0 }),
-  server: true
-})
+  server: true,
+});
 
 // Get featured testimonials with simple fetch
-const { data: featuredTestimonials } = await useFetch('/api/testimonials/featured', {
-  key: 'testimonials-featured',
-  query: { limit: 3 },
-  default: () => [],
-  server: true
-})
+const { data: featuredTestimonials } = await useFetch(
+  '/api/testimonials/featured',
+  {
+    key: 'testimonials-featured',
+    query: { limit: 3 },
+    default: () => [],
+    server: true,
+  }
+);
 
 // Extract testimonials from response
-const testimonials = computed(() => testimonialsResponse.value?.items || [])
+const testimonials = computed(() => testimonialsResponse.value?.items || []);
 
 // Filter controls
-const selectedRating = ref('')
-const showFeaturedOnly = ref(false)
+const selectedRating = ref('');
+const showFeaturedOnly = ref(false);
 
 // Computed filtered testimonials
 const filteredTestimonials = computed(() => {
-  if (!testimonials.value) return []
-  
-  let filtered = [...testimonials.value]
-  
+  if (!testimonials.value) return [];
+
+  let filtered = [...testimonials.value];
+
   // Filter by rating
   if (selectedRating.value) {
-    const minRating = parseInt(selectedRating.value)
-    filtered = filtered.filter(testimonial => 
-      testimonial.rating && testimonial.rating >= minRating
-    )
+    const minRating = parseInt(selectedRating.value);
+    filtered = filtered.filter(
+      testimonial => testimonial.rating && testimonial.rating >= minRating
+    );
   }
-  
+
   // Filter by featured status
   if (showFeaturedOnly.value) {
-    filtered = filtered.filter(testimonial => testimonial.featured)
+    filtered = filtered.filter(testimonial => testimonial.featured);
   }
-  
+
   // Exclude featured testimonials from main list to avoid duplication
   if (featuredTestimonials.value?.length) {
-    const featuredIds = new Set(featuredTestimonials.value.map(t => t.id))
-    filtered = filtered.filter(testimonial => !featuredIds.has(testimonial.id))
+    const featuredIds = new Set(featuredTestimonials.value.map(t => t.id));
+    filtered = filtered.filter(testimonial => !featuredIds.has(testimonial.id));
   }
-  
-  return filtered
-})
+
+  return filtered;
+});
 
 // Navigation functions
 const openEmailClient = () => {

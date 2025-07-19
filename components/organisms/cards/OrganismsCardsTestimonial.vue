@@ -1,10 +1,5 @@
 <template>
-  <MoleculesCardsBase
-    variant="default"
-    size="md"
-    padding="lg"
-    hover
-  >
+  <MoleculesCardsBase variant="default" size="md" padding="lg" hover>
     <!-- Quote Icon -->
     <div class="mb-6">
       <UIcon
@@ -70,20 +65,20 @@ const props = defineProps({
 
 // Computed properties to handle both legacy and enhanced field names
 const clientName = computed(() => {
-  return props.testimonial.clientName || props.testimonial.name || 'Anonymous'
-})
+  return props.testimonial.clientName || props.testimonial.name || 'Anonymous';
+});
 
 const clientTitle = computed(() => {
-  return props.testimonial.clientTitle || props.testimonial.title || ''
-})
+  return props.testimonial.clientTitle || props.testimonial.title || '';
+});
 
 const clientCompany = computed(() => {
-  return props.testimonial.clientCompany || props.testimonial.company || ''
-})
+  return props.testimonial.clientCompany || props.testimonial.company || '';
+});
 
 // Helper function to get initials from name
 const getInitials = name => {
-  if (!name) return '?'
+  if (!name) return '?';
   return name
     .split(' ')
     .map(word => word.charAt(0).toUpperCase())

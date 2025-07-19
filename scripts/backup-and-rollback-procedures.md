@@ -14,17 +14,21 @@ This document outlines comprehensive backup and rollback procedures for the Cont
 /**
  * Create a complete backup of all content types before migration
  */
-const { createClient } = require('contentful-management')
-const fs = require('fs')
-require('dotenv').config()
+const { createClient } = require('contentful-management');
+const fs = require('fs');
+require('dotenv').config();
 
 async function backupContentModels() {
-  const client = createClient({ accessToken: process.env.CONTENTFUL_MANAGEMENT_TOKEN })
-  const space = await client.getSpace(process.env.CONTENTFUL_SPACE_ID)
-  const environment = await space.getEnvironment(process.env.CONTENTFUL_ENVIRONMENT || 'master')
-  
-  const contentTypes = await environment.getContentTypes()
-  
+  const client = createClient({
+    accessToken: process.env.CONTENTFUL_MANAGEMENT_TOKEN,
+  });
+  const space = await client.getSpace(process.env.CONTENTFUL_SPACE_ID);
+  const environment = await space.getEnvironment(
+    process.env.CONTENTFUL_ENVIRONMENT || 'master'
+  );
+
+  const contentTypes = await environment.getContentTypes();
+
   const backup = {
     timestamp: new Date().toISOString(),
     environment: process.env.CONTENTFUL_ENVIRONMENT || 'master',
@@ -33,15 +37,15 @@ async function backupContentModels() {
       name: ct.name,
       description: ct.description,
       displayField: ct.displayField,
-      fields: ct.fields
-    }))
-  }
-  
-  const filename = `backup-content-models-${Date.now()}.json`
-  fs.writeFileSync(filename, JSON.stringify(backup, null, 2))
-  
-  console.log(`✅ Content models backed up to ${filename}`)
-  return filename
+      fields: ct.fields,
+    })),
+  };
+
+  const filename = `backup-content-models-${Date.now()}.json`;
+  fs.writeFileSync(filename, JSON.stringify(backup, null, 2));
+
+  console.log(`✅ Content models backed up to ${filename}`);
+  return filename;
 }
 ```
 
@@ -54,26 +58,30 @@ async function backupContentModels() {
  * Create a complete backup of all content entries before migration
  */
 async function backupContentData() {
-  const client = createClient({ accessToken: process.env.CONTENTFUL_MANAGEMENT_TOKEN })
-  const space = await client.getSpace(process.env.CONTENTFUL_SPACE_ID)
-  const environment = await space.getEnvironment(process.env.CONTENTFUL_ENVIRONMENT || 'master')
-  
-  const allEntries = await environment.getEntries({ limit: 1000 })
-  
+  const client = createClient({
+    accessToken: process.env.CONTENTFUL_MANAGEMENT_TOKEN,
+  });
+  const space = await client.getSpace(process.env.CONTENTFUL_SPACE_ID);
+  const environment = await space.getEnvironment(
+    process.env.CONTENTFUL_ENVIRONMENT || 'master'
+  );
+
+  const allEntries = await environment.getEntries({ limit: 1000 });
+
   const backup = {
     timestamp: new Date().toISOString(),
     environment: process.env.CONTENTFUL_ENVIRONMENT || 'master',
     entries: allEntries.items.map(entry => ({
       sys: entry.sys,
-      fields: entry.fields
-    }))
-  }
-  
-  const filename = `backup-content-data-${Date.now()}.json`
-  fs.writeFileSync(filename, JSON.stringify(backup, null, 2))
-  
-  console.log(`✅ Content data backed up to ${filename}`)
-  return filename
+      fields: entry.fields,
+    })),
+  };
+
+  const filename = `backup-content-data-${Date.now()}.json`;
+  fs.writeFileSync(filename, JSON.stringify(backup, null, 2));
+
+  console.log(`✅ Content data backed up to ${filename}`);
+  return filename;
 }
 ```
 
@@ -101,29 +109,38 @@ contentful space environment create --name "backup-$(date +%Y%m%d)" --source mas
 const FIELDS_TO_REMOVE = {
   blogPost: ['slug', 'category', 'tags', 'publishedAt', 'readTime', 'featured'],
   project: ['liveUrl', 'repositoryUrl', 'featured', 'endDate', 'status'],
-  testimonial: ['clientName', 'clientTitle', 'clientCompany', 'rating', 'featured', 'projectReference']
-}
+  testimonial: [
+    'clientName',
+    'clientTitle',
+    'clientCompany',
+    'rating',
+    'featured',
+    'projectReference',
+  ],
+};
 
 async function rollbackPhase1() {
-  console.log('🔄 Rolling back Phase 1: Removing added fields...')
-  
-  for (const [contentTypeName, fieldsToRemove] of Object.entries(FIELDS_TO_REMOVE)) {
-    const contentType = await environment.getContentType(contentTypeName)
-    
+  console.log('🔄 Rolling back Phase 1: Removing added fields...');
+
+  for (const [contentTypeName, fieldsToRemove] of Object.entries(
+    FIELDS_TO_REMOVE
+  )) {
+    const contentType = await environment.getContentType(contentTypeName);
+
     // Remove fields in reverse order to avoid dependency issues
     for (const fieldId of fieldsToRemove.reverse()) {
-      const fieldIndex = contentType.fields.findIndex(f => f.id === fieldId)
+      const fieldIndex = contentType.fields.findIndex(f => f.id === fieldId);
       if (fieldIndex !== -1) {
-        contentType.fields.splice(fieldIndex, 1)
-        console.log(`   ✅ Removed field: ${fieldId}`)
+        contentType.fields.splice(fieldIndex, 1);
+        console.log(`   ✅ Removed field: ${fieldId}`);
       }
     }
-    
-    await contentType.update()
-    await contentType.publish()
+
+    await contentType.update();
+    await contentType.publish();
   }
-  
-  console.log('✅ Phase 1 rollback completed')
+
+  console.log('✅ Phase 1 rollback completed');
 }
 ```
 
@@ -138,34 +155,36 @@ async function rollbackPhase1() {
  * Clear data from fields added in Phase 1
  */
 async function rollbackPhase2() {
-  console.log('🔄 Rolling back Phase 2: Clearing populated data...')
-  
-  const contentTypes = ['blogPost', 'project', 'testimonial']
-  
+  console.log('🔄 Rolling back Phase 2: Clearing populated data...');
+
+  const contentTypes = ['blogPost', 'project', 'testimonial'];
+
   for (const contentTypeName of contentTypes) {
-    const entries = await environment.getEntries({ content_type: contentTypeName })
-    
+    const entries = await environment.getEntries({
+      content_type: contentTypeName,
+    });
+
     for (const entry of entries.items) {
-      let modified = false
-      
+      let modified = false;
+
       // Clear all fields added in Phase 1
-      const fieldsToRemove = FIELDS_TO_REMOVE[contentTypeName] || []
+      const fieldsToRemove = FIELDS_TO_REMOVE[contentTypeName] || [];
       for (const fieldId of fieldsToRemove) {
         if (entry.fields[fieldId]) {
-          delete entry.fields[fieldId]
-          modified = true
+          delete entry.fields[fieldId];
+          modified = true;
         }
       }
-      
+
       if (modified) {
-        await entry.update()
-        await entry.publish()
-        console.log(`   ✅ Cleared data from entry: ${entry.sys.id}`)
+        await entry.update();
+        await entry.publish();
+        console.log(`   ✅ Cleared data from entry: ${entry.sys.id}`);
       }
     }
   }
-  
-  console.log('✅ Phase 2 rollback completed')
+
+  console.log('✅ Phase 2 rollback completed');
 }
 ```
 
@@ -182,28 +201,30 @@ async function rollbackPhase2() {
 const FIELDS_TO_MAKE_OPTIONAL = {
   blogPost: ['slug'],
   project: ['repositoryUrl'],
-  testimonial: ['rating']
-}
+  testimonial: ['rating'],
+};
 
 async function rollbackPhase3() {
-  console.log('🔄 Rolling back Phase 3: Making fields optional...')
-  
-  for (const [contentTypeName, fieldsToUpdate] of Object.entries(FIELDS_TO_MAKE_OPTIONAL)) {
-    const contentType = await environment.getContentType(contentTypeName)
-    
+  console.log('🔄 Rolling back Phase 3: Making fields optional...');
+
+  for (const [contentTypeName, fieldsToUpdate] of Object.entries(
+    FIELDS_TO_MAKE_OPTIONAL
+  )) {
+    const contentType = await environment.getContentType(contentTypeName);
+
     for (const fieldId of fieldsToUpdate) {
-      const fieldIndex = contentType.fields.findIndex(f => f.id === fieldId)
+      const fieldIndex = contentType.fields.findIndex(f => f.id === fieldId);
       if (fieldIndex !== -1) {
-        contentType.fields[fieldIndex].required = false
-        console.log(`   ✅ Made field optional: ${fieldId}`)
+        contentType.fields[fieldIndex].required = false;
+        console.log(`   ✅ Made field optional: ${fieldId}`);
       }
     }
-    
-    await contentType.update()
-    await contentType.publish()
+
+    await contentType.update();
+    await contentType.publish();
   }
-  
-  console.log('✅ Phase 3 rollback completed')
+
+  console.log('✅ Phase 3 rollback completed');
 }
 ```
 
@@ -214,10 +235,11 @@ async function rollbackPhase3() {
 **Rollback Checklist:**
 
 1. **Revert Frontend Changes**
+
    ```bash
    # Revert to previous git commit
    git revert <commit-hash>
-   
+
    # Or reset to previous state
    git reset --hard <previous-commit>
    ```
@@ -231,10 +253,11 @@ async function rollbackPhase3() {
    - Update routing configuration
 
 4. **Clear Application Caches**
+
    ```bash
    # Clear Next.js cache
    rm -rf .next
-   
+
    # Clear node_modules if needed
    rm -rf node_modules && npm install
    ```
@@ -248,6 +271,7 @@ async function rollbackPhase3() {
 **Procedure:**
 
 1. **Stop Application**
+
    ```bash
    # Stop production deployment
    pm2 stop all
@@ -256,29 +280,32 @@ async function rollbackPhase3() {
    ```
 
 2. **Restore from Backup Environment**
+
    ```bash
    # Clone backup environment to master
    contentful space environment create --name "restore-$(date +%Y%m%d)" --source backup-20250712
-   
+
    # Update environment alias
    contentful space environment update master --name "master-old"
    contentful space environment update restore-20250712 --name "master"
    ```
 
 3. **Restore Content Data**
+
    ```javascript
    // Use backup-content-data.cjs in reverse
-   const backupData = require('./backup-content-data-1720786800000.json')
-   
+   const backupData = require('./backup-content-data-1720786800000.json');
+
    for (const entryData of backupData.entries) {
-     const entry = await environment.getEntry(entryData.sys.id)
-     entry.fields = entryData.fields
-     await entry.update()
-     await entry.publish()
+     const entry = await environment.getEntry(entryData.sys.id);
+     entry.fields = entryData.fields;
+     await entry.update();
+     await entry.publish();
    }
    ```
 
 4. **Revert Application Code**
+
    ```bash
    git checkout main
    git reset --hard <last-known-good-commit>
@@ -313,13 +340,13 @@ async function rollbackPhase3() {
 
 ## Recovery Time Objectives (RTO)
 
-| Rollback Type | Target RTO | Maximum RTO |
-|---------------|------------|-------------|
-| Phase 1 (Fields) | 15 minutes | 30 minutes |
-| Phase 2 (Data) | 30 minutes | 60 minutes |
-| Phase 3 (Requirements) | 10 minutes | 20 minutes |
-| Phase 4 (Application) | 45 minutes | 90 minutes |
-| Complete Restore | 2 hours | 4 hours |
+| Rollback Type          | Target RTO | Maximum RTO |
+| ---------------------- | ---------- | ----------- |
+| Phase 1 (Fields)       | 15 minutes | 30 minutes  |
+| Phase 2 (Data)         | 30 minutes | 60 minutes  |
+| Phase 3 (Requirements) | 10 minutes | 20 minutes  |
+| Phase 4 (Application)  | 45 minutes | 90 minutes  |
+| Complete Restore       | 2 hours    | 4 hours     |
 
 ## Monitoring and Alerting
 
@@ -399,30 +426,32 @@ Consider creating a master rollback script that can handle different scenarios:
 
 ```javascript
 // scripts/rollback-master.cjs
-const args = process.argv.slice(2)
-const phase = args[0]
-const confirm = args[1]
+const args = process.argv.slice(2);
+const phase = args[0];
+const confirm = args[1];
 
 if (confirm !== '--confirm') {
-  console.log('⚠️  Add --confirm to execute rollback')
-  process.exit(1)
+  console.log('⚠️  Add --confirm to execute rollback');
+  process.exit(1);
 }
 
 switch (phase) {
   case 'phase1':
-    await rollbackPhase1()
-    break
+    await rollbackPhase1();
+    break;
   case 'phase2':
-    await rollbackPhase2()
-    break
+    await rollbackPhase2();
+    break;
   case 'phase3':
-    await rollbackPhase3()
-    break
+    await rollbackPhase3();
+    break;
   case 'complete':
-    await rollbackComplete()
-    break
+    await rollbackComplete();
+    break;
   default:
-    console.log('Usage: node rollback-master.cjs [phase1|phase2|phase3|complete] --confirm')
+    console.log(
+      'Usage: node rollback-master.cjs [phase1|phase2|phase3|complete] --confirm'
+    );
 }
 ```
 

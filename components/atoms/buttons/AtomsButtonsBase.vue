@@ -26,7 +26,14 @@
 interface Props {
   variant?: 'solid' | 'outline' | 'soft' | 'ghost' | 'link';
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  color?: 'primary' | 'secondary' | 'tertiary' | 'success' | 'warning' | 'error' | 'neutral';
+  color?:
+    | 'primary'
+    | 'secondary'
+    | 'tertiary'
+    | 'success'
+    | 'warning'
+    | 'error'
+    | 'neutral';
   disabled?: boolean;
   loading?: boolean;
   to?: string;
@@ -59,14 +66,14 @@ const uButtonColor = computed(() => {
   // Map our design system colors to UButton colors
   const colorMap = {
     primary: 'primary',
-    secondary: 'secondary', 
+    secondary: 'secondary',
     tertiary: 'info', // Map tertiary to info for UButton
     success: 'success',
     warning: 'warning',
     error: 'error',
     neutral: 'gray', // Map neutral to gray for UButton
   } as const;
-  
+
   return colorMap[props.color] || 'primary';
 });
 

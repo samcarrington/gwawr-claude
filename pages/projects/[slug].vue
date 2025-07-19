@@ -18,7 +18,7 @@
           </div>
         </UContainer>
       </section>
-      
+
       <!-- Content Loading -->
       <article class="py-12">
         <UContainer>
@@ -30,14 +30,19 @@
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="min-h-screen flex items-center justify-center">
+    <div
+      v-else-if="error"
+      class="min-h-screen flex items-center justify-center"
+    >
       <UContainer>
         <div class="text-center">
           <UAlert
             color="red"
             variant="soft"
             title="Failed to load project"
-            :description="error.message || 'The project could not be found or loaded.'"
+            :description="
+              error.message || 'The project could not be found or loaded.'
+            "
             class="mb-8"
           />
           <NuxtLink
@@ -61,11 +66,16 @@
         <UContainer>
           <div class="max-w-4xl mx-auto">
             <!-- Project Images -->
-            <section v-if="project.images && project.images.length > 1" class="mb-12">
-              <h2 class="text-2xl font-bold text-gray-900 mb-6">Project Gallery</h2>
+            <section
+              v-if="project.images && project.images.length > 1"
+              class="mb-12"
+            >
+              <h2 class="text-2xl font-bold text-gray-900 mb-6">
+                Project Gallery
+              </h2>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div 
-                  v-for="(image, index) in project.images.slice(1)" 
+                <div
+                  v-for="(image, index) in project.images.slice(1)"
                   :key="index"
                   class="aspect-video rounded-lg overflow-hidden shadow-lg"
                 >
@@ -80,8 +90,10 @@
 
             <!-- Full Description -->
             <section v-if="project.fullDescription" class="mb-12">
-              <h2 class="text-2xl font-bold text-gray-900 mb-6">About This Project</h2>
-              <div 
+              <h2 class="text-2xl font-bold text-gray-900 mb-6">
+                About This Project
+              </h2>
+              <div
                 class="prose prose-gray max-w-none prose-lg prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-primary prose-strong:text-gray-900 prose-code:bg-gray-100 prose-code:text-gray-800 prose-blockquote:border-primary prose-blockquote:text-gray-700"
                 v-html="project.fullDescription"
               />
@@ -91,7 +103,9 @@
             <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
               <!-- Technologies -->
               <div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Technologies Used</h3>
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                  Technologies Used
+                </h3>
                 <div class="flex flex-wrap gap-2">
                   <span
                     v-for="tech in project.technologies"
@@ -105,23 +119,35 @@
 
               <!-- Project Info -->
               <div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Project Details</h3>
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                  Project Details
+                </h3>
                 <dl class="space-y-2">
                   <div>
                     <dt class="text-sm font-medium text-gray-500">Status</dt>
-                    <dd class="text-sm text-gray-900 capitalize">{{ project.status.replace('-', ' ') }}</dd>
+                    <dd class="text-sm text-gray-900 capitalize">
+                      {{ project.status.replace('-', ' ') }}
+                    </dd>
                   </div>
                   <div>
                     <dt class="text-sm font-medium text-gray-500">Category</dt>
-                    <dd class="text-sm text-gray-900">{{ project.category }}</dd>
+                    <dd class="text-sm text-gray-900">
+                      {{ project.category }}
+                    </dd>
                   </div>
                   <div v-if="project.startDate">
-                    <dt class="text-sm font-medium text-gray-500">Start Date</dt>
-                    <dd class="text-sm text-gray-900">{{ formatDate(project.startDate) }}</dd>
+                    <dt class="text-sm font-medium text-gray-500">
+                      Start Date
+                    </dt>
+                    <dd class="text-sm text-gray-900">
+                      {{ formatDate(project.startDate) }}
+                    </dd>
                   </div>
                   <div v-if="project.endDate">
                     <dt class="text-sm font-medium text-gray-500">End Date</dt>
-                    <dd class="text-sm text-gray-900">{{ formatDate(project.endDate) }}</dd>
+                    <dd class="text-sm text-gray-900">
+                      {{ formatDate(project.endDate) }}
+                    </dd>
                   </div>
                 </dl>
               </div>
@@ -190,32 +216,40 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate } from '~/utils/date'
+import { formatDate } from '~/utils/date';
 
-const route = useRoute()
+const route = useRoute();
 
 // Get project data using slug (non-blocking)
-const { data: project, error, pending } = useProject(route.params.slug as string)
+const {
+  data: project,
+  error,
+  pending,
+} = useProject(route.params.slug as string);
 
 // Watch for when project loading completes and handle 404
-watch([project, error, pending], ([projectData, projectError, projectPending]) => {
-  // Only throw 404 after loading is complete and no project was found
-  if (!projectPending && !projectData && !projectError) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Project not found',
-    })
-  }
-}, { immediate: true })
+watch(
+  [project, error, pending],
+  ([projectData, projectError, projectPending]) => {
+    // Only throw 404 after loading is complete and no project was found
+    if (!projectPending && !projectData && !projectError) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Project not found',
+      });
+    }
+  },
+  { immediate: true }
+);
 
 // Page metadata (reactive to project data)
 useHead(() => {
   if (!project.value) {
     return {
-      title: 'Loading... - Sam Carrington'
-    }
+      title: 'Loading... - Sam Carrington',
+    };
   }
-  
+
   return {
     title: `${project.value.title} - Sam Carrington`,
     meta: [
@@ -240,17 +274,17 @@ useHead(() => {
         content: project.value.images?.[0] || '',
       },
     ],
-  }
-})
+  };
+});
 
 // Contact function
 const openEmailClient = () => {
-  if (!project.value) return
-  
-  const subject = encodeURIComponent(`Re: ${project.value.title} Project`)
+  if (!project.value) return;
+
+  const subject = encodeURIComponent(`Re: ${project.value.title} Project`);
   const body = encodeURIComponent(
     `Hi Sam,\n\nI saw your project "${project.value.title}" and would like to discuss it further.\n\nBest regards,`
-  )
-  window.location.href = `mailto:sam@gwawr.com?subject=${subject}&body=${body}`
-}
+  );
+  window.location.href = `mailto:sam@gwawr.com?subject=${subject}&body=${body}`;
+};
 </script>

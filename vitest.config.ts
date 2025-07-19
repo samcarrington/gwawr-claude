@@ -1,6 +1,6 @@
-import { defineConfig } from 'vitest/config'
-import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path'
+import { defineConfig } from 'vitest/config';
+import vue from '@vitejs/plugin-vue';
+import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [vue()],
@@ -8,8 +8,8 @@ export default defineConfig({
     alias: {
       '~': resolve(__dirname, '.'),
       '@': resolve(__dirname, '.'),
-      '#app': resolve(__dirname, 'node_modules/nuxt/dist/app')
-    }
+      '#app': resolve(__dirname, 'node_modules/nuxt/dist/app'),
+    },
   },
   test: {
     environment: 'jsdom',
@@ -20,7 +20,7 @@ export default defineConfig({
       '**/node_modules/**',
       '**/dist/**',
       '**/.{idea,git,cache,output,temp}/**',
-      '**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*'
-    ]
-  }
-})
+      '**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*',
+    ],
+  },
+});

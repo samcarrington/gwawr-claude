@@ -9,7 +9,7 @@
               Default Hero Title
             </AtomsTypographyPage>
           </slot>
-          
+
           <slot name="subtitle">
             <p class="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
               Default hero subtitle description
@@ -17,7 +17,10 @@
           </slot>
 
           <!-- Action Buttons -->
-          <div v-if="$slots.actions" class="flex flex-col sm:flex-row gap-4 justify-center">
+          <div
+            v-if="$slots.actions"
+            class="flex flex-col sm:flex-row gap-4 justify-center"
+          >
             <slot name="actions" />
           </div>
         </div>
@@ -85,11 +88,16 @@ const heroClasses = computed(() => {
   };
 
   classes.push(sizeClasses[props.size] || sizeClasses.fullscreen);
-  classes.push(backgroundClasses[props.variant][props.background] || backgroundClasses.gradient.primary);
+  classes.push(
+    backgroundClasses[props.variant][props.background] ||
+      backgroundClasses.gradient.primary
+  );
 
   // Add overlay for image variant
   if (props.variant === 'image' && props.overlay) {
-    classes.push('before:absolute before:inset-0 before:bg-black/40 before:z-10');
+    classes.push(
+      'before:absolute before:inset-0 before:bg-black/40 before:z-10'
+    );
   }
 
   return classes.join(' ');
@@ -97,11 +105,11 @@ const heroClasses = computed(() => {
 
 const containerClasses = computed(() => {
   const classes = [];
-  
+
   if (props.centered) {
     classes.push('text-center');
   }
-  
+
   // Add z-index for overlay
   if (props.variant === 'image' && props.overlay) {
     classes.push('relative z-20');

@@ -1,6 +1,6 @@
 <template>
-  <div 
-    v-if="renderedContent" 
+  <div
+    v-if="renderedContent"
     class="prose prose-gray max-w-none"
     :class="proseClasses"
     v-html="renderedContent"
@@ -14,66 +14,70 @@
 </template>
 
 <script setup lang="ts">
-import { renderContent } from '~/utils/contentful-transformers'
+import { renderContent } from '~/utils/contentful-transformers';
 
 interface Props {
-  content: any
-  size?: 'sm' | 'md' | 'lg' | 'xl'
-  fallbackText?: string
+  content: any;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  fallbackText?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'md',
-  fallbackText: 'No content available'
-})
+  fallbackText: 'No content available',
+});
 
 // Track loading state
-const isLoading = ref(true)
-const renderedContent = ref('')
+const isLoading = ref(true);
+const renderedContent = ref('');
 
 // Render the content using our smart renderer (async)
 onMounted(async () => {
-  isLoading.value = true
+  isLoading.value = true;
   try {
     if (props.content) {
-      renderedContent.value = await renderContent(props.content)
+      renderedContent.value = await renderContent(props.content);
     } else {
-      renderedContent.value = ''
+      renderedContent.value = '';
     }
   } catch (error) {
-    console.error('[AtomsContentRenderer] Error rendering content:', error)
-    renderedContent.value = ''
+    console.error('[AtomsContentRenderer] Error rendering content:', error);
+    renderedContent.value = '';
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
-})
+});
 
 // Watch for content changes and re-render
-watch(() => props.content, async (newContent) => {
-  isLoading.value = true
-  try {
-    if (newContent) {
-      renderedContent.value = await renderContent(newContent)
-    } else {
-      renderedContent.value = ''
+watch(
+  () => props.content,
+  async newContent => {
+    isLoading.value = true;
+    try {
+      if (newContent) {
+        renderedContent.value = await renderContent(newContent);
+      } else {
+        renderedContent.value = '';
+      }
+    } catch (error) {
+      console.error('[AtomsContentRenderer] Error rendering content:', error);
+      renderedContent.value = '';
+    } finally {
+      isLoading.value = false;
     }
-  } catch (error) {
-    console.error('[AtomsContentRenderer] Error rendering content:', error)
-    renderedContent.value = ''
-  } finally {
-    isLoading.value = false
-  }
-}, { deep: true })
+  },
+  { deep: true }
+);
 
 // Dynamic prose classes based on size
 const proseClasses = computed(() => {
   const sizeClasses = {
     sm: 'prose-sm',
     md: 'prose-base',
-    lg: 'prose-lg', 
-    xl: 'prose-xl'
-  }
-  
+    lg: 'prose-lg',
+    xl: 'prose-xl',
+  };
+
   return [
     sizeClasses[props.size],
     // Custom styling for better integration
@@ -84,7 +88,7 @@ const proseClasses = computed(() => {
     'prose-code:bg-gray-100',
     'prose-code:text-gray-800',
     'prose-blockquote:border-primary',
-    'prose-blockquote:text-gray-700'
-  ]
-})
+    'prose-blockquote:text-gray-700',
+  ];
+});
 </script>

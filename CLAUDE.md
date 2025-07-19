@@ -219,12 +219,13 @@ A task is **Done** only when **ALL** of the following are complete:
 ---
 id: task-42
 title: Add GraphQL resolver
-priority: high    # Set priority here
+priority: high # Set priority here
 status: To Do
 ---
 ```
 
 **Why this matters:**
+
 - Task IDs must be sequential numbers for proper dependency tracking
 - Priority is metadata that can change; task ID should be permanent
 - Backlog.md CLI expects sequential numbering for task references
