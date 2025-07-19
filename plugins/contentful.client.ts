@@ -1,15 +1,16 @@
 import { createClient } from 'contentful'
+import type { ContentfulClientApi } from 'contentful'
 
 export default defineNuxtPlugin(async () => {
   const runtimeConfig = useRuntimeConfig()
   
   // Check if Contentful is configured
-  if (!runtimeConfig.contentfulSpaceId || !runtimeConfig.contentfulAccessToken) {
+  if (!runtimeConfig.public.contentfulSpaceId || !runtimeConfig.public.contentfulAccessToken) {
     console.warn('[Contentful Plugin] Missing configuration, client not initialized')
     return {
       provide: {
-        contentful: null,
-        contentfulPreview: null,
+        contentful: null as ContentfulClientApi<undefined> | null,
+        contentfulPreview: null as ContentfulClientApi<undefined> | null,
       },
     }
   }
@@ -17,22 +18,15 @@ export default defineNuxtPlugin(async () => {
   try {
     // Create production client
     const contentfulClient = createClient({
-      space: runtimeConfig.contentfulSpaceId,
-      accessToken: runtimeConfig.contentfulAccessToken,
-      environment: runtimeConfig.contentfulEnvironment || 'master',
-      host: runtimeConfig.contentfulHost || 'cdn.contentful.com',
+      space: runtimeConfig.public.contentfulSpaceId,
+      accessToken: runtimeConfig.public.contentfulAccessToken,
+      environment: runtimeConfig.public.contentfulEnvironment || 'master',
+      host: runtimeConfig.public.contentfulHost || 'cdn.contentful.com',
     })
 
-    // Create preview client if preview token is available
+    // Preview client is not available on client-side (preview tokens are private)
+    // Preview functionality should be handled server-side only
     let previewClient = null
-    if (runtimeConfig.contentfulPreviewAccessToken) {
-      previewClient = createClient({
-        space: runtimeConfig.contentfulSpaceId,
-        accessToken: runtimeConfig.contentfulPreviewAccessToken,
-        environment: runtimeConfig.contentfulEnvironment || 'master',
-        host: runtimeConfig.contentfulPreviewHost || 'preview.contentful.com',
-      })
-    }
 
     // Perform health check in development
     if (process.env.NODE_ENV === 'development') {

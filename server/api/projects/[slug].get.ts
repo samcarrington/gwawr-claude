@@ -1,4 +1,4 @@
-import { createClient } from 'contentful'
+import { getContentfulClient, isContentfulConfigured, getContentfulConfig } from '~/server/utils/contentful'
 import { transformProject } from '~/utils/contentful-transformers'
 
 export default defineEventHandler(async (event) => {
@@ -15,10 +15,13 @@ export default defineEventHandler(async (event) => {
     // Set cache headers for individual projects (longer cache since they change less frequently)
     setHeader(event, 'Cache-Control', 'public, max-age=1800') // 30 minutes
 
-    // Check if Contentful is configured
-    const config = useRuntimeConfig(event)
-    if (!config.contentfulSpaceId || !config.contentfulAccessToken) {
-      console.warn('[API] Contentful not configured, using mock data for project:', slug)
+    // Get Contentful client using centralized service
+    const client = getContentfulClient(event)
+    
+    if (!client) {
+      const config = getContentfulConfig(event)
+      console.warn('[API] Contentful not available, config:', config)
+      console.warn('[API] Using mock data for project:', slug)
       
       // Fallback to mock data
       const { getProjects } = await import('~/data/projects')
@@ -34,13 +37,6 @@ export default defineEventHandler(async (event) => {
       
       return { project }
     }
-
-    // Create Contentful client
-    const client = createClient({
-      space: config.contentfulSpaceId,
-      accessToken: config.contentfulAccessToken,
-      environment: config.contentfulEnvironment || 'master',
-    })
 
     // Fetch project by slug from Contentful
     const response = await client.getEntries({
