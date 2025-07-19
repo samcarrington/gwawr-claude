@@ -132,7 +132,7 @@ const props = defineProps<{
 const projectImage = computed(() => {
   return props.project.images && props.project.images.length > 0 
     ? props.project.images[0] 
-    : undefined
+    : null
 })
 
 // Get badge variant based on project status
