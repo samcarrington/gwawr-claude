@@ -90,32 +90,34 @@
         </UButton>
         
         <!-- Secondary Actions -->
-        <div class="flex gap-2" v-if="project.liveUrl || project.repositoryUrl">
-          <UButton
-            v-if="project.liveUrl"
-            size="sm"
-            variant="outline"
-            :to="project.liveUrl"
-            target="_blank"
-            external
-            class="flex-1"
-          >
-            <UIcon name="i-heroicons-globe-alt" class="mr-1" />
-            Live Demo
-          </UButton>
-          <UButton
-            v-if="project.repositoryUrl"
-            size="sm"
-            variant="ghost"
-            :to="project.repositoryUrl"
-            target="_blank"
-            external
-            class="flex-1"
-          >
-            <UIcon name="i-heroicons-code-bracket" class="mr-1" />
-            Repository
-          </UButton>
-        </div>
+        <template v-if="project.liveUrl || project.repositoryUrl">
+          <div class="flex gap-2">
+            <UButton
+              v-if="project.liveUrl"
+              size="sm"
+              variant="outline"
+              :to="project.liveUrl"
+              target="_blank"
+              external
+              class="flex-1"
+            >
+              <UIcon name="i-heroicons-globe-alt" class="mr-1" />
+              Live Demo
+            </UButton>
+            <UButton
+              v-if="project.repositoryUrl"
+              size="sm"
+              variant="ghost"
+              :to="project.repositoryUrl"
+              target="_blank"
+              external
+              class="flex-1"
+            >
+              <UIcon name="i-heroicons-code-bracket" class="mr-1" />
+              Repository
+            </UButton>
+          </div>
+        </template>
       </div>
     </template>
   </MoleculesCardsBase>
