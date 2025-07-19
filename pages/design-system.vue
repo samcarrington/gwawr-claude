@@ -7,7 +7,8 @@
           Design System Showcase
         </AtomsTypographyPage>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-          A comprehensive overview of our design system components, patterns, and guidelines.
+          A comprehensive overview of our design system components, patterns,
+          and guidelines.
         </p>
       </div>
 
@@ -184,9 +185,15 @@
           <div>
             <h4 class="text-lg font-semibold mb-4">Badge Outline</h4>
             <div class="flex flex-wrap gap-4">
-              <AtomsBadges variant="primary" :outline="true">Outline Primary</AtomsBadges>
-              <AtomsBadges variant="secondary" :outline="true">Outline Secondary</AtomsBadges>
-              <AtomsBadges variant="success" :outline="true">Outline Success</AtomsBadges>
+              <AtomsBadges variant="primary" :outline="true"
+                >Outline Primary</AtomsBadges
+              >
+              <AtomsBadges variant="secondary" :outline="true"
+                >Outline Secondary</AtomsBadges
+              >
+              <AtomsBadges variant="success" :outline="true"
+                >Outline Success</AtomsBadges
+              >
             </div>
           </div>
         </div>
@@ -270,7 +277,8 @@
             </template>
             <template #content>
               <p class="text-gray-600">
-                This is a basic card component with header, content, and footer sections.
+                This is a basic card component with header, content, and footer
+                sections.
               </p>
             </template>
             <template #footer>
@@ -315,23 +323,33 @@
             <h4 class="text-lg font-semibold mb-4">Primary Colors</h4>
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
               <div class="text-center">
-                <div class="w-16 h-16 bg-primary-100 rounded-lg mx-auto mb-2 border"></div>
+                <div
+                  class="w-16 h-16 bg-primary-100 rounded-lg mx-auto mb-2 border"
+                ></div>
                 <p class="text-sm font-medium">primary-100</p>
               </div>
               <div class="text-center">
-                <div class="w-16 h-16 bg-primary-300 rounded-lg mx-auto mb-2"></div>
+                <div
+                  class="w-16 h-16 bg-primary-300 rounded-lg mx-auto mb-2"
+                ></div>
                 <p class="text-sm font-medium">primary-300</p>
               </div>
               <div class="text-center">
-                <div class="w-16 h-16 bg-primary-500 rounded-lg mx-auto mb-2"></div>
+                <div
+                  class="w-16 h-16 bg-primary-500 rounded-lg mx-auto mb-2"
+                ></div>
                 <p class="text-sm font-medium">primary-500</p>
               </div>
               <div class="text-center">
-                <div class="w-16 h-16 bg-primary-700 rounded-lg mx-auto mb-2"></div>
+                <div
+                  class="w-16 h-16 bg-primary-700 rounded-lg mx-auto mb-2"
+                ></div>
                 <p class="text-sm font-medium">primary-700</p>
               </div>
               <div class="text-center">
-                <div class="w-16 h-16 bg-primary-900 rounded-lg mx-auto mb-2"></div>
+                <div
+                  class="w-16 h-16 bg-primary-900 rounded-lg mx-auto mb-2"
+                ></div>
                 <p class="text-sm font-medium">primary-900</p>
               </div>
             </div>
@@ -342,23 +360,33 @@
             <h4 class="text-lg font-semibold mb-4">Secondary Colors</h4>
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
               <div class="text-center">
-                <div class="w-16 h-16 bg-secondary-100 rounded-lg mx-auto mb-2 border"></div>
+                <div
+                  class="w-16 h-16 bg-secondary-100 rounded-lg mx-auto mb-2 border"
+                ></div>
                 <p class="text-sm font-medium">secondary-100</p>
               </div>
               <div class="text-center">
-                <div class="w-16 h-16 bg-secondary-300 rounded-lg mx-auto mb-2"></div>
+                <div
+                  class="w-16 h-16 bg-secondary-300 rounded-lg mx-auto mb-2"
+                ></div>
                 <p class="text-sm font-medium">secondary-300</p>
               </div>
               <div class="text-center">
-                <div class="w-16 h-16 bg-secondary-500 rounded-lg mx-auto mb-2"></div>
+                <div
+                  class="w-16 h-16 bg-secondary-500 rounded-lg mx-auto mb-2"
+                ></div>
                 <p class="text-sm font-medium">secondary-500</p>
               </div>
               <div class="text-center">
-                <div class="w-16 h-16 bg-secondary-700 rounded-lg mx-auto mb-2"></div>
+                <div
+                  class="w-16 h-16 bg-secondary-700 rounded-lg mx-auto mb-2"
+                ></div>
                 <p class="text-sm font-medium">secondary-700</p>
               </div>
               <div class="text-center">
-                <div class="w-16 h-16 bg-secondary-900 rounded-lg mx-auto mb-2"></div>
+                <div
+                  class="w-16 h-16 bg-secondary-900 rounded-lg mx-auto mb-2"
+                ></div>
                 <p class="text-sm font-medium">secondary-900</p>
               </div>
             </div>
@@ -378,18 +406,26 @@
           <div class="p-6 border rounded-lg">
             <h5 class="text-lg font-semibold mb-2">Design System Guide</h5>
             <p class="text-gray-600 mb-4">
-              Complete documentation including component usage, theme configuration, and development guidelines.
+              Complete documentation including component usage, theme
+              configuration, and development guidelines.
             </p>
-            <a href="/docs/design-system-guide.md" class="text-primary hover:underline">
+            <a
+              href="/docs/design-system-guide.md"
+              class="text-primary hover:underline"
+            >
               View Documentation →
             </a>
           </div>
           <div class="p-6 border rounded-lg">
             <h5 class="text-lg font-semibold mb-2">Component Library</h5>
             <p class="text-gray-600 mb-4">
-              Detailed component documentation with props, examples, and usage patterns.
+              Detailed component documentation with props, examples, and usage
+              patterns.
             </p>
-            <a href="/docs/design-system.md" class="text-primary hover:underline">
+            <a
+              href="/docs/design-system.md"
+              class="text-primary hover:underline"
+            >
               View Components →
             </a>
           </div>
@@ -406,7 +442,8 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: 'Comprehensive design system showcase with components, patterns, and guidelines for the GWAWR website.',
+      content:
+        'Comprehensive design system showcase with components, patterns, and guidelines for the GWAWR website.',
     },
   ],
 });

@@ -1,9 +1,5 @@
 <template>
-  <component
-    :is="tag"
-    :class="[cardClasses, $attrs.class]"
-    v-bind="$attrs"
-  >
+  <component :is="tag" :class="[cardClasses, $attrs.class]" v-bind="$attrs">
     <!-- Header slot for images, icons, etc. -->
     <div v-if="$slots.header" :class="headerClasses">
       <slot name="header" />
@@ -113,35 +109,35 @@ const cardClasses = computed(() => {
 
 const headerClasses = computed(() => {
   const classes = ['card-header'];
-  
+
   // Remove padding for header if card has padding
   if (props.padding !== 'none') {
     classes.push('rounded-t-' + props.rounded);
   }
-  
+
   return classes.join(' ');
 });
 
 const contentClasses = computed(() => {
   const classes = ['card-content'];
-  
+
   // Apply padding to content area
   if (props.padding !== 'none') {
     classes.push(paddingClasses[props.padding] || paddingClasses.md);
   }
-  
+
   return classes.join(' ');
 });
 
 const footerClasses = computed(() => {
   const classes = ['card-footer'];
-  
+
   // Apply padding to footer area
   if (props.padding !== 'none') {
     classes.push(paddingClasses[props.padding] || paddingClasses.md);
     classes.push('pt-0'); // Remove top padding for footer
   }
-  
+
   return classes.join(' ');
 });
 </script>

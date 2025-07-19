@@ -1,75 +1,82 @@
-import { getContentfulClient } from '~/utils/contentful-client'
-import { 
-  transformBlogPost, 
+import { getContentfulClient } from '~/utils/contentful-client';
+import {
+  transformBlogPost,
   transformBlogPosts,
   transformProject,
   transformProjects,
   transformTestimonial,
   transformTestimonials,
-  handleTransformationError
-} from '~/utils/contentful-transformers'
-import type { ContentfulQueryOptions } from '~/types/contentful'
-import type { BlogPost } from '~/types/blog'
+  handleTransformationError,
+} from '~/utils/contentful-transformers';
+import type { ContentfulQueryOptions } from '~/types/contentful';
+import type { BlogPost } from '~/types/blog';
 
 /**
  * Service layer for Contentful operations
  * Centralizes business logic and data transformation
  */
 export class ContentfulService {
-  private client: ReturnType<typeof getContentfulClient>
-  
+  private client: ReturnType<typeof getContentfulClient>;
+
   constructor() {
-    this.client = getContentfulClient()
+    this.client = getContentfulClient();
   }
-  
+
   // Blog Post Operations
-  
+
   /**
    * Get all blog posts with optional filtering
    */
-  async getBlogPosts(options: {
-    category?: string
-    featured?: boolean
-    search?: string
-    limit?: number
-    skip?: number
-  } = {}): Promise<{ items: BlogPost[]; total: number; skip: number; limit: number }> {
+  async getBlogPosts(
+    options: {
+      category?: string;
+      featured?: boolean;
+      search?: string;
+      limit?: number;
+      skip?: number;
+    } = {}
+  ): Promise<{
+    items: BlogPost[];
+    total: number;
+    skip: number;
+    limit: number;
+  }> {
     try {
       const query: ContentfulQueryOptions = {
         content_type: 'blogPost',
         order: '-fields.publishedAt',
         limit: options.limit || 20,
         skip: options.skip || 0,
-      }
-      
+      };
+
       // Add filters
       if (options.category && options.category !== 'All') {
-        query['fields.category'] = options.category
+        query['fields.category'] = options.category;
       }
-      
+
       if (options.featured !== undefined) {
-        query['fields.featured'] = options.featured
+        query['fields.featured'] = options.featured;
       }
-      
+
       if (options.search) {
-        query['query'] = options.search
+        query['query'] = options.search;
       }
-      
-      const response = await this.client.getEntriesByType('blogPost', query)
-      const transformedPosts = await transformBlogPosts(response.items)
-      
+
+      const response = await this.client.getEntriesByType('blogPost', query);
+      const transformedPosts = await transformBlogPosts(response.items);
+
       return {
         items: transformedPosts,
         total: response.total,
         skip: response.skip,
         limit: response.limit,
-      }
+      };
     } catch (error) {
-      handleTransformationError(error, 'getBlogPosts')
-      throw new Error('Failed to fetch blog posts')
+      handleTransformationError(error, 'getBlogPosts');
+      throw new Error('Failed to fetch blog posts');
     }
   }
-  
+
   /**
    * Get a single blog post by slug
    */
@@ -77,15 +84,15 @@ export class ContentfulService {
     try {
       const entry = await this.client.getEntryBySlug('blogPost', slug, {
         include: 2,
-      })
-      
-      return entry ? await transformBlogPost(entry) : null
+      });
+
+      return entry ? await transformBlogPost(entry) : null;
     } catch (error) {
-      handleTransformationError(error, `getBlogPost(${slug})`)
-      return null
+      handleTransformationError(error, `getBlogPost(${slug})`);
+      return null;
     }
   }
-  
+
   /**
    * Get featured blog post
    */
@@ -95,15 +102,17 @@ export class ContentfulService {
         'fields.featured': true,
         order: '-fields.publishedAt',
         limit: 1,
-      })
-      
-      return response.items.length > 0 ? await transformBlogPost(response.items[0]) : null
+      });
+
+      return response.items.length > 0
+        ? await transformBlogPost(response.items[0])
+        : null;
     } catch (error) {
-      handleTransformationError(error, 'getFeaturedBlogPost')
-      return null
+      handleTransformationError(error, 'getFeaturedBlogPost');
+      return null;
     }
   }
-  
+
   /**
    * Get blog categories
    */
@@ -112,103 +121,105 @@ export class ContentfulService {
       const response = await this.client.getEntriesByType('blogPost', {
         select: 'fields.category',
         limit: 1000,
-      })
-      
-      const categories = new Set<string>()
+      });
+
+      const categories = new Set<string>();
       response.items.forEach((entry: any) => {
-        const category = entry.fields.category
+        const category = entry.fields.category;
         if (category && typeof category === 'string') {
-          categories.add(category)
+          categories.add(category);
         }
-      })
-      
-      return Array.from(categories).sort()
+      });
+
+      return Array.from(categories).sort();
     } catch (error) {
-      handleTransformationError(error, 'getBlogCategories')
-      return []
+      handleTransformationError(error, 'getBlogCategories');
+      return [];
     }
   }
-  
+
   /**
    * Get related blog posts by category
    */
   async getRelatedBlogPosts(postId: string, limit = 3): Promise<BlogPost[]> {
     try {
       // First get the current post to find its category
-      const currentPost = await this.client.getEntry(postId)
-      if (!currentPost) return []
-      
-      const category = currentPost.fields.category
-      if (!category) return []
-      
+      const currentPost = await this.client.getEntry(postId);
+      if (!currentPost) return [];
+
+      const category = currentPost.fields.category;
+      if (!category) return [];
+
       // Get related posts
       const response = await this.client.getEntriesByType('blogPost', {
         'fields.category': category,
         'sys.id[ne]': postId,
         order: '-fields.publishedAt',
         limit,
-      })
-      
-      return await transformBlogPosts(response.items)
+      });
+
+      return await transformBlogPosts(response.items);
     } catch (error) {
-      handleTransformationError(error, `getRelatedBlogPosts(${postId})`)
-      return []
+      handleTransformationError(error, `getRelatedBlogPosts(${postId})`);
+      return [];
     }
   }
-  
+
   // Project Operations
-  
+
   /**
    * Get all projects with optional filtering
    */
-  async getProjects(options: {
-    category?: string
-    featured?: boolean
-    status?: string
-    search?: string
-    limit?: number
-    skip?: number
-  } = {}): Promise<{ items: any[]; total: number; skip: number; limit: number }> {
+  async getProjects(
+    options: {
+      category?: string;
+      featured?: boolean;
+      status?: string;
+      search?: string;
+      limit?: number;
+      skip?: number;
+    } = {}
+  ): Promise<{ items: any[]; total: number; skip: number; limit: number }> {
     try {
       const query: ContentfulQueryOptions = {
         content_type: 'project',
         order: '-fields.date',
         limit: options.limit || 20,
         skip: options.skip || 0,
-      }
-      
+      };
+
       // Add filters
       if (options.category && options.category !== 'All') {
-        query['fields.category'] = options.category
+        query['fields.category'] = options.category;
       }
-      
+
       if (options.featured !== undefined) {
-        query['fields.featured'] = options.featured
+        query['fields.featured'] = options.featured;
       }
-      
+
       if (options.status) {
-        query['fields.status'] = options.status
+        query['fields.status'] = options.status;
       }
-      
+
       if (options.search) {
-        query['query'] = options.search
+        query['query'] = options.search;
       }
-      
-      const response = await this.client.getEntriesByType('project', query)
-      const transformedProjects = await transformProjects(response.items)
-      
+
+      const response = await this.client.getEntriesByType('project', query);
+      const transformedProjects = await transformProjects(response.items);
+
       return {
         items: transformedProjects,
         total: response.total,
         skip: response.skip,
         limit: response.limit,
-      }
+      };
     } catch (error) {
-      handleTransformationError(error, 'getProjects')
-      throw new Error('Failed to fetch projects')
+      handleTransformationError(error, 'getProjects');
+      throw new Error('Failed to fetch projects');
     }
   }
-  
+
   /**
    * Get featured projects
    */
@@ -218,27 +229,29 @@ export class ContentfulService {
         'fields.featured': true,
         order: '-fields.date',
         limit,
-      })
-      
-      return await transformProjects(response.items)
+      });
+
+      return await transformProjects(response.items);
     } catch (error) {
-      handleTransformationError(error, 'getFeaturedProjects')
-      return []
+      handleTransformationError(error, 'getFeaturedProjects');
+      return [];
     }
   }
-  
+
   // Testimonial Operations
-  
+
   /**
    * Get all testimonials with optional filtering
    */
-  async getTestimonials(options: {
-    featured?: boolean
-    minRating?: number
-    search?: string
-    limit?: number
-    skip?: number
-  } = {}): Promise<{ items: any[]; total: number; skip: number; limit: number }> {
+  async getTestimonials(
+    options: {
+      featured?: boolean;
+      minRating?: number;
+      search?: string;
+      limit?: number;
+      skip?: number;
+    } = {}
+  ): Promise<{ items: any[]; total: number; skip: number; limit: number }> {
     try {
       const query: ContentfulQueryOptions = {
         content_type: 'testimonial',
@@ -246,36 +259,36 @@ export class ContentfulService {
         limit: options.limit || 20,
         skip: options.skip || 0,
         include: 2,
-      }
-      
+      };
+
       // Add filters
       if (options.featured !== undefined) {
-        query['fields.featured'] = options.featured
+        query['fields.featured'] = options.featured;
       }
-      
+
       if (options.minRating) {
-        query['fields.rating[gte]'] = options.minRating
+        query['fields.rating[gte]'] = options.minRating;
       }
-      
+
       if (options.search) {
-        query['query'] = options.search
+        query['query'] = options.search;
       }
-      
-      const response = await this.client.getEntriesByType('testimonial', query)
-      const transformedTestimonials = transformTestimonials(response.items)
-      
+
+      const response = await this.client.getEntriesByType('testimonial', query);
+      const transformedTestimonials = transformTestimonials(response.items);
+
       return {
         items: transformedTestimonials,
         total: response.total,
         skip: response.skip,
         limit: response.limit,
-      }
+      };
     } catch (error) {
-      handleTransformationError(error, 'getTestimonials')
-      throw new Error('Failed to fetch testimonials')
+      handleTransformationError(error, 'getTestimonials');
+      throw new Error('Failed to fetch testimonials');
     }
   }
-  
+
   /**
    * Get featured testimonials
    */
@@ -286,43 +299,43 @@ export class ContentfulService {
         order: '-fields.rating,-sys.createdAt',
         limit,
         include: 2,
-      })
-      
+      });
+
       // Note: transformTestimonials may need to be updated to async if it uses renderContent
-      return transformTestimonials(response.items)
+      return transformTestimonials(response.items);
     } catch (error) {
-      handleTransformationError(error, 'getFeaturedTestimonials')
-      return []
+      handleTransformationError(error, 'getFeaturedTestimonials');
+      return [];
     }
   }
-  
+
   // Health Check
-  
+
   /**
    * Test Contentful connection
    */
   async healthCheck(): Promise<{ status: 'ok' | 'error'; message?: string }> {
     try {
-      await this.client.healthCheck()
-      return { status: 'ok' }
+      await this.client.healthCheck();
+      return { status: 'ok' };
     } catch (error) {
-      return { 
-        status: 'error', 
-        message: error instanceof Error ? error.message : 'Unknown error' 
-      }
+      return {
+        status: 'error',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      };
     }
   }
 }
 
 // Singleton instance
-let contentfulService: ContentfulService | null = null
+let contentfulService: ContentfulService | null = null;
 
 /**
  * Get singleton ContentfulService instance
  */
 export function getContentfulService(): ContentfulService {
   if (!contentfulService) {
-    contentfulService = new ContentfulService()
+    contentfulService = new ContentfulService();
   }
-  return contentfulService
+  return contentfulService;
 }

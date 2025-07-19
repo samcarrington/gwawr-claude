@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { mount } from '@vue/test-utils'
-import { ref } from 'vue'
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { mount } from '@vue/test-utils';
+import { ref } from 'vue';
 
 // Mock the composable
 const mockUseProjectFilter = {
@@ -15,12 +15,12 @@ const mockUseProjectFilter = {
   pending: ref(false),
   error: ref(null),
   resetFilters: vi.fn(),
-  refresh: vi.fn()
-}
+  refresh: vi.fn(),
+};
 
 const mockUseFeaturedProjects = {
-  data: ref([])
-}
+  data: ref([]),
+};
 
 // Mock Nuxt composables
 vi.mock('#app', () => ({
@@ -29,38 +29,38 @@ vi.mock('#app', () => ({
   useRouter: vi.fn(() => ({ replace: vi.fn() })),
   useLazyFetch: vi.fn(() => mockUseProjectFilter),
   watch: vi.fn(),
-  computed: vi.fn((fn) => ({ value: fn() }))
-}))
+  computed: vi.fn(fn => ({ value: fn() })),
+}));
 
 vi.mock('~/composables/useProjects', () => ({
   useProjectFilter: vi.fn(() => mockUseProjectFilter),
-  useFeaturedProjects: vi.fn(() => mockUseFeaturedProjects)
-}))
+  useFeaturedProjects: vi.fn(() => mockUseFeaturedProjects),
+}));
 
 describe('Projects Page Integration', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
   it('should render filter tabs', async () => {
     // This is a basic integration test to verify the page structure
     // More comprehensive E2E tests would be needed for full filter testing
-    expect(mockUseProjectFilter.categories.value).toContain('All')
-    expect(mockUseProjectFilter.statusOptions).toContain('All')
-    expect(mockUseProjectFilter.statusOptions).toContain('completed')
-    expect(mockUseProjectFilter.statusOptions).toContain('in-progress')
-    expect(mockUseProjectFilter.statusOptions).toContain('planned')
-  })
+    expect(mockUseProjectFilter.categories.value).toContain('All');
+    expect(mockUseProjectFilter.statusOptions).toContain('All');
+    expect(mockUseProjectFilter.statusOptions).toContain('completed');
+    expect(mockUseProjectFilter.statusOptions).toContain('in-progress');
+    expect(mockUseProjectFilter.statusOptions).toContain('planned');
+  });
 
   it('should have reset filters functionality', () => {
-    mockUseProjectFilter.resetFilters()
-    expect(mockUseProjectFilter.resetFilters).toHaveBeenCalled()
-  })
+    mockUseProjectFilter.resetFilters();
+    expect(mockUseProjectFilter.resetFilters).toHaveBeenCalled();
+  });
 
   it('should provide filter state management', () => {
-    expect(mockUseProjectFilter.selectedCategory).toBeDefined()
-    expect(mockUseProjectFilter.selectedStatus).toBeDefined()
-    expect(mockUseProjectFilter.searchQuery).toBeDefined()
-    expect(mockUseProjectFilter.showFeaturedOnly).toBeDefined()
-  })
-})
+    expect(mockUseProjectFilter.selectedCategory).toBeDefined();
+    expect(mockUseProjectFilter.selectedStatus).toBeDefined();
+    expect(mockUseProjectFilter.searchQuery).toBeDefined();
+    expect(mockUseProjectFilter.showFeaturedOnly).toBeDefined();
+  });
+});

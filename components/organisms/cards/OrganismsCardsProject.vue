@@ -1,14 +1,8 @@
 <template>
-  <MoleculesCardsBase
-    variant="default"
-    size="md"
-    padding="md"
-    hover
-    overflow
-  >
+  <MoleculesCardsBase variant="default" size="md" padding="md" hover overflow>
     <!-- Project Image -->
     <template #header>
-      <NuxtLink 
+      <NuxtLink
         :to="`/projects/${project.slug || project.id}`"
         class="block transition-transform duration-200 hover:scale-105"
         :aria-label="`View details for ${project.title}`"
@@ -40,14 +34,14 @@
         />
       </div>
 
-      <NuxtLink 
+      <NuxtLink
         :to="`/projects/${project.slug || project.id}`"
         class="block"
         :aria-label="`View details for ${project.title}`"
       >
-        <AtomsTypographyCard 
-          tag="h3" 
-          size="default" 
+        <AtomsTypographyCard
+          tag="h3"
+          size="default"
           spacing="tight"
           class="transition-colors duration-200 hover:text-primary-600 hover:underline cursor-pointer"
         >
@@ -55,8 +49,8 @@
         </AtomsTypographyCard>
       </NuxtLink>
       <div class="text-gray-600 mb-4 line-clamp-3">
-        <AtomsContentRenderer 
-          :content="project.description" 
+        <AtomsContentRenderer
+          :content="project.description"
           size="sm"
           fallback-text="No description available"
         />
@@ -70,7 +64,6 @@
           size="xs"
         />
       </div>
-
     </template>
 
     <!-- Project Links -->
@@ -88,7 +81,7 @@
           <UIcon name="i-heroicons-eye" class="mr-1" />
           View Details
         </UButton>
-        
+
         <!-- Secondary Actions -->
         <template v-if="project.liveUrl || project.repositoryUrl">
           <div class="flex gap-2">
@@ -124,30 +117,30 @@
 </template>
 
 <script setup lang="ts">
-import type { Project } from '~/types/project'
+import type { Project } from '~/types/project';
 
 const props = defineProps<{
-  project: Project
-}>()
+  project: Project;
+}>();
 
 // Get the first image from the images array
 const projectImage = computed(() => {
-  return props.project.images && props.project.images.length > 0 
-    ? props.project.images[0] 
-    : null
-})
+  return props.project.images && props.project.images.length > 0
+    ? props.project.images[0]
+    : null;
+});
 
 // Get badge variant based on project status
 function getStatusVariant(status: Project['status']) {
   switch (status) {
     case 'completed':
-      return 'success' as const
+      return 'success' as const;
     case 'in-progress':
-      return 'warning' as const
+      return 'warning' as const;
     case 'planned':
-      return 'secondary' as const
+      return 'secondary' as const;
     default:
-      return 'default' as const
+      return 'default' as const;
   }
 }
 </script>

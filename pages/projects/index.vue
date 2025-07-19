@@ -13,7 +13,10 @@
       </div>
 
       <!-- Featured Project -->
-      <OrganismsHeroesProject v-if="featuredProject" :project="featuredProject" />
+      <OrganismsHeroesProject
+        v-if="featuredProject"
+        :project="featuredProject"
+      />
 
       <!-- Filter Tabs -->
       <div class="mb-12">
@@ -45,7 +48,11 @@
             color="secondary"
             @click="selectedStatus = status"
           >
-            {{ status === 'All' ? 'All Status' : status.charAt(0).toUpperCase() + status.slice(1) }}
+            {{
+              status === 'All'
+                ? 'All Status'
+                : status.charAt(0).toUpperCase() + status.slice(1)
+            }}
           </AtomsButtonsBase>
         </div>
       </div>
@@ -92,14 +99,18 @@
       </div>
 
       <!-- Empty State -->
-      <div
-        v-else
-        class="text-center py-16 text-gray-500"
-      >
+      <div v-else class="text-center py-16 text-gray-500">
         <UIcon name="i-heroicons-folder-open" class="w-16 h-16 mx-auto mb-4" />
-        <AtomsTypographyCard tag="h3" size="default" align="center" spacing="tight">No projects found</AtomsTypographyCard>
+        <AtomsTypographyCard
+          tag="h3"
+          size="default"
+          align="center"
+          spacing="tight"
+          >No projects found</AtomsTypographyCard
+        >
         <p class="text-lg">
-          Try selecting a different category or status, or check back later for new projects.
+          Try selecting a different category or status, or check back later for
+          new projects.
         </p>
       </div>
     </UContainer>
@@ -117,10 +128,10 @@ useHead({
         'Browse my portfolio of web development projects, featuring full-stack applications, frontend showcases, and creative coding experiments.',
     },
   ],
-})
+});
 
 // Use new Contentful data fetching strategy (non-blocking for better UX)
-const { data: featuredProjects } = useFeaturedProjects(1)
+const { data: featuredProjects } = useFeaturedProjects(1);
 
 // Filter functionality using the new composable
 const {
@@ -131,12 +142,12 @@ const {
   projects,
   pending,
   error,
-} = useProjectFilter()
+} = useProjectFilter();
 
 // Featured project (first featured project)
-const featuredProject = computed(() => 
-  featuredProjects.value && featuredProjects.value.length > 0 
-    ? featuredProjects.value[0] 
+const featuredProject = computed(() =>
+  featuredProjects.value && featuredProjects.value.length > 0
+    ? featuredProjects.value[0]
     : null
-)
+);
 </script>

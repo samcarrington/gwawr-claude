@@ -3,6 +3,7 @@
 ## Current Components Analysis
 
 ### Atoms (Basic building blocks)
+
 - **BaseButton.vue** - Basic button component with variants
 - **ButtonPrimary.vue** - Specific button variant
 - **ButtonSecondary.vue** - Specific button variant
@@ -13,11 +14,13 @@
 - **CardTitle.vue** - Specific title variant
 
 ### Molecules (Simple combinations of atoms)
+
 - **BaseCard.vue** - Card container with slots
 - **TagList.vue** - List of badge components
 - **CardImage.vue** - Image component with badge overlay
 
 ### Organisms (Complex combinations of molecules/atoms)
+
 - **Header.vue** - Navigation header with logo, menu, mobile toggle
 - **Footer.vue** - Site footer with links and information
 - **CallToAction.vue** - CTA section with title, description, buttons
@@ -28,6 +31,7 @@
 - **TestimonialCard.vue** - Testimonial card with quote, author
 
 ### Templates (Page-level layout components)
+
 - Currently handled by pages/ and layouts/ directories
 
 ## Proposed Folder Structure with Nuxt Auto-Import Naming
@@ -128,15 +132,15 @@ Based on Nuxt's auto-import system, components get names from their directory pa
 
 ### Current vs New Component Names
 
-| Current Component | New Location | Auto-Import Name |
-|---|---|---|
-| `BaseButton.vue` | `atoms/BaseButton.vue` | `<AtomsBaseButton />` |
-| `ButtonPrimary.vue` | `atoms/ButtonPrimary.vue` | `<AtomsButtonPrimary />` |
-| `Badge.vue` | `atoms/Badge.vue` | `<AtomsBadge />` |
-| `BaseCard.vue` | `molecules/BaseCard.vue` | `<MoleculesBaseCard />` |
-| `TagList.vue` | `molecules/TagList.vue` | `<MoleculesTagList />` |
-| `Header.vue` | `organisms/Header.vue` | `<OrganismsHeader />` |
-| `CallToAction.vue` | `organisms/CallToAction.vue` | `<OrganismsCallToAction />` |
+| Current Component   | New Location                 | Auto-Import Name            |
+| ------------------- | ---------------------------- | --------------------------- |
+| `BaseButton.vue`    | `atoms/BaseButton.vue`       | `<AtomsBaseButton />`       |
+| `ButtonPrimary.vue` | `atoms/ButtonPrimary.vue`    | `<AtomsButtonPrimary />`    |
+| `Badge.vue`         | `atoms/Badge.vue`            | `<AtomsBadge />`            |
+| `BaseCard.vue`      | `molecules/BaseCard.vue`     | `<MoleculesBaseCard />`     |
+| `TagList.vue`       | `molecules/TagList.vue`      | `<MoleculesTagList />`      |
+| `Header.vue`        | `organisms/Header.vue`       | `<OrganismsHeader />`       |
+| `CallToAction.vue`  | `organisms/CallToAction.vue` | `<OrganismsCallToAction />` |
 
 ### Naming Strategy
 

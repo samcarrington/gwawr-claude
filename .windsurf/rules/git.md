@@ -1,6 +1,6 @@
 ---
 trigger: model_decision
-description: Use these rules when interacting with Git version control
+description: Use these rules when interacting with Git, branching, committing and opening PRs
 ---
 
 # Working with Git Version Control

@@ -33,7 +33,13 @@
       </div>
 
       <!-- Title -->
-      <AtomsTypographyCard tag="h2" size="default" spacing="default" hover class="line-clamp-2">
+      <AtomsTypographyCard
+        tag="h2"
+        size="default"
+        spacing="default"
+        hover
+        class="line-clamp-2"
+      >
         {{ post.title }}
       </AtomsTypographyCard>
 
@@ -51,7 +57,6 @@
           prefix="#"
         />
       </div>
-
     </template>
 
     <!-- Read More Link -->

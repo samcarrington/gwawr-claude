@@ -5,6 +5,7 @@ This project uses Vitest with jsdom for unit testing Vue components and composab
 ## Setup
 
 The testing framework includes:
+
 - **Vitest**: Fast unit test framework with excellent TypeScript support
 - **jsdom**: Lightweight DOM implementation for Node.js environments
 - **@vue/test-utils**: Vue component testing utilities
@@ -31,17 +32,17 @@ npm test -- --watch
 ### Basic Component Test
 
 ```typescript
-import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
-import MyComponent from './MyComponent.vue'
+import { describe, it, expect } from 'vitest';
+import { mount } from '@vue/test-utils';
+import MyComponent from './MyComponent.vue';
 
 describe('MyComponent', () => {
   it('should render with default props', () => {
-    const wrapper = mount(MyComponent)
-    
-    expect(wrapper.exists()).toBe(true)
-  })
-})
+    const wrapper = mount(MyComponent);
+
+    expect(wrapper.exists()).toBe(true);
+  });
+});
 ```
 
 ### Testing Props and Slots
@@ -50,34 +51,34 @@ describe('MyComponent', () => {
 it('should render slot content', () => {
   const wrapper = mount(MyComponent, {
     slots: {
-      default: 'Hello World'
-    }
-  })
+      default: 'Hello World',
+    },
+  });
 
-  expect(wrapper.text()).toContain('Hello World')
-})
+  expect(wrapper.text()).toContain('Hello World');
+});
 
 it('should handle props correctly', () => {
   const wrapper = mount(MyComponent, {
     props: {
-      title: 'Test Title'
-    }
-  })
+      title: 'Test Title',
+    },
+  });
 
-  expect(wrapper.props('title')).toBe('Test Title')
-})
+  expect(wrapper.props('title')).toBe('Test Title');
+});
 ```
 
 ### Testing Events
 
 ```typescript
 it('should emit events correctly', async () => {
-  const wrapper = mount(MyComponent)
-  
-  await wrapper.find('button').trigger('click')
-  
-  expect(wrapper.emitted('click')).toHaveLength(1)
-})
+  const wrapper = mount(MyComponent);
+
+  await wrapper.find('button').trigger('click');
+
+  expect(wrapper.emitted('click')).toHaveLength(1);
+});
 ```
 
 ## Mocking Components
@@ -91,29 +92,30 @@ For components that use Nuxt UI components (like UButton), create stubs:
 const UButtonStub = {
   name: 'UButton',
   template: '<button v-bind="$attrs"><slot /></button>',
-  props: ['variant', 'size', 'color', 'disabled', 'loading']
-}
+  props: ['variant', 'size', 'color', 'disabled', 'loading'],
+};
 
 describe('MyComponent', () => {
   const mountOptions = {
     global: {
       components: {
-        UButton: UButtonStub
-      }
-    }
-  }
+        UButton: UButtonStub,
+      },
+    },
+  };
 
   it('should render with mocked UButton', () => {
-    const wrapper = mount(MyComponent, mountOptions)
-    
-    expect(wrapper.find('button').exists()).toBe(true)
-  })
-})
+    const wrapper = mount(MyComponent, mountOptions);
+
+    expect(wrapper.find('button').exists()).toBe(true);
+  });
+});
 ```
 
 ### Mocking Nuxt Composables
 
 Nuxt composables are automatically mocked in the test setup. Common mocks include:
+
 - `useHead`
 - `useRoute`
 - `useRouter`
@@ -146,9 +148,9 @@ components/
 ## Example Test Structure
 
 ```typescript
-import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
-import MyComponent from './MyComponent.vue'
+import { describe, it, expect } from 'vitest';
+import { mount } from '@vue/test-utils';
+import MyComponent from './MyComponent.vue';
 
 describe('MyComponent', () => {
   // Setup common mount options
@@ -156,36 +158,36 @@ describe('MyComponent', () => {
     global: {
       components: {
         // Mock any child components
-      }
-    }
-  }
+      },
+    },
+  };
 
   // Test rendering
   it('should render correctly', () => {
-    const wrapper = mount(MyComponent, mountOptions)
-    expect(wrapper.exists()).toBe(true)
-  })
+    const wrapper = mount(MyComponent, mountOptions);
+    expect(wrapper.exists()).toBe(true);
+  });
 
   // Test props
   it('should handle props correctly', () => {
     // Test implementation
-  })
+  });
 
   // Test events
   it('should emit events correctly', async () => {
     // Test implementation
-  })
+  });
 
   // Test slots
   it('should render slot content', () => {
     // Test implementation
-  })
+  });
 
   // Test edge cases
   it('should handle edge cases', () => {
     // Test implementation
-  })
-})
+  });
+});
 ```
 
 ## Coverage
@@ -193,6 +195,7 @@ describe('MyComponent', () => {
 The testing setup includes coverage reporting. Run `npm run test:coverage` to generate a coverage report.
 
 Target coverage goals:
+
 - **Statements**: 80%+
 - **Functions**: 80%+
 - **Lines**: 80%+

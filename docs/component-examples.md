@@ -13,12 +13,12 @@ This document provides practical examples of how to use the design system compon
     <AtomsTypographyPage size="hero" spacing="tight">
       Welcome to Our Platform
     </AtomsTypographyPage>
-    
+
     <!-- Section headings -->
     <AtomsTypographySection size="large" align="center">
       Our Features
     </AtomsTypographySection>
-    
+
     <!-- Card titles -->
     <AtomsTypographyCard tag="h3" size="default" spacing="default">
       Feature Title
@@ -33,15 +33,11 @@ This document provides practical examples of how to use the design system compon
 <template>
   <div class="space-y-4">
     <!-- Primary actions -->
-    <AtomsButtonsPrimary size="lg" shadow>
-      Get Started
-    </AtomsButtonsPrimary>
-    
+    <AtomsButtonsPrimary size="lg" shadow> Get Started </AtomsButtonsPrimary>
+
     <!-- Secondary actions -->
-    <AtomsButtonsSecondary size="lg">
-      Learn More
-    </AtomsButtonsSecondary>
-    
+    <AtomsButtonsSecondary size="lg"> Learn More </AtomsButtonsSecondary>
+
     <!-- Custom button with icon -->
     <AtomsButtonsBase color="primary" variant="outline" size="md">
       <template #leading>
@@ -69,13 +65,13 @@ This document provides practical examples of how to use the design system compon
         Build Amazing <span class="text-primary-200">Applications</span>
       </span>
     </template>
-    
+
     <template #subtitle>
       <p class="text-white/90">
         The modern development platform for teams who ship fast
       </p>
     </template>
-    
+
     <template #actions>
       <div class="flex flex-col sm:flex-row gap-4">
         <AtomsButtonsBase variant="solid" color="white" size="lg">
@@ -121,10 +117,10 @@ const features = [
     icon: 'i-heroicons-bolt',
     title: 'Lightning Fast',
     description: 'Built for speed with modern technologies',
-    tags: ['Vue.js', 'Nuxt.js', 'Tailwind']
+    tags: ['Vue.js', 'Nuxt.js', 'Tailwind'],
   },
   // ... more features
-]
+];
 </script>
 ```
 
@@ -144,15 +140,15 @@ const features = [
   >
     <div class="prose prose-lg mx-auto">
       <p>
-        Our mission is to empower developers with the tools and platforms
-        they need to build exceptional digital experiences.
+        Our mission is to empower developers with the tools and platforms they
+        need to build exceptional digital experiences.
       </p>
       <p>
-        We believe in open source, community-driven development, and
-        making technology accessible to everyone.
+        We believe in open source, community-driven development, and making
+        technology accessible to everyone.
       </p>
     </div>
-    
+
     <template #footer>
       <div class="text-center mt-8">
         <AtomsButtonsBase color="primary" size="lg">
@@ -289,7 +285,7 @@ const features = [
         Start Building
       </AtomsButtonsBase>
     </template>
-    
+
     <template #secondary-button="{ variant, classes }">
       <AtomsButtonsBase
         size="lg"
@@ -314,13 +310,9 @@ const features = [
 ```vue
 <template>
   <!-- ✅ Good: Using layout components for structure -->
-  <TemplatesLayoutsSection
-    title="Services"
-    background="neutral"
-    padding="xl"
-  >
+  <TemplatesLayoutsSection title="Services" background="neutral" padding="xl">
     <TemplatesLayoutsGrid :columns="3" gap="lg">
-      <MoleculesCardsBase 
+      <MoleculesCardsBase
         v-for="service in services"
         :key="service.id"
         variant="elevated"
@@ -367,15 +359,11 @@ const features = [
   <AtomsButtonsBase color="primary" variant="solid">
     Primary Action
   </AtomsButtonsBase>
-  
-  <AtomsBadges variant="success">
-    Completed
-  </AtomsBadges>
+
+  <AtomsBadges variant="success"> Completed </AtomsBadges>
 
   <!-- ❌ Avoid: Hardcoded color classes -->
-  <button class="bg-blue-500 text-white">
-    Custom Button
-  </button>
+  <button class="bg-blue-500 text-white">Custom Button</button>
 </template>
 ```
 
@@ -384,19 +372,13 @@ const features = [
 ```vue
 <template>
   <!-- ✅ Good: Using responsive props -->
-  <TemplatesLayoutsGrid
-    :columns="3"
-    :responsive="true"
-    gap="lg"
-  >
+  <TemplatesLayoutsGrid :columns="3" :responsive="true" gap="lg">
     <!-- Content adapts automatically -->
   </TemplatesLayoutsGrid>
 
   <!-- ✅ Good: Mobile-first responsive classes -->
   <div class="text-center md:text-left">
-    <AtomsTypographyPage size="large">
-      Responsive Heading
-    </AtomsTypographyPage>
+    <AtomsTypographyPage size="large"> Responsive Heading </AtomsTypographyPage>
   </div>
 </template>
 ```
@@ -407,9 +389,9 @@ const features = [
 
 ```typescript
 // Component.test.ts
-import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
-import MyComponent from './MyComponent.vue'
+import { describe, it, expect } from 'vitest';
+import { mount } from '@vue/test-utils';
+import MyComponent from './MyComponent.vue';
 
 describe('MyComponent', () => {
   it('should render design system components', () => {
@@ -417,23 +399,23 @@ describe('MyComponent', () => {
       global: {
         components: {
           AtomsButtonsBase: { template: '<button><slot /></button>' },
-          TemplatesLayoutsSection: { template: '<section><slot /></section>' }
-        }
-      }
-    })
+          TemplatesLayoutsSection: { template: '<section><slot /></section>' },
+        },
+      },
+    });
 
-    expect(wrapper.find('button').exists()).toBe(true)
-    expect(wrapper.find('section').exists()).toBe(true)
-  })
+    expect(wrapper.find('button').exists()).toBe(true);
+    expect(wrapper.find('section').exists()).toBe(true);
+  });
 
   it('should handle props correctly', () => {
     const wrapper = mount(MyComponent, {
-      props: { variant: 'primary' }
-    })
+      props: { variant: 'primary' },
+    });
 
-    expect(wrapper.props('variant')).toBe('primary')
-  })
-})
+    expect(wrapper.props('variant')).toBe('primary');
+  });
+});
 ```
 
 This comprehensive set of examples demonstrates how to effectively use the design system components to build consistent, maintainable interfaces.

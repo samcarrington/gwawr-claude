@@ -6,7 +6,14 @@
 
 <script setup lang="ts">
 interface Props {
-  variant?: 'default' | 'primary' | 'secondary' | 'tertiary' | 'success' | 'warning' | 'error';
+  variant?:
+    | 'default'
+    | 'primary'
+    | 'secondary'
+    | 'tertiary'
+    | 'success'
+    | 'warning'
+    | 'error';
   size?: 'xs' | 'sm' | 'md' | 'lg';
   rounded?: 'sm' | 'md' | 'lg' | 'full';
   outline?: boolean;
@@ -64,7 +71,9 @@ const badgeClasses = computed(() => {
   // Add variant classes
   if (props.outline) {
     classes.push('border bg-transparent');
-    classes.push(outlineVariantClasses[props.variant] || outlineVariantClasses.default);
+    classes.push(
+      outlineVariantClasses[props.variant] || outlineVariantClasses.default
+    );
   } else {
     classes.push(variantClasses[props.variant] || variantClasses.default);
   }
