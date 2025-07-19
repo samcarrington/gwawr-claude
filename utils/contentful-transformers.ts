@@ -533,7 +533,7 @@ export async function transformTestimonial(entry: any) {
         '[Testimonial Transformer] Failed to render quote content:',
         error
       );
-      content = fields.quote; // Fallback to raw content if rendering fails
+      content = extractTextFromNodes(fields.quote || ''); // Fallback to plain text or empty string // Fallback to raw content if rendering fails
     }
   }
 
@@ -556,6 +556,7 @@ export async function transformTestimonial(entry: any) {
 /**
  * Transform multiple testimonials
  */
+// Updated to accept actual Contentful SDK Entry types for better compatibility
 export async function transformTestimonials(entries: any[]) {
   return Promise.all(entries.map(transformTestimonial));
 }

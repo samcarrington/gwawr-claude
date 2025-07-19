@@ -86,8 +86,14 @@ describe('Testimonials API', () => {
           title: 'Great Work',
           content: 'Excellent service and quality work!',
           clientName: 'John Doe',
+          clientTitle: undefined,
+          clientCompany: undefined,
+          company: undefined,
+          name: undefined,
           rating: 5,
           featured: true,
+          projectReference: undefined,
+          attribution: undefined,
         },
       ];
 
@@ -274,8 +280,14 @@ describe('Testimonials API', () => {
         title: 'Featured Testimonial',
         content: 'Outstanding work and professionalism!',
         clientName: 'Jane Smith',
+        clientTitle: undefined,
+        clientCompany: undefined,
+        company: undefined,
+        name: undefined,
         rating: 5,
         featured: true,
+        projectReference: undefined,
+        attribution: undefined,
       };
 
       mockContentfulClient.getEntries.mockResolvedValue(mockContentfulResponse);

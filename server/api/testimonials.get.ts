@@ -56,6 +56,10 @@ export default defineEventHandler(async event => {
     const response = await client.getEntries(contentfulQuery);
 
     // Transform the data
+    // TODO: (copilot) The transformTestimonials function processes each 
+    // testimonial with async operations sequentially. For better performance 
+    // with large datasets, consider implementing batch processing or limiting 
+    // the number of concurrent transformations.
     const transformedTestimonials = await transformTestimonials(response.items);
 
     return {

@@ -123,7 +123,7 @@ describe('OrganismsCardsTestimonial', () => {
       title: 'Legacy Testimonial',
       content: 'Great work!',
       name: 'Jane Smith', // Legacy field
-      title: 'Manager', // Legacy field
+      clientTitle: 'Manager', // Legacy field mapped to clientTitle
       company: 'Legacy Inc', // Legacy field
       rating: 4,
     };
@@ -149,7 +149,7 @@ describe('OrganismsCardsTestimonial', () => {
       clientTitle: 'New Title',
       clientCompany: 'New Company',
       name: 'Old Name', // Legacy field - should be ignored
-      title: 'Old Title', // Legacy field - should be ignored
+      legacyTitle: 'Old Title', // Legacy field renamed to avoid conflict - should be ignored
       company: 'Old Company', // Legacy field - should be ignored
       rating: 5,
     };
