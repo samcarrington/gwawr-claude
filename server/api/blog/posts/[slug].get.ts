@@ -18,8 +18,8 @@ export default defineEventHandler(async (event) => {
     
     // Check if Contentful is configured
     const config = useRuntimeConfig(event)
-    const spaceId = config.contentfulSpaceId
-    const accessToken = config.contentfulAccessToken
+    const spaceId = config.public.contentfulSpaceId
+    const accessToken = config.public.contentfulAccessToken
     
     if (!spaceId || !accessToken) {
       console.warn('[API] Contentful not configured, using mock data for blog post')

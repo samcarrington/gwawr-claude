@@ -1,6 +1,6 @@
 ---
 trigger: model_decision
-description: Whenever a user mentions backlog, assume they want you to use the command line tool. CRUD verbs on a task also imply use of the Backlog CLI.
+description: user mentioning task, milestone, backlog or subtask should trigger this rule
 ---
 
 # === BACKLOG.MD GUIDELINES START ===
@@ -53,11 +53,9 @@ Once a task is created it will be stored in `backlog/tasks/` directory as a Mark
 ### Additional task requirements
 
 - Tasks must be **atomic** and **testable**. If a task is too large, break it down into smaller subtasks.
-  Each task should represent a single unit of work that can be completed in a single PR.
+  Each task should represent a single unit of work that can be completed in a single Pull Request.
 
-- **Never** reference tasks that are to be done in the future or that are not yet created. You can only reference
-  previous
-  tasks (id < current task id).
+- **Never** reference tasks that are to be done in the future or that are not yet created. You can only reference previous tasks (id < current task id).
 
 - When creating multiple tasks, ensure they are **independent** and they do not depend on future tasks.   
   Example of wrong tasks splitting: task 1: "Add API endpoint for user data", task 2: "Define the user model and DB
@@ -102,7 +100,7 @@ Mandatory sections for every task:
 
 - **Implementation Plan**: (The **"how"**) Outline the steps to achieve the task. Because the implementation details may
   change after the task is created, **the implementation notes must be added only after putting the task in progress**
-  and before starting working on the task.
+  and before starting working on the task. As a cascade plan is devised, stored, or changed, the plan should be reflected in the backlog task too.
 - **Implementation Notes**: Document your approach, decisions, challenges, and any deviations from the plan. This
   section is added after you are done working on the task. It should summarize what you did and why you did it. Keep it
   concise but informative.

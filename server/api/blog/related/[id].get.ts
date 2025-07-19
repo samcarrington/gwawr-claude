@@ -5,8 +5,8 @@ export default defineEventHandler(async (event) => {
   try {
     // Get runtime config and validate Contentful configuration
     const config = useRuntimeConfig(event)
-    const spaceId = config.contentfulSpaceId
-    const accessToken = config.contentfulAccessToken
+    const spaceId = config.public.contentfulSpaceId
+    const accessToken = config.public.contentfulAccessToken
     
     if (!spaceId || !accessToken) {
       throw createError({

@@ -7,8 +7,8 @@ export default defineEventHandler(async (event) => {
     
     // Get runtime config and validate Contentful configuration
     const config = useRuntimeConfig(event)
-    const spaceId = config.contentfulSpaceId
-    const accessToken = config.contentfulAccessToken
+    const spaceId = config.public.contentfulSpaceId
+    const accessToken = config.public.contentfulAccessToken
     
     if (!spaceId || !accessToken) {
       console.warn('[API] Contentful not configured, using mock data for categories')

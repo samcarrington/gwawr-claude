@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     
     // Check if Contentful is configured
     const config = useRuntimeConfig(event)
-    if (!config.contentfulSpaceId || !config.contentfulAccessToken) {
+    if (!config.public.contentfulSpaceId || !config.public.contentfulAccessToken) {
       console.warn('[API] Contentful not configured, using mock data')
       
       // Fallback to mock data
@@ -77,10 +77,10 @@ export default defineEventHandler(async (event) => {
     
     // Create Contentful client directly in server context
     const client = createClient({
-      space: config.contentfulSpaceId,
-      accessToken: config.contentfulAccessToken,
-      environment: config.contentfulEnvironment || 'master',
-      host: config.contentfulHost || 'cdn.contentful.com',
+      space: config.public.contentfulSpaceId,
+      accessToken: config.public.contentfulAccessToken,
+      environment: config.public.contentfulEnvironment || 'master',
+      host: config.public.contentfulHost || 'cdn.contentful.com',
     })
     
     const response = await client.getEntries(contentfulQuery)
