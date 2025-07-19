@@ -3,7 +3,7 @@ id: task-41.2
 title: Update testimonial components with enhanced Contentful fields
 status: Done
 assignee:
-  - '@Claude'
+  - '@Cascade'
 created_date: '2025-07-12'
 updated_date: '2025-07-19'
 labels: []
