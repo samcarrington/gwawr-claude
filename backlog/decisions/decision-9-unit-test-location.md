@@ -1,6 +1,9 @@
-# Decision 9 – Colocate Utility Unit Tests with Source Files
-
-Date: 2025-07-14
+---
+id: decision-9
+title: Colocate Utility Unit Tests with Source Files
+date: '2025-07-14'
+status: accepted
+---
 
 ## Context
 
