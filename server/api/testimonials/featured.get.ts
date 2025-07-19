@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
     })
     
     // Transform the data
-    const transformedTestimonials = response.items.map(transformTestimonial)
+    const transformedTestimonials = await Promise.all(response.items.map(transformTestimonial))
     
     return transformedTestimonials
   } catch (error) {

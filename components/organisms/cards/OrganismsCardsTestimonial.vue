@@ -27,19 +27,19 @@
         class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4"
       >
         <span class="text-primary font-semibold text-lg">
-          {{ getInitials(testimonial.name) }}
+          {{ getInitials(clientName) }}
         </span>
       </div>
 
       <!-- Author Details -->
       <div>
         <h4 class="font-semibold text-gray-900">
-          {{ testimonial.name }}
+          {{ clientName }}
         </h4>
         <p class="text-gray-600 text-sm">
-          {{ testimonial.title }}
-          <span v-if="testimonial.company" class="text-gray-400">
-            at {{ testimonial.company }}
+          {{ clientTitle }}
+          <span v-if="clientCompany" class="text-gray-400">
+            at {{ clientCompany }}
           </span>
         </p>
       </div>
@@ -61,15 +61,29 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   testimonial: {
     type: Object,
     required: true,
   },
 });
 
+// Computed properties to handle both legacy and enhanced field names
+const clientName = computed(() => {
+  return props.testimonial.clientName || props.testimonial.name || 'Anonymous'
+})
+
+const clientTitle = computed(() => {
+  return props.testimonial.clientTitle || props.testimonial.title || ''
+})
+
+const clientCompany = computed(() => {
+  return props.testimonial.clientCompany || props.testimonial.company || ''
+})
+
 // Helper function to get initials from name
 const getInitials = name => {
+  if (!name) return '?'
   return name
     .split(' ')
     .map(word => word.charAt(0).toUpperCase())

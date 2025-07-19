@@ -54,7 +54,7 @@ export default defineEventHandler(async (event) => {
     const response = await client.getEntries(contentfulQuery)
     
     // Transform the data
-    const transformedTestimonials = transformTestimonials(response.items)
+    const transformedTestimonials = await transformTestimonials(response.items)
     
     return {
       items: transformedTestimonials,

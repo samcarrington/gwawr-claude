@@ -442,13 +442,26 @@ export async function transformProjects(entries: any[]) {
 /**
  * Transform Contentful testimonial to our Testimonial type
  */
-export function transformTestimonial(entry: any) {
+export async function transformTestimonial(entry: any) {
   const fields = entry.fields
+  
+  // Process the quote field (RichText) to get the testimonial content
+  let content = ''
+  if (fields.quote) {
+    try {
+      content = await renderContent(fields.quote)
+      // Strip surrounding paragraph tags for cleaner testimonial display
+      content = content.replace(/^<p[^>]*>/, '').replace(/<\/p>$/, '')
+    } catch (error) {
+      console.warn('[Testimonial Transformer] Failed to render quote content:', error)
+      content = fields.quote // Fallback to raw content if rendering fails
+    }
+  }
   
   return {
     id: entry.sys.id,
     title: fields.title,
-    content: fields.content || fields.testimonialText, // Handle both field names
+    content: content, // Use processed quote content
     clientName: fields.clientName,
     clientTitle: fields.clientTitle,
     clientCompany: fields.clientCompany,
@@ -464,8 +477,8 @@ export function transformTestimonial(entry: any) {
 /**
  * Transform multiple testimonials
  */
-export function transformTestimonials(entries: any[]) {
-  return entries.map(transformTestimonial)
+export async function transformTestimonials(entries: any[]) {
+  return Promise.all(entries.map(transformTestimonial))
 }
 
 /**

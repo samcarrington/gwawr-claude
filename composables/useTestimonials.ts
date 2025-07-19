@@ -51,17 +51,22 @@ export const useTestimonials = (options: UseTestimonialsOptions = {}) => {
   // Generate cache key based on query parameters
   const key = computed(() => {
     const queryString = JSON.stringify(query.value, Object.keys(query.value).sort())
-    // Use btoa for browser compatibility
-    const encoded = Buffer.from(encodeURIComponent(queryString)).toString('base64')
-    return `testimonials-${encoded}`
+    // Use simple hash for browser compatibility
+    let hash = 0
+    for (let i = 0; i < queryString.length; i++) {
+      const char = queryString.charCodeAt(i)
+      hash = ((hash << 5) - hash) + char
+      hash = hash & hash // Convert to 32bit integer
+    }
+    return `testimonials-${Math.abs(hash)}`
   })
   
   // Choose fetch method based on options
   const fetchMethod = options.lazy ? useLazyFetch : useFetch
   
   return fetchMethod<TestimonialsResponse>('/api/testimonials', {
-    key: key.value,
-    query: query.value,
+    key: key,
+    query: query,
     default: () => ({ items: [], total: 0, skip: 0, limit: 0 }),
     server: options.server ?? true,
     transform: (data: TestimonialsResponse) => {
@@ -122,9 +127,9 @@ export const useTestimonialFilter = () => {
   
   // Reactive testimonials based on filters
   const { data: testimonials, pending, error, refresh } = useTestimonials({
-    minRating: computed(() => minRating.value > 1 ? minRating.value : undefined),
-    search: computed(() => searchQuery.value || undefined),
-    featured: computed(() => showFeaturedOnly.value || undefined),
+    minRating: minRating.value > 1 ? minRating.value : undefined,
+    search: searchQuery.value || undefined,
+    featured: showFeaturedOnly.value || undefined,
     lazy: true,
   })
   
