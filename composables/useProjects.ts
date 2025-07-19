@@ -94,13 +94,57 @@ export const useProject = (slug: string | Ref<string>) => {
 }
 
 /**
- * Reactive composable for project filtering
+ * Reactive composable for project filtering with persistent state via URL query parameters
  */
 export const useProjectFilter = () => {
-  const selectedCategory = ref<string>('All')
-  const selectedStatus = ref<string>('All')
-  const searchQuery = ref<string>('')
-  const showFeaturedOnly = ref<boolean>(false)
+  const route = useRoute()
+  const router = useRouter()
+  
+  // Initialize filter state from URL query parameters with defaults
+  const selectedCategory = ref<string>(route.query.category as string || 'All')
+  const selectedStatus = ref<string>(route.query.status as string || 'All')
+  const searchQuery = ref<string>(route.query.search as string || '')
+  const showFeaturedOnly = ref<boolean>(route.query.featured === 'true')
+  
+  // Function to update URL with current filter state
+  const updateURL = () => {
+    const query: Record<string, string> = {}
+    
+    if (selectedCategory.value !== 'All') {
+      query.category = selectedCategory.value
+    }
+    if (selectedStatus.value !== 'All') {
+      query.status = selectedStatus.value
+    }
+    if (searchQuery.value) {
+      query.search = searchQuery.value
+    }
+    if (showFeaturedOnly.value) {
+      query.featured = 'true'
+    }
+    
+    // Only update URL if query parameters have changed
+    const currentQuery = route.query
+    const hasChanged = Object.keys(query).length !== Object.keys(currentQuery).length ||
+      Object.entries(query).some(([key, value]) => currentQuery[key] !== value)
+    
+    if (hasChanged || Object.keys(currentQuery).some(key => !query[key])) {
+      router.replace({ query })
+    }
+  }
+  
+  // Watch for filter changes and update URL
+  watch([selectedCategory, selectedStatus, searchQuery, showFeaturedOnly], () => {
+    updateURL()
+  }, { flush: 'post' })
+  
+  // Watch for URL changes (browser back/forward) and update filter state
+  watch(() => route.query, (newQuery) => {
+    selectedCategory.value = newQuery.category as string || 'All'
+    selectedStatus.value = newQuery.status as string || 'All'
+    searchQuery.value = newQuery.search as string || ''
+    showFeaturedOnly.value = newQuery.featured === 'true'
+  }, { immediate: false })
   
   // Create reactive options for useProjects
   const projectsOptions = computed(() => ({
@@ -143,6 +187,7 @@ export const useProjectFilter = () => {
     selectedStatus.value = 'All'
     searchQuery.value = ''
     showFeaturedOnly.value = false
+    // URL will be updated automatically via watchers
   }
   
   return {

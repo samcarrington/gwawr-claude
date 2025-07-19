@@ -2,9 +2,10 @@ import { createClient } from 'contentful'
 import { transformProjects } from '~/utils/contentful-transformers'
 
 export default defineEventHandler(async (event) => {
+  // Get query parameters for filtering and pagination (moved outside try-catch for scope)
+  const query = getQuery(event) as Record<string, any>
+  
   try {
-    // Get query parameters for filtering and pagination
-    const query = getQuery(event) as Record<string, any>
     
     // Set cache headers
     setHeader(event, 'Cache-Control', 'public, max-age=600') // 10 minutes for projects
@@ -112,11 +113,41 @@ export default defineEventHandler(async (event) => {
       const { getProjects } = await import('~/data/projects')
       const mockProjects = getProjects()
       
+      // Apply filters to mock data (same logic as initial fallback)
+      let filteredProjects = mockProjects
+      
+      if (query.category && query.category !== 'All') {
+        filteredProjects = filteredProjects.filter(project => project.category === query.category)
+      }
+      
+      if (query.featured !== undefined) {
+        filteredProjects = filteredProjects.filter(project => project.featured === (query.featured === 'true'))
+      }
+      
+      if (query.status) {
+        filteredProjects = filteredProjects.filter(project => project.status === query.status)
+      }
+      
+      if (query.search) {
+        const searchTerm = query.search.toLowerCase()
+        filteredProjects = filteredProjects.filter(project => 
+          project.title.toLowerCase().includes(searchTerm) ||
+          project.description.toLowerCase().includes(searchTerm) ||
+          project.category.toLowerCase().includes(searchTerm) ||
+          project.technologies.some(tech => tech.toLowerCase().includes(searchTerm))
+        )
+      }
+      
+      // Apply pagination
+      const limit = query.limit ? parseInt(query.limit as string) : 20
+      const skip = query.skip ? parseInt(query.skip as string) : 0
+      const paginatedProjects = filteredProjects.slice(skip, skip + limit)
+      
       return {
-        items: mockProjects,
-        total: mockProjects.length,
-        skip: 0,
-        limit: mockProjects.length,
+        items: paginatedProjects,
+        total: filteredProjects.length,
+        skip,
+        limit,
       }
     } catch (fallbackError) {
       console.error('[API] Even mock data fallback failed:', fallbackError)
