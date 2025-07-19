@@ -8,13 +8,19 @@
   >
     <!-- Project Image -->
     <template #header>
-      <MoleculesCardsImage
-        :src="projectImage"
-        :alt="project.title"
-        :category="project.category"
-        aspect-ratio="video"
-        fallback-icon="i-heroicons-photo"
-      />
+      <NuxtLink 
+        :to="`/projects/${project.slug || project.id}`"
+        class="block transition-transform duration-200 hover:scale-105"
+        :aria-label="`View details for ${project.title}`"
+      >
+        <MoleculesCardsImage
+          :src="projectImage"
+          :alt="project.title"
+          :category="project.category"
+          aspect-ratio="video"
+          fallback-icon="i-heroicons-photo"
+        />
+      </NuxtLink>
     </template>
 
     <!-- Project Content -->
@@ -34,9 +40,20 @@
         />
       </div>
 
-      <AtomsTypographyCard tag="h3" size="default" spacing="tight">
-        {{ project.title }}
-      </AtomsTypographyCard>
+      <NuxtLink 
+        :to="`/projects/${project.slug || project.id}`"
+        class="block"
+        :aria-label="`View details for ${project.title}`"
+      >
+        <AtomsTypographyCard 
+          tag="h3" 
+          size="default" 
+          spacing="tight"
+          class="transition-colors duration-200 hover:text-primary-600 hover:underline cursor-pointer"
+        >
+          {{ project.title }}
+        </AtomsTypographyCard>
+      </NuxtLink>
       <div class="text-gray-600 mb-4 line-clamp-3">
         <AtomsContentRenderer 
           :content="project.description" 
@@ -58,29 +75,47 @@
 
     <!-- Project Links -->
     <template #footer>
-      <div class="flex gap-3">
+      <div class="flex flex-col gap-3">
+        <!-- Primary Action -->
         <UButton
-          v-if="project.liveUrl"
+          :to="`/projects/${project.slug || project.id}`"
+          variant="solid"
+          color="primary"
           size="sm"
-          variant="outline"
-          :to="project.liveUrl"
-          target="_blank"
-          external
+          class="w-full"
+          :aria-label="`View details for ${project.title}`"
         >
-          <UIcon name="i-heroicons-globe-alt" class="mr-1" />
-          Live Demo
+          <UIcon name="i-heroicons-eye" class="mr-1" />
+          View Details
         </UButton>
-        <UButton
-          v-if="project.repositoryUrl"
-          size="sm"
-          variant="ghost"
-          :to="project.repositoryUrl"
-          target="_blank"
-          external
-        >
-          <UIcon name="i-heroicons-code-bracket" class="mr-1" />
-          Repository
-        </UButton>
+        
+        <!-- Secondary Actions -->
+        <div class="flex gap-2" v-if="project.liveUrl || project.repositoryUrl">
+          <UButton
+            v-if="project.liveUrl"
+            size="sm"
+            variant="outline"
+            :to="project.liveUrl"
+            target="_blank"
+            external
+            class="flex-1"
+          >
+            <UIcon name="i-heroicons-globe-alt" class="mr-1" />
+            Live Demo
+          </UButton>
+          <UButton
+            v-if="project.repositoryUrl"
+            size="sm"
+            variant="ghost"
+            :to="project.repositoryUrl"
+            target="_blank"
+            external
+            class="flex-1"
+          >
+            <UIcon name="i-heroicons-code-bracket" class="mr-1" />
+            Repository
+          </UButton>
+        </div>
       </div>
     </template>
   </MoleculesCardsBase>
@@ -101,16 +136,16 @@ const projectImage = computed(() => {
 })
 
 // Get badge variant based on project status
-function getStatusVariant(status: Project['status']): string {
+function getStatusVariant(status: Project['status']) {
   switch (status) {
     case 'completed':
-      return 'success'
+      return 'success' as const
     case 'in-progress':
-      return 'warning'
+      return 'warning' as const
     case 'planned':
-      return 'info'
+      return 'secondary' as const
     default:
-      return 'default'
+      return 'default' as const
   }
 }
 </script>
