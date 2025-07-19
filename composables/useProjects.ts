@@ -74,20 +74,20 @@ export const useFeaturedProjects = (limit = 3) => {
 export const useProject = (slug: string | Ref<string>) => {
   const slugRef = isRef(slug) ? slug : ref(slug)
   
-  // For now, we'll fetch from the projects list and filter
-  // In the future, we might create a dedicated API endpoint
-  const { data: projects, error, pending } = useProjects({
-    limit: 1000, // Get all projects to find by slug
-    server: true,
-  })
-  
-  const project = computed(() => {
-    if (!projects.value?.items) return null
-    return projects.value.items.find(p => p.slug === slugRef.value) || null
-  })
+  // Use dedicated API endpoint for optimal performance
+  const { data: response, error, pending } = useFetch<Project | null>(
+    `/api/projects/${slugRef.value}`,
+    {
+      key: `project-${slugRef.value}`,
+      default: () => null,
+      server: true,
+      // Transform response to extract project
+      transform: (data: any) => data?.project || null,
+    }
+  )
   
   return {
-    data: project,
+    data: response,
     error,
     pending,
   }

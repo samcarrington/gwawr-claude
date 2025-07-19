@@ -1,11 +1,11 @@
 ---
 id: task-high.3
 title: Update application code for enhanced content models
-status: In Progress
+status: Done
 assignee:
   - '@Claude'
 created_date: '2025-07-11'
-updated_date: '2025-07-17'
+updated_date: '2025-07-19'
 labels:
   - contentful
   - application

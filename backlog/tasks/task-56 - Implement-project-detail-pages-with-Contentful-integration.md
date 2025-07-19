@@ -1,9 +1,11 @@
 ---
 id: task-56
 title: Implement project detail pages with Contentful integration
-status: To Do
-assignee: []
+status: Done
+assignee:
+  - '@Claude'
 created_date: '2025-07-19'
+updated_date: '2025-07-19'
 labels: []
 dependencies: []
 ---
