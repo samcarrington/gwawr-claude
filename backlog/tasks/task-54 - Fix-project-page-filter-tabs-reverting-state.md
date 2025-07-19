@@ -1,9 +1,11 @@
 ---
 id: task-54
 title: Fix project page filter tabs reverting state
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@cascade'
 created_date: '2025-07-19'
+updated_date: '2025-07-19'
 labels: []
 dependencies: []
 ---
