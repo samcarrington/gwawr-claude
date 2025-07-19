@@ -1,7 +1,9 @@
-# Decision 4: Use @nuxt/test-utils with Vitest and jsdom for Unit Testing
-
-## Status
-Accepted
+---
+id: decision-4
+title: Use @nuxt/test-utils with Vitest and jsdom for Unit Testing
+date: '2025-07-11'
+status: accepted
+---
 
 ## Context
 The project currently lacks a comprehensive unit testing framework for Vue components and composables. While we have basic route testing with shell scripts, we need a proper testing setup that can:

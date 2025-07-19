@@ -1,9 +1,31 @@
-# Decision 7: Migration Execution Order and Infrastructure-First Approach
+---
+id: decision-7
+title: Migration Execution Order and Infrastructure-First Approach
+date: '2025-07-12'
+status: accepted
+---
 
-## Status
-Accepted
+## Context
 
-## Date
+During the implementation of Contentful content model migration (tasks high.1, medium.1, medium.2, high.2), we executed the individual migration phases before creating the comprehensive orchestrator, backup, and rollback procedures. This approach created several issues:
+
+### Problems Identified:
+
+1. **No Comprehensive Backup**: Individual tasks were executed without complete pre-migration backups
+2. **No Centralized Orchestration**: Each migration was run independently without unified logging or error handling
+3. **Limited Rollback Capability**: Rollback procedures were created after execution, not before
+4. **Risk Management**: Higher risk exposure due to lack of safety infrastructure
+5. **Process Consistency**: Different execution approaches across similar tasks
+
+### Execution Order That Occurred:
+1. ✅ task-high.1 (blogPost enhancement) - Executed individually
+2. ✅ task-medium.1 (project enhancement) - Executed individually  
+3. ✅ task-medium.2 (testimonial enhancement) - Executed individually
+4. ✅ task-high.2 (migration scripts) - Created orchestrator AFTER individual executions
+
+### Problems This Created:
+- **Retroactive Safety**: Safety measures created after risk exposure
+- **Incomplete Documentation**: Migration logs scattered across individual executions
 2025-07-12
 
 ## Context

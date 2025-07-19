@@ -1,7 +1,9 @@
-# Decision 5: Use Nested Component Structure with Cascade Naming
-
-## Status
-Accepted
+---
+id: decision-5
+title: Use Nested Component Structure with Cascade Naming
+date: '2025-07-11'
+status: accepted
+---
 
 ## Context
 As our component library grows, we need to establish a scalable and maintainable organization system. We have two approaches documented in `~/docs/component-organization-analysis.md`:
