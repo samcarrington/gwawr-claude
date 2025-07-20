@@ -7,8 +7,8 @@ export default defineAppConfig({
       rounded: 'rounded-lg',
       size: {
         xs: 'text-xs px-2 py-1',
-        sm: 'text-sm px-3 py-1.5',
-        md: 'text-sm px-4 py-2',
+        sm: 'text-sm px-3 py-2',
+        md: 'text-sm px-4 py-3',
         lg: 'text-base px-6 py-3',
         xl: 'text-lg px-8 py-4',
       },
@@ -21,17 +21,17 @@ export default defineAppConfig({
       },
       padding: {
         xs: 'px-2 py-1',
-        sm: 'px-3 py-1.5',
+        sm: 'px-3 py-2',
         md: 'px-4 py-2',
         lg: 'px-6 py-3',
         xl: 'px-8 py-4',
       },
       square: {
         xs: 'p-1',
-        sm: 'p-1.5',
-        md: 'p-2',
-        lg: 'p-2.5',
-        xl: 'p-3',
+        sm: 'p-2',
+        md: 'p-3',
+        lg: 'p-4',
+        xl: 'p-5',
       },
       color: {
         primary: {

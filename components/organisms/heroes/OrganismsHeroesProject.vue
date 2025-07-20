@@ -91,10 +91,9 @@ const props = defineProps<{
   project: Project;
 }>();
 
-// Get the first image from the images array
+// Get the banner image for the project hero
 const projectImage = computed(() => {
-  return props.project.images && props.project.images.length > 0
-    ? props.project.images[0]
-    : null;
+  return props.project.bannerImage || 
+    (props.project.images && props.project.images.length > 0 ? props.project.images[0] : null);
 });
 </script>
