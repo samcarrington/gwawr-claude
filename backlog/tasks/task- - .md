@@ -1,3 +1,16 @@
+---
+id: ''
+title: ''
+status: Done
+assignee: []
+created_date: ''
+updated_date: '2025-07-20'
+labels: []
+dependencies: []
+---
+
+## Description
+
 # task-48 - Calculate blog read time dynamically
 
 ## Description (the why)

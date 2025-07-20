@@ -6,6 +6,7 @@ trigger: always_on
 
 - Use Backlog, documented below, to manage all tasks and actions
 - Observe all accessibility standards when generating HTML and interactive functionality
+- before finalising a task, run 'npm run format' to ensure all code is formatted consistently
 
 ## 1. Interactions with user
 

@@ -29,7 +29,7 @@
           {{ formatDate(post.publishedAt) }}
         </time>
         <span class="mx-2">•</span>
-        <span>{{ post.readTime }} min read</span>
+        <span>{{ readTime.text }}</span>
       </div>
 
       <!-- Title -->
@@ -77,9 +77,12 @@
 import { formatDate } from '~/utils/date';
 import type { BlogPost } from '~/types/blog';
 
-defineProps<{
+const props = defineProps<{
   post: BlogPost;
 }>();
+
+// Calculate read time dynamically from content
+const readTime = useReadTime(() => props.post.content);
 </script>
 
 <style scoped>

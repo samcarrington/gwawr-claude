@@ -486,8 +486,16 @@ export async function transformProject(entry: any) {
         ? await renderContent(fields.fullDescription)
         : undefined,
       technologies: extractTechnologyNames(fields.technologies),
-      thumbnail: getAssetUrl(fields.thumbnail, { width: 400, quality: 80, format: 'webp' }),
-      bannerImage: getAssetUrl(fields.bannerImage, { width: 1200, quality: 85, format: 'webp' }),
+      thumbnail: getAssetUrl(fields.thumbnail, {
+        width: 400,
+        quality: 80,
+        format: 'webp',
+      }),
+      bannerImage: getAssetUrl(fields.bannerImage, {
+        width: 1200,
+        quality: 85,
+        format: 'webp',
+      }),
       images: extractImageUrls(fields.images), // Keep for backward compatibility
       liveUrl: fields.liveUrl || undefined,
       repositoryUrl: fields.repositoryUrl || undefined,

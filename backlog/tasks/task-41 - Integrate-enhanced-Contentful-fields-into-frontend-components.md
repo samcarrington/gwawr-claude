@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@Claude'
 created_date: '2025-07-12'
-updated_date: '2025-07-12'
+updated_date: '2025-07-20'
 labels:
   - frontend
   - vue
@@ -22,10 +22,7 @@ Update Vue components and pages to utilize the newly added Contentful fields (sl
 
 ## Acceptance Criteria
 
-- [ ] Blog components display new fields (category
-- [ ] tags
-- [ ] read time
-- [ ] featured badge)
+- [ ] Blog components display new fields (category, tags, read time, featured badge)
 - [ ] Project components display new fields (repository URL, live URL, status, featured)
 - [ ] Testimonial components display new fields (rating, client info,featured)
 - [ ] URL routing updated to use slugs instead of IDs where applicable

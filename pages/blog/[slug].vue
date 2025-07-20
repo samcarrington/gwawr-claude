@@ -88,7 +88,7 @@
               </div>
               <div class="flex items-center">
                 <UIcon name="i-heroicons-clock" class="w-5 h-5 mr-2" />
-                <span>{{ post.readTime }} min read</span>
+                <span>{{ readTime.text }}</span>
               </div>
             </div>
 
@@ -331,6 +331,9 @@ const { data: relatedPosts, pending: relatedPending } = useRelatedBlogPosts(
   computed(() => post.value?.id || ''),
   3
 );
+
+// Calculate read time dynamically from content
+const readTime = useReadTime(() => post.value?.content || '');
 
 // Watch for when post loading completes and handle 404
 watch(
