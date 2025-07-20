@@ -123,11 +123,10 @@ const props = defineProps<{
   project: Project;
 }>();
 
-// Get the first image from the images array
+// Get the thumbnail image for the project card
 const projectImage = computed(() => {
-  return props.project.images && props.project.images.length > 0
-    ? props.project.images[0]
-    : null;
+  return props.project.thumbnail || 
+    (props.project.images && props.project.images.length > 0 ? props.project.images[0] : null);
 });
 
 // Get badge variant based on project status
