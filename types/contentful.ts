@@ -5,6 +5,7 @@ export interface ContentfulEntry<T = any> extends Entry<T> {
   sys: {
     id: string;
     type: 'Entry';
+    // FIXME: Fragile ISO date format, should be string declaration with JSDoc or a type alias
     createdAt: `${number}-${number}-${number}T${number}:${number}:${number}Z`;
     updatedAt: `${number}-${number}-${number}T${number}:${number}:${number}Z`;
     locale: string;
