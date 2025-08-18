@@ -60,9 +60,9 @@ export default defineEventHandler(async event => {
       content_type: 'blogPost',
       'fields.category': currentCategory,
       'sys.id[ne]': id, // Exclude current post
-      order: '-fields.publishedAt',
+      order: '-fields.publishedAt', // Most recent first
       limit,
-    });
+    } as any);
 
     // Transform the data
     const transformedPosts = await transformBlogPosts(response.items);

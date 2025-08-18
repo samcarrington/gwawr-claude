@@ -33,7 +33,7 @@ export default defineEventHandler(async event => {
     const response = await client.getEntries({
       content_type: 'testimonial',
       'fields.featured': true,
-      order: '-fields.rating,-sys.createdAt', // Order by rating first, then by creation date
+      order: ['-fields.rating', '-sys.createdAt'], // Order by rating first, then by creation date
       limit,
       include: 2, // Include linked entries
     });
