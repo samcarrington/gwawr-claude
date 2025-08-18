@@ -5,7 +5,12 @@ import { computed, ref } from 'vue';
 declare global {
   var UButton: any;
   var UContainer: any;
-  var UIcon: any;
+import { defineComponent } from 'vue';
+// TypeScript declarations for global extensions
+declare global {
+  var UButton: ReturnType<typeof defineComponent>;
+  var UContainer: ReturnType<typeof defineComponent>;
+  var UIcon: ReturnType<typeof defineComponent>;
 }
 
 // Make Vue globals available
