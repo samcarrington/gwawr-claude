@@ -48,7 +48,6 @@ async function fetchBlogContent(slug: string, event: any): Promise<string> {
   }
 
   // Process rich text content to HTML for reading time calculation
-  const { renderContent } = await import('#shared/utils/contentful-transformers');
   return await renderContent(entry.fields.content);
 }
 
