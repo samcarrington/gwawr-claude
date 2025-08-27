@@ -30,7 +30,6 @@ async function fetchBlogContent(slug: string, event: any): Promise<string> {
   }
 
   // Fetch from Contentful
-  const { createClient } = await import('contentful');
   const client = createClient({
     space: spaceId,
     accessToken: accessToken,
