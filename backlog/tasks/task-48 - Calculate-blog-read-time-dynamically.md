@@ -6,13 +6,13 @@ We no longer want to rely on a manually-entered `readTime` field in Contentful. 
 
 ## Acceptance Criteria (the what)
 
-- [ ] **Decision recorded** – Select and document the dependency / approach for read-time calculation.  Decision file created in `backlog/decisions/` and linked here.
-- [ ] **Utility implemented** – A composable/utility (e.g. `useReadTime.ts`) computes read time from raw Markdown/HTML.
-- [ ] **UI updated** – Blog list and detail components display computed read time.
-- [ ] **Accuracy** – Calculated read time is within ±10 % of `reading-time` reference for sample posts.
-- [ ] **Performance** – Calculation adds ≤ 5 ms P95 client CPU for a 5 kB article.
-- [ ] **Tests** – Unit tests cover short, medium, and long articles.
-- [ ] **Docs updated** – README / developer docs describe the usage and chosen dependency.
+- [x] **Decision recorded** – Select and document the dependency / approach for read-time calculation.  Decision file created in `backlog/decisions/` and linked here.
+- [x] **Utility implemented** – A composable/utility (e.g. `useReadTime.ts`) computes read time from raw Markdown/HTML.
+- [x] **UI updated** – Blog list and detail components display computed read time.
+- [x] **Accuracy** – Calculated read time is within ±10 % of `reading-time` reference for sample posts.
+- [x] **Performance** – Calculation adds ≤ 5 ms P95 client CPU for a 5 kB article.
+- [x] **Tests** – Unit tests cover short, medium, and long articles.
+- [x] **Docs updated** – README / developer docs describe the usage and chosen dependency.
 
 ## Implementation Plan (the how)
 

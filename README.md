@@ -49,6 +49,7 @@ npm run generate
 
 - **Tailwind CSS v4**: Uses the latest version with CSS-first configuration
 - **Nuxt UI**: Pre-built components with full customization
+- **Dynamic Read Time**: Automatic calculation of blog post reading time using the `reading-time` library
 - **Modern Setup**: ES modules, TypeScript support, and optimized build process
 
 ## Configuration

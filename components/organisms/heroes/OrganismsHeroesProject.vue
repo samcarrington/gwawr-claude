@@ -93,7 +93,11 @@ const props = defineProps<{
 
 // Get the banner image for the project hero
 const projectImage = computed(() => {
-  return props.project.bannerImage || 
-    (props.project.images && props.project.images.length > 0 ? props.project.images[0] : null);
+  return (
+    props.project.bannerImage ||
+    (props.project.images && props.project.images.length > 0
+      ? props.project.images[0]
+      : null)
+  );
 });
 </script>

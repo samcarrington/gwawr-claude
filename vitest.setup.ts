@@ -1,9 +1,21 @@
 import { vi } from 'vitest';
 import { computed, ref } from 'vue';
 
+// TypeScript declarations for global extensions
+declare global {
+  var UButton: any;
+  var UContainer: any;
+import { defineComponent } from 'vue';
+// TypeScript declarations for global extensions
+declare global {
+  var UButton: ReturnType<typeof defineComponent>;
+  var UContainer: ReturnType<typeof defineComponent>;
+  var UIcon: ReturnType<typeof defineComponent>;
+}
+
 // Make Vue globals available
-global.computed = computed;
-global.ref = ref;
+(global as any).computed = computed;
+(global as any).ref = ref;
 
 // Mock Nuxt's auto-imported composables
 vi.mock('#app', () => ({

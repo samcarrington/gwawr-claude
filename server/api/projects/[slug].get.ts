@@ -71,8 +71,8 @@ export default defineEventHandler(async event => {
   } catch (error: unknown) {
     console.error('[API] Failed to fetch project:', slug, error);
 
-    // If it's already a createError, re-throw it
-    if (isCreateError(error)) {
+    // If it's already a Nuxt error (has statusCode), re-throw it
+    if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error;
     }
 

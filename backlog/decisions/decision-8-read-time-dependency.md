@@ -2,7 +2,7 @@
 id: decision-8
 title: Choose dependency for dynamic blog read-time calculation
 date: '2025-07-14'
-status: proposed
+status: implemented
 ---
 
 ## Context

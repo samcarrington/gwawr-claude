@@ -1,13 +1,29 @@
-import type { Entry, Asset } from 'contentful';
+import type { Entry, Asset, OrderFilterPaths } from 'contentful';
 
 // Base Contentful types
 export interface ContentfulEntry<T = any> extends Entry<T> {
   sys: {
     id: string;
     type: 'Entry';
-    createdAt: string;
-    updatedAt: string;
+    // FIXME: Fragile ISO date format, should be string declaration with JSDoc or a type alias
+    createdAt: `${number}-${number}-${number}T${number}:${number}:${number}Z`;
+    updatedAt: `${number}-${number}-${number}T${number}:${number}:${number}Z`;
     locale: string;
+    revision: number;
+    space: {
+      sys: {
+        id: string;
+        type: 'Link';
+        linkType: 'Space';
+      };
+    };
+    environment: {
+      sys: {
+        id: string;
+        type: 'Link';
+        linkType: 'Environment';
+      };
+    };
     contentType: {
       sys: {
         id: string;
@@ -15,6 +31,10 @@ export interface ContentfulEntry<T = any> extends Entry<T> {
         type: 'Link';
       };
     };
+    publishedVersion: number;
+    publishedAt: string;
+    firstPublishedAt: string;
+    publishedCounter: number;
   };
   fields: T;
 }
@@ -162,7 +182,7 @@ export interface ContentfulQueryOptions {
   'fields.featured'?: boolean;
   'fields.category.sys.id'?: string;
   'fields.tags.sys.id[in]'?: string;
-  order?: string;
+  order?: OrderFilterPaths[];
   limit?: number;
   skip?: number;
   include?: number;
