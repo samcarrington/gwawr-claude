@@ -1,5 +1,5 @@
 import { createClient } from 'contentful';
-import { transformBlogPosts } from '~/utils/contentful-transformers';
+import { transformBlogPosts } from '#shared/utils/contentful-transformers';
 
 export default defineEventHandler(async event => {
   try {
@@ -18,7 +18,7 @@ export default defineEventHandler(async event => {
       console.warn('[API] Contentful not configured, using mock data');
 
       // Fallback to mock data
-      const { getSortedBlogPosts } = await import('~/data/blog');
+      const { getSortedBlogPosts } = await import('#shared/data/blog');
       const mockPosts = getSortedBlogPosts();
 
       // Apply filters to mock data
@@ -108,7 +108,7 @@ export default defineEventHandler(async event => {
     // Fallback to mock data on any error
     try {
       console.warn('[API] Falling back to mock data due to error');
-      const { getSortedBlogPosts } = await import('~/data/blog');
+      const { getSortedBlogPosts } = await import('#shared/data/blog');
       const mockPosts = getSortedBlogPosts();
 
       return {

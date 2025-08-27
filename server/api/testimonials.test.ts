@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createClient } from 'contentful';
-import testimonialsHandler from '~/server/api/testimonials.get';
-import featuredTestimonialsHandler from '~/server/api/testimonials/featured.get';
+import testimonialsHandler from '~~/server/api/testimonials.get';
+import featuredTestimonialsHandler from '~~/server/api/testimonials/featured.get';
 
 // Mock contentful client
 vi.mock('contentful', () => ({
@@ -9,7 +9,7 @@ vi.mock('contentful', () => ({
 }));
 
 // Mock transformTestimonials
-vi.mock('~/utils/contentful-transformers', () => ({
+vi.mock('#shared/utils/contentful-transformers', () => ({
   transformTestimonials: vi.fn(),
   transformTestimonial: vi.fn(),
 }));
@@ -57,7 +57,7 @@ describe('Testimonials API', () => {
   describe('/api/testimonials', () => {
     it('should fetch and transform testimonials successfully', async () => {
       const { transformTestimonials } = await import(
-        '~/utils/contentful-transformers'
+        '#shared/utils/contentful-transformers'
       );
 
       mockGetQuery.mockReturnValue({ limit: '10', skip: '0' });
@@ -131,7 +131,7 @@ describe('Testimonials API', () => {
 
     it('should handle featured filter parameter', async () => {
       const { transformTestimonials } = await import(
-        '~/utils/contentful-transformers'
+        '#shared/utils/contentful-transformers'
       );
 
       mockGetQuery.mockReturnValue({ featured: 'true', limit: '5' });
@@ -157,7 +157,7 @@ describe('Testimonials API', () => {
 
     it('should handle minRating filter parameter', async () => {
       const { transformTestimonials } = await import(
-        '~/utils/contentful-transformers'
+        '#shared/utils/contentful-transformers'
       );
 
       mockGetQuery.mockReturnValue({ minRating: '4' });
@@ -183,7 +183,7 @@ describe('Testimonials API', () => {
 
     it('should handle search parameter', async () => {
       const { transformTestimonials } = await import(
-        '~/utils/contentful-transformers'
+        '#shared/utils/contentful-transformers'
       );
 
       mockGetQuery.mockReturnValue({ search: 'excellent work' });
@@ -229,7 +229,7 @@ describe('Testimonials API', () => {
 
     it('should handle Contentful API errors', async () => {
       const { transformTestimonials } = await import(
-        '~/utils/contentful-transformers'
+        '#shared/utils/contentful-transformers'
       );
 
       mockGetQuery.mockReturnValue({});
@@ -255,7 +255,7 @@ describe('Testimonials API', () => {
   describe('/api/testimonials/featured', () => {
     it('should fetch and transform featured testimonials successfully', async () => {
       const { transformTestimonial } = await import(
-        '~/utils/contentful-transformers'
+        '#shared/utils/contentful-transformers'
       );
 
       mockGetQuery.mockReturnValue({ limit: '3' });
@@ -319,7 +319,7 @@ describe('Testimonials API', () => {
 
     it('should use default limit when not provided', async () => {
       const { transformTestimonial } = await import(
-        '~/utils/contentful-transformers'
+        '#shared/utils/contentful-transformers'
       );
 
       mockGetQuery.mockReturnValue({});

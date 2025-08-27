@@ -2,8 +2,8 @@ import {
   getContentfulClient,
   isContentfulConfigured,
   getContentfulConfig,
-} from '~/server/utils/contentful';
-import { transformProject } from '~/utils/contentful-transformers';
+} from '~~/server/utils/contentful';
+import { transformProject } from '#shared/utils/contentful-transformers';
 
 export default defineEventHandler(async event => {
   const slug = getRouterParam(event, 'slug');
@@ -28,7 +28,7 @@ export default defineEventHandler(async event => {
       console.warn('[API] Using mock data for project:', slug);
 
       // Fallback to mock data
-      const { getProjects } = await import('~/data/projects');
+      const { getProjects } = await import('#shared/data/projects');
       const mockProjects = getProjects();
       const project = mockProjects.find(p => p.slug === slug);
 
@@ -78,7 +78,7 @@ export default defineEventHandler(async event => {
 
     // For other errors, try fallback to mock data
     try {
-      const { getProjects } = await import('~/data/projects');
+      const { getProjects } = await import('#shared/data/projects');
       const mockProjects = getProjects();
       const project = mockProjects.find(p => p.slug === slug);
 

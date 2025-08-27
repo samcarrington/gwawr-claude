@@ -1,5 +1,4 @@
 import { createClient } from 'contentful';
-import { transformTestimonials } from '~/utils/contentful-transformers';
 
 export default defineEventHandler(async event => {
   try {

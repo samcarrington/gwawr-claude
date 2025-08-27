@@ -2,12 +2,38 @@
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineNuxtConfig({
-  compatibilityDate: '2025-05-15',
-  devtools: { enabled: false },
-  modules: ['@nuxt/ui'],
+  compatibilityDate: '2025-07-15',
+  devtools: { enabled: true },
+  // Exclude test files from Nuxt's file scanning
+  ignore: [
+    '**/*.test.*',
+    '**/*.spec.*'
+  ],
+  modules: [
+    // '@nuxt/content',
+    '@nuxt/image',
+    '@nuxt/ui',
+    '@nuxt/fonts',
+    '@nuxt/devtools',
+    '@nuxt/test-utils/module',
+    '@nuxt/scripts',
+    '@nuxt/eslint'
+  ],
   css: ['~/assets/css/main.css'],
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      // Exclude test files from client-side build
+      rollupOptions: {
+        external: (id) => {
+          return /\.(test|spec)\.(js|ts|vue)$/.test(id)
+        }
+      }
+    },
+    optimizeDeps: {
+      // Exclude test files from dependency optimization
+      exclude: ['vitest']
+    }
   },
   runtimeConfig: {
     // Private keys (only available on server-side)

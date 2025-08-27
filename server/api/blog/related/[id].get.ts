@@ -1,5 +1,5 @@
 import { createClient } from 'contentful';
-import { transformBlogPosts } from '~/utils/contentful-transformers';
+import { transformBlogPosts } from '#shared/utils/contentful-transformers';
 
 export default defineEventHandler(async event => {
   try {
