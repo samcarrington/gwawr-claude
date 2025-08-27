@@ -16,16 +16,6 @@ const readingTimeCache = new Map<
 // Cache TTL: 24 hours
 const CACHE_TTL = 24 * 60 * 60 * 1000;
 
-function stripMarkdownAndHtml(text: string): string {
-  return text
-    .replace(/<[^>]*>/g, '') // Remove HTML tags
-    .replace(/!\[.*?\]\(.*?\)/g, '') // Remove markdown images
-    .replace(/\[.*?\]\(.*?\)/g, '') // Remove markdown links
-    .replace(/[#*_`~]/g, '') // Remove markdown formatting
-    .replace(/\s+/g, ' ') // Normalize whitespace
-    .trim();
-}
-
 async function fetchBlogContent(slug: string, event: any): Promise<string> {
   // Check if Contentful is configured
   const config = useRuntimeConfig(event);
@@ -57,7 +47,9 @@ async function fetchBlogContent(slug: string, event: any): Promise<string> {
     return '';
   }
 
-  return entry.fields.content as string;
+  // Process rich text content to HTML for reading time calculation
+  const { renderContent } = await import('#shared/utils/contentful-transformers');
+  return await renderContent(entry.fields.content);
 }
 
 export default defineEventHandler(async event => {
@@ -98,9 +90,8 @@ export default defineEventHandler(async event => {
       });
     }
 
-    // Calculate reading time
-    const plainText = stripMarkdownAndHtml(content);
-    const stats = readingTime(plainText);
+    // Calculate reading time - reading-time library handles HTML/markdown directly
+    const stats = readingTime(content);
 
     // Cache the result
     readingTimeCache.set(slug, {

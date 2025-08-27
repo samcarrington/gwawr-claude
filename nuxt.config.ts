@@ -16,9 +16,32 @@ export default defineNuxtConfig({
     '@nuxt/scripts',
     '@nuxt/eslint',
   ],
+  // Optimize font loading to prevent FOUC
+  fonts: {
+    families: [
+      // Add your font families here for better optimization
+      { name: 'Inter', provider: 'google' },
+      { name: 'JetBrains Mono', provider: 'google' }
+    ],
+    // Use font-display: swap to prevent invisible text during font swap
+    defaults: {
+      fallbacks: {
+        'sans-serif': ['Inter', 'system-ui', 'sans-serif'],
+        'monospace': ['JetBrains Mono', 'monospace']
+      }
+    }
+  },
   css: ['~/assets/css/main.css'],
+  // Add critical CSS inlining and optimization
+  nitro: {
+    compressPublicAssets: true,
+  },
   vite: {
     plugins: [tailwindcss()],
+    css: {
+      // Inline critical CSS for faster initial paint
+      devSourcemap: true,
+    },
     build: {
       // Exclude test files from client-side build
       rollupOptions: {
@@ -26,11 +49,25 @@ export default defineNuxtConfig({
           return /\.(test|spec)\.(js|ts|vue)$/.test(id);
         },
       },
+      // Optimize CSS delivery
+      cssCodeSplit: true,
     },
     optimizeDeps: {
       // Exclude test files from dependency optimization
       exclude: ['vitest'],
     },
+  },
+  // Use Nuxt's built-in loading and transition system
+  ssr: true,
+  app: {
+    // Built-in page transitions
+    pageTransition: { name: 'page', mode: 'out-in' },
+    layoutTransition: { name: 'layout', mode: 'out-in' }
+  },
+  // Optimize critical resource loading
+  experimental: {
+    payloadExtraction: false,
+    viewTransition: true,
   },
   runtimeConfig: {
     // Private keys (only available on server-side)

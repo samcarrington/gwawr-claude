@@ -1,5 +1,52 @@
 @import 'tailwindcss';
 
+/* Critical styles - loaded first to prevent FOUC */
+* {
+  /* Prevent content jumping during font loading */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure consistent background during loading */
+html,
+body {
+  background-color: #f9fafb; /* matches bg-gray-50 */
+  scroll-behavior: smooth;
+}
+
+/* Prevent hydration layout shifts */
+#__nuxt {
+  min-height: 100vh;
+}
+
+/* Nuxt built-in page transitions */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 300ms, transform 300ms;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+/* Nuxt built-in layout transitions */
+.layout-enter-active,
+.layout-leave-active {
+  transition: opacity 200ms;
+}
+
+.layout-enter-from,
+.layout-leave-to {
+  opacity: 0;
+}
+
 @theme {
   /* ==========================================================================
      COLOR PALETTE
