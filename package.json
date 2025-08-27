@@ -20,6 +20,7 @@
   "dependencies": {
     "@contentful/rich-text-html-renderer": "^17.0.1",
     "@contentful/rich-text-types": "^17.0.1",
+    "@iconify-json/heroicons": "^1.2.2",
     "@nuxt/content": "3.6.3",
     "@nuxt/eslint": "1.9.0",
     "@nuxt/image": "1.11.0",
