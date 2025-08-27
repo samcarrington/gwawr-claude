@@ -1,5 +1,5 @@
 import { createClient } from 'contentful';
-import { transformProjects } from '~/utils/contentful-transformers';
+import { transformProjects } from '#shared/utils/contentful-transformers';
 
 export default defineEventHandler(async event => {
   // Get query parameters for filtering and pagination (moved outside try-catch for scope)
@@ -20,7 +20,7 @@ export default defineEventHandler(async event => {
       );
 
       // Fallback to mock data
-      const { getProjects } = await import('~/data/projects');
+      const { getProjects } = await import('#shared/data/projects');
       const mockProjects = getProjects();
 
       // Apply filters to mock data
@@ -151,7 +151,7 @@ export default defineEventHandler(async event => {
     // Fallback to mock data on error
     try {
       console.warn('[API] Falling back to mock data for projects due to error');
-      const { getProjects } = await import('~/data/projects');
+      const { getProjects } = await import('#shared/data/projects');
       const mockProjects = getProjects();
 
       // Apply filters to mock data (same logic as initial fallback)

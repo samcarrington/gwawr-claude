@@ -16,7 +16,7 @@ export default defineEventHandler(async event => {
       );
 
       // Fallback to mock data
-      const { getBlogCategories } = await import('~/data/blog');
+      const { getBlogCategories } = await import('#shared/data/blog');
       return getBlogCategories();
     }
 
@@ -54,7 +54,7 @@ export default defineEventHandler(async event => {
       console.warn(
         '[API] Falling back to mock data for categories due to error'
       );
-      const { getBlogCategories } = await import('~/data/blog');
+      const { getBlogCategories } = await import('#shared/data/blog');
       return getBlogCategories();
     } catch (fallbackError) {
       console.error('[API] Even mock data fallback failed:', fallbackError);

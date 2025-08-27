@@ -1,5 +1,4 @@
 import { createClient } from 'contentful';
-import { transformProject } from '~/utils/contentful-transformers';
 
 export default defineEventHandler(async event => {
   try {
@@ -21,7 +20,7 @@ export default defineEventHandler(async event => {
       );
 
       // Fallback to mock data
-      const { getFeaturedProjects } = await import('~/data/projects');
+      const { getFeaturedProjects } = await import('#shared/data/projects');
       const featuredProjects = getFeaturedProjects();
 
       return featuredProjects.slice(0, limit);
@@ -56,7 +55,7 @@ export default defineEventHandler(async event => {
       console.warn(
         '[API] Falling back to mock data for featured projects due to error'
       );
-      const { getFeaturedProjects } = await import('~/data/projects');
+      const { getFeaturedProjects } = await import('#shared/data/projects');
       const featuredProjects = getFeaturedProjects();
       const query = getQuery(event);
       const limit = query.limit ? parseInt(query.limit as string) : 3;

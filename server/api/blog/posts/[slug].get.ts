@@ -1,5 +1,5 @@
 import { createClient } from 'contentful';
-import { transformBlogPost } from '~/utils/contentful-transformers';
+import { transformBlogPost } from '#shared/utils/contentful-transformers';
 
 export default defineEventHandler(async event => {
   try {
@@ -27,7 +27,7 @@ export default defineEventHandler(async event => {
       );
 
       // Fallback to mock data
-      const { getBlogPostBySlug } = await import('~/data/blog');
+      const { getBlogPostBySlug } = await import('#shared/data/blog');
       const mockPost = getBlogPostBySlug(slug);
 
       if (!mockPost) {
@@ -87,7 +87,7 @@ export default defineEventHandler(async event => {
       console.warn(
         '[API] Falling back to mock data for blog post due to error'
       );
-      const { getBlogPostBySlug } = await import('~/data/blog');
+      const { getBlogPostBySlug } = await import('#shared/data/blog');
       const mockPost = getBlogPostBySlug(
         getRouterParam(event, 'slug') as string
       );
