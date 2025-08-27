@@ -333,7 +333,9 @@ const { data: relatedPosts, pending: relatedPending } = useRelatedBlogPosts(
 );
 
 // Fetch pre-calculated read time from API
-const readTime = useReadTime(() => post.value?.slug || route.params.slug as string);
+const readTime = useReadTime(
+  () => post.value?.slug || (route.params.slug as string)
+);
 
 // Watch for when post loading completes and handle 404
 watch(

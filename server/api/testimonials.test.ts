@@ -41,7 +41,7 @@ vi.mock('#imports', () => ({
   getQuery: mockGetQuery,
   setHeader: mockSetHeader,
   createError: mockCreateError,
-  defineEventHandler: vi.fn((handler) => handler),
+  defineEventHandler: vi.fn(handler => handler),
 }));
 
 describe('Testimonials API', () => {
@@ -58,11 +58,11 @@ describe('Testimonials API', () => {
     });
 
     // Set up default behaviors for handlers to simulate the actual implementation
-    mockTestimonialsHandler.mockImplementation(async (event) => {
+    mockTestimonialsHandler.mockImplementation(async event => {
       const query = mockGetQuery(event);
       const limit = parseInt(query.limit || '20', 10);
       const skip = parseInt(query.skip || '0', 10);
-      
+
       const contentfulQuery: any = {
         content_type: 'testimonial',
         order: '-sys.createdAt',
@@ -74,20 +74,20 @@ describe('Testimonials API', () => {
       if (query.featured === 'true') {
         contentfulQuery['fields.featured'] = true;
       }
-      
+
       if (query.minRating) {
         contentfulQuery['fields.rating[gte]'] = parseInt(query.minRating, 10);
       }
-      
+
       if (query.search) {
         contentfulQuery.query = query.search;
       }
 
       const response = await mockContentfulClient.getEntries(contentfulQuery);
       const transformedItems = await mockTransformTestimonials(response.items);
-      
+
       mockSetHeader(event, 'Cache-Control', 'public, max-age=900');
-      
+
       return {
         items: transformedItems,
         total: response.total,
@@ -96,10 +96,10 @@ describe('Testimonials API', () => {
       };
     });
 
-    mockFeaturedTestimonialsHandler.mockImplementation(async (event) => {
+    mockFeaturedTestimonialsHandler.mockImplementation(async event => {
       const query = mockGetQuery(event);
       const limit = parseInt(query.limit || '5', 10);
-      
+
       const response = await mockContentfulClient.getEntries({
         content_type: 'testimonial',
         'fields.featured': true,
@@ -111,9 +111,9 @@ describe('Testimonials API', () => {
       const transformedItems = await Promise.all(
         response.items.map(item => mockTransformTestimonial(item))
       );
-      
+
       mockSetHeader(event, 'Cache-Control', 'public, max-age=900');
-      
+
       return transformedItems;
     });
   });
@@ -172,8 +172,14 @@ describe('Testimonials API', () => {
         include: 2,
       });
 
-      expect(mockTransformTestimonials).toHaveBeenCalledWith(mockContentfulResponse.items);
-      expect(mockSetHeader).toHaveBeenCalledWith(mockEvent, 'Cache-Control', 'public, max-age=900');
+      expect(mockTransformTestimonials).toHaveBeenCalledWith(
+        mockContentfulResponse.items
+      );
+      expect(mockSetHeader).toHaveBeenCalledWith(
+        mockEvent,
+        'Cache-Control',
+        'public, max-age=900'
+      );
 
       expect(result).toEqual({
         items: mockTransformedTestimonials,
@@ -291,8 +297,14 @@ describe('Testimonials API', () => {
         include: 2,
       });
 
-      expect(mockTransformTestimonial).toHaveBeenCalledWith(mockContentfulResponse.items[0]);
-      expect(mockSetHeader).toHaveBeenCalledWith(mockEvent, 'Cache-Control', 'public, max-age=900');
+      expect(mockTransformTestimonial).toHaveBeenCalledWith(
+        mockContentfulResponse.items[0]
+      );
+      expect(mockSetHeader).toHaveBeenCalledWith(
+        mockEvent,
+        'Cache-Control',
+        'public, max-age=900'
+      );
 
       expect(result).toEqual([mockTransformedTestimonial]);
     });

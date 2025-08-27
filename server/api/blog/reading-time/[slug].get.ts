@@ -2,7 +2,16 @@ import readingTime from 'reading-time';
 
 // In-memory cache for reading times
 // In production, you might want to use Redis or another persistent cache
-const readingTimeCache = new Map<string, { text: string; minutes: number; time: number; words: number; cachedAt: number }>();
+const readingTimeCache = new Map<
+  string,
+  {
+    text: string;
+    minutes: number;
+    time: number;
+    words: number;
+    cachedAt: number;
+  }
+>();
 
 // Cache TTL: 24 hours
 const CACHE_TTL = 24 * 60 * 60 * 1000;
@@ -51,10 +60,10 @@ async function fetchBlogContent(slug: string, event: any): Promise<string> {
   return entry.fields.content as string;
 }
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async event => {
   try {
     const slug = getRouterParam(event, 'slug');
-    
+
     if (!slug) {
       throw createError({
         statusCode: 400,
@@ -65,12 +74,12 @@ export default defineEventHandler(async (event) => {
     // Check cache first
     const cached = readingTimeCache.get(slug);
     const now = Date.now();
-    
-    if (cached && (now - cached.cachedAt) < CACHE_TTL) {
+
+    if (cached && now - cached.cachedAt < CACHE_TTL) {
       // Set cache headers for cached responses
       setHeader(event, 'Cache-Control', 'public, max-age=3600'); // 1 hour
       setHeader(event, 'X-Cache', 'HIT');
-      
+
       return {
         text: cached.text,
         minutes: cached.minutes,
@@ -81,7 +90,7 @@ export default defineEventHandler(async (event) => {
 
     // Fetch blog content
     const content = await fetchBlogContent(slug, event);
-    
+
     if (!content) {
       throw createError({
         statusCode: 404,
@@ -112,10 +121,12 @@ export default defineEventHandler(async (event) => {
       time: stats.time,
       words: stats.words,
     };
-
   } catch (error) {
-    console.error(`[API] Failed to calculate reading time for "${getRouterParam(event, 'slug')}":`, error);
-    
+    console.error(
+      `[API] Failed to calculate reading time for "${getRouterParam(event, 'slug')}":`,
+      error
+    );
+
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to calculate reading time',

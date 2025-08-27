@@ -5,10 +5,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   // Exclude test files from Nuxt's file scanning
-  ignore: [
-    '**/*.test.*',
-    '**/*.spec.*'
-  ],
+  ignore: ['**/*.test.*', '**/*.spec.*'],
   modules: [
     // '@nuxt/content',
     '@nuxt/image',
@@ -17,7 +14,7 @@ export default defineNuxtConfig({
     '@nuxt/devtools',
     '@nuxt/test-utils/module',
     '@nuxt/scripts',
-    '@nuxt/eslint'
+    '@nuxt/eslint',
   ],
   css: ['~/assets/css/main.css'],
   vite: {
@@ -25,15 +22,15 @@ export default defineNuxtConfig({
     build: {
       // Exclude test files from client-side build
       rollupOptions: {
-        external: (id) => {
-          return /\.(test|spec)\.(js|ts|vue)$/.test(id)
-        }
-      }
+        external: id => {
+          return /\.(test|spec)\.(js|ts|vue)$/.test(id);
+        },
+      },
     },
     optimizeDeps: {
       // Exclude test files from dependency optimization
-      exclude: ['vitest']
-    }
+      exclude: ['vitest'],
+    },
   },
   runtimeConfig: {
     // Private keys (only available on server-side)

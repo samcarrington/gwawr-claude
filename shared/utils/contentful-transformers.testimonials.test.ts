@@ -5,9 +5,9 @@ vi.mock('@contentful/rich-text-html-renderer', () => ({
   documentToHtmlString: vi.fn(),
 }));
 
-import { 
-  transformTestimonial, 
-  transformTestimonials 
+import {
+  transformTestimonial,
+  transformTestimonials,
 } from '#shared/utils/contentful-transformers';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 
@@ -21,7 +21,9 @@ describe('Testimonial Transformers', () => {
   describe('transformTestimonial', () => {
     it('should transform a testimonial entry with quote field', async () => {
       // Mock the rich text renderer to return HTML
-      mockDocumentToHtmlString.mockReturnValue('<p class="mb-4">Great work with Sam!</p>');
+      mockDocumentToHtmlString.mockReturnValue(
+        '<p class="mb-4">Great work with Sam!</p>'
+      );
 
       const mockEntry = {
         sys: {
@@ -122,7 +124,9 @@ describe('Testimonial Transformers', () => {
     });
 
     it('should strip paragraph tags from rendered content', async () => {
-      mockDocumentToHtmlString.mockReturnValue('<p class="mb-4">Content with paragraph tags</p>');
+      mockDocumentToHtmlString.mockReturnValue(
+        '<p class="mb-4">Content with paragraph tags</p>'
+      );
 
       const mockEntry = {
         sys: { id: 'test-id' },
@@ -146,8 +150,8 @@ describe('Testimonial Transformers', () => {
       const mockEntry = {
         sys: { id: 'test-id' },
         fields: {
-          quote: { 
-            nodeType: 'document', 
+          quote: {
+            nodeType: 'document',
             content: [
               {
                 nodeType: 'paragraph',

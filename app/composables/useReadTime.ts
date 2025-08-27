@@ -14,21 +14,23 @@ interface ReadTimeStats {
  * @returns Reactive reading time information fetched from server
  */
 export const useReadTime = (slug: MaybeRefOrGetter<string>) => {
-  const { data: stats, error, pending, refresh } = useFetch<ReadTimeStats>(
-    () => `/api/blog/reading-time/${toValue(slug)}`,
-    {
-      key: `reading-time-${toValue(slug)}`,
-      default: () => ({
-        text: '0 min read',
-        minutes: 0,
-        time: 0,
-        words: 0,
-      }),
-      // Cache on client for 1 hour
-      server: true,
-      client: true,
-    }
-  );
+  const {
+    data: stats,
+    error,
+    pending,
+    refresh,
+  } = useFetch<ReadTimeStats>(() => `/api/blog/reading-time/${toValue(slug)}`, {
+    key: `reading-time-${toValue(slug)}`,
+    default: () => ({
+      text: '0 min read',
+      minutes: 0,
+      time: 0,
+      words: 0,
+    }),
+    // Cache on client for 1 hour
+    server: true,
+    client: true,
+  });
 
   return {
     /**

@@ -43,11 +43,11 @@ vi.mock('vue', async () => {
 describe('useProjects', () => {
   beforeEach(async () => {
     vi.clearAllMocks();
-    
+
     // Get the mocked functions
     const { useLazyFetch, useFetch } = await import('#app');
     const { watch } = await import('vue');
-    
+
     vi.mocked(useLazyFetch).mockReturnValue({
       data: ref(mockProjectsResponse),
       pending: ref(false),
@@ -114,7 +114,7 @@ describe('useProjects', () => {
 
     it('should initialize with default values when no URL params', async () => {
       const { useProjectFilter } = await import('./useProjects');
-      
+
       const {
         selectedCategory,
         selectedStatus,
@@ -174,7 +174,7 @@ describe('useProjects', () => {
     it('should setup watchers for reactivity', async () => {
       const { useProjectFilter } = await import('./useProjects');
       const { watch } = await import('vue');
-      
+
       useProjectFilter();
 
       // Verify that watch was called to set up reactivity
@@ -190,7 +190,7 @@ describe('useProjects', () => {
       };
 
       const { useProjectFilter } = await import('./useProjects');
-      
+
       const {
         selectedCategory,
         selectedStatus,
@@ -209,7 +209,7 @@ describe('useProjects', () => {
 
     it('should provide correct status options', async () => {
       const { useProjectFilter } = await import('./useProjects');
-      
+
       const { statusOptions } = useProjectFilter();
 
       expect(statusOptions).toEqual([
@@ -258,7 +258,7 @@ describe('useProjects', () => {
       });
 
       const { useProjectFilter } = await import('./useProjects');
-      
+
       const { pending } = useProjectFilter();
 
       expect(pending.value).toBe(true);

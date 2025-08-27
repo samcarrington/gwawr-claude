@@ -6,8 +6,8 @@ export default defineVitestConfig({
     globals: true, // This makes vi, describe, test, expect available globally
     environmentOptions: {
       nuxt: {
-        domEnvironment: 'jsdom'
-      }
+        domEnvironment: 'jsdom',
+      },
     },
     setupFiles: ['./vitest.setup.ts'],
   },

@@ -36,7 +36,7 @@ describe('useReadTime', () => {
 
   it('should handle different slug formats', async () => {
     const { useReadTime } = await import('~/composables/useReadTime');
-    
+
     // Test with different slug formats
     const readTime1 = useReadTime('blog-post-1');
     const readTime2 = useReadTime('another-post');
