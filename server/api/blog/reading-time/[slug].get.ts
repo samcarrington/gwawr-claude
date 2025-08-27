@@ -18,6 +18,19 @@ const readingTimeCache = new Map<
 // Cache TTL: 24 hours
 const CACHE_TTL = 24 * 60 * 60 * 1000;
 
+// Lazy-loaded Contentful client - only imported when needed
+let contentfulClient: any = null;
+async function getContentfulClient(spaceId: string, accessToken: string) {
+  if (!contentfulClient) {
+    const { createClient } = await import('contentful');
+    contentfulClient = createClient({
+      space: spaceId,
+      accessToken: accessToken,
+    });
+  }
+  return contentfulClient;
+}
+
 async function fetchBlogContent(slug: string, event: any): Promise<string> {
   // Check if Contentful is configured
   const config = useRuntimeConfig(event);
@@ -30,12 +43,8 @@ async function fetchBlogContent(slug: string, event: any): Promise<string> {
     return mockPost?.content || '';
   }
 
-  // Fetch from Contentful
-  const { createClient } = await import('contentful');
-  const client = createClient({
-    space: spaceId,
-    accessToken: accessToken,
-  });
+  // Fetch from Contentful using lazy-loaded client
+  const client = await getContentfulClient(spaceId, accessToken);
 
   const response = await client.getEntries({
     content_type: 'blogPost',
@@ -49,7 +58,6 @@ async function fetchBlogContent(slug: string, event: any): Promise<string> {
   }
 
   // Process rich text content to HTML for reading time calculation
-  const { renderContent } = await import('#shared/utils/contentful-transformers');
   return await renderContent(entry.fields.content);
 }
 
