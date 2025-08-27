@@ -3,7 +3,13 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
+  devtools: {
+    enabled: true,
+
+    timeline: {
+      enabled: true,
+    },
+  },
   // Exclude test files from Nuxt's file scanning
   ignore: ['**/*.test.*', '**/*.spec.*'],
   modules: [
@@ -19,22 +25,34 @@ export default defineNuxtConfig({
   // Optimize font loading to prevent FOUC
   fonts: {
     families: [
-      // Add your font families here for better optimization
-      { name: 'Inter', provider: 'google' },
-      { name: 'JetBrains Mono', provider: 'google' }
+      // Primary fonts with optimized loading
+      { 
+        name: 'Inter', 
+        provider: 'google',
+        // Use font-display: optional for immediate fallback during FOUC window
+        display: 'optional'
+      },
+      { 
+        name: 'JetBrains Mono', 
+        provider: 'google',
+        display: 'swap'
+      }
     ],
-    // Use font-display: swap to prevent invisible text during font swap
     defaults: {
       fallbacks: {
-        'sans-serif': ['Inter', 'system-ui', 'sans-serif'],
-        'monospace': ['JetBrains Mono', 'monospace']
-      }
+        'sans-serif': ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        'monospace': ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace']
+      },
+      preload: true, // Preload critical fonts
+      display: 'optional' // Use optional for immediate fallback
     }
   },
   css: ['~/assets/css/main.css'],
   // Add critical CSS inlining and optimization
   nitro: {
     compressPublicAssets: true,
+    // Inline small CSS files to prevent FOUC
+    inlineDynamicImports: true,
   },
   vite: {
     plugins: [tailwindcss()],
@@ -49,8 +67,8 @@ export default defineNuxtConfig({
           return /\.(test|spec)\.(js|ts|vue)$/.test(id);
         },
       },
-      // Optimize CSS delivery
-      cssCodeSplit: true,
+      // Bundle CSS together instead of code splitting for faster critical CSS loading
+      cssCodeSplit: false,
     },
     optimizeDeps: {
       // Exclude test files from dependency optimization

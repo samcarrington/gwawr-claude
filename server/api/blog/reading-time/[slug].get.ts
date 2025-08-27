@@ -1,4 +1,6 @@
 import readingTime from 'reading-time';
+import { getBlogPostBySlug } from '#shared/data/blog';
+import { renderContent } from '#shared/utils/contentful-transformers';
 
 // In-memory cache for reading times
 // In production, you might want to use Redis or another persistent cache
@@ -24,7 +26,6 @@ async function fetchBlogContent(slug: string, event: any): Promise<string> {
 
   if (!spaceId || !accessToken) {
     // Fallback to mock data
-    const { getBlogPostBySlug } = await import('#shared/data/blog');
     const mockPost = getBlogPostBySlug(slug);
     return mockPost?.content || '';
   }
